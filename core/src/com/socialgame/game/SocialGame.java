@@ -19,7 +19,7 @@ public class SocialGame extends Game {
 
 	/**
 	 * Primary sprite sheet.
-	 * Current stores all sprites from the game, might be worth splitting into more sheets if more sprites needed.
+	 * Currently stores all sprites from the game, might be worth splitting into more sheets if more sprites needed.
 	 */
 	public TextureAtlas spriteSheet;
 
@@ -28,6 +28,15 @@ public class SocialGame extends Game {
 	 * Can be used for timing other game components
 	 */
 	public float elapsedTime;
+
+	public Settings settings;
+
+	/**
+	 * TODO: Customisation rewards
+	 * Stores this client's current XP, used to unlock rewards.
+	 * It might be better to move this to be stored under the settings object
+	 */
+	public float playerXP;
 	
 	@Override
 	public void create () {

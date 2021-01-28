@@ -1,10 +1,16 @@
 package com.socialgame.game.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.player.PlayerCustomisation;
 
 public class MainMenuScreen implements Screen {
-    final SocialGame game;
+    protected final SocialGame game;
+
+    public PlayerCustomisation playerCustomisation;
+
+    private OrthographicCamera camera;
 
     public MainMenuScreen(SocialGame game) {
         this.game = game;
