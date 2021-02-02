@@ -2,13 +2,13 @@ package com.socialgame.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.socialgame.game.player.Player;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
+import com.socialgame.game.player.Player;
+import com.socialgame.game.player.PlayerController;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -19,12 +19,12 @@ public class GameScreen implements Screen {
     /**
      * Stage object for use with Scene2d
      */
-    private Stage stage;
+    private final Stage stage;
 
     /**
      * Box2d world used for physics simulation
      */
-    private World world;
+    private final World world;
 
     /**
      * TODO: Think about how we want to do the map
@@ -32,24 +32,33 @@ public class GameScreen implements Screen {
      */
     //private Map map;
 
-    private OrthographicCamera camera;
-
     public GameScreen(SocialGame game) {
         this.game = game;
         this.stage = new Stage();
 
         // Create our physics world with no gravity
-        this.world = new World(new Vector2(0, 0), true);
+        this.world = game.world;
+
+        player = new Player(game);
+        stage.addActor(player);
+        stage.addListener(new PlayerController(player));
     }
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Advance physics and actors
+        world.step(delta, 6, 2);
+        stage.act(delta);
+
+        // Draw changes on screen
+        stage.draw();
     }
 
     @Override
@@ -69,11 +78,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }
