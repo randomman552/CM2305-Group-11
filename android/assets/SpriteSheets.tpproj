@@ -1,6 +1,6 @@
 name=sprites
 filename=
-output=../../../../../../Desktop
+output=.
 
 alias=true
 alphaThreshold=0
@@ -32,12 +32,12 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:new,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false}]
+inputFiles=[{path:raw,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false}]
 
 
 -PROJ-
 
-version=4.10.0
+version=4.9.0
 fileTypeType=png
 fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=ffffffff

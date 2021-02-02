@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.socialgame.game.screens.GameScreen;
 
 public class SocialGame extends Game {
 	/**
@@ -42,8 +43,10 @@ public class SocialGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		spriteSheet = new TextureAtlas();
+		spriteSheet = new TextureAtlas(Gdx.files.internal("sprites.atlas"));
 		elapsedTime = 0;
+
+		setScreen(new GameScreen(this));
 	}
 
 	@Override
