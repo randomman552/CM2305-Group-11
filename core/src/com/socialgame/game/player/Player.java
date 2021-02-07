@@ -21,6 +21,8 @@ public class Player extends Interactable {
 
     private Animation<TextureRegion> walkAnim;
     private Animation<TextureRegion> idleAnim;
+    private boolean movingLeft = false;
+
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
     private Item[] inventory;
@@ -70,15 +72,20 @@ public class Player extends Interactable {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // Return texture to default un-flipped state
         texture = getKeyFrame(game.elapsedTime);
-        if (texture.isFlipX())
-            texture.flip(true, false);
 
-        // Flip texture back if we are moving left
-        if (body.getLinearVelocity().x < 0 && !texture.isFlipX()) {
+        // Change movingLeft to flip sprite
+        // We don't change the state of movingLeft when we are stationary,
+        // this preserves the flipped state and prevents the player from flipping to default when stopped.
+        if (body.getLinearVelocity().x < 0)
+            movingLeft = true;
+        else if (body.getLinearVelocity().x > 0)
+            movingLeft = false;
+
+        // Flip texture if moving left and it is not already flipped
+        // Or flip it back to default if we are not moving left and it is already flipped
+        if (movingLeft && !texture.isFlipX() || !movingLeft && texture.isFlipX())
             texture.flip(true, false);
-        }
 
         super.draw(batch, parentAlpha);
     }
