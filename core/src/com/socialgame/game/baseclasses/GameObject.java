@@ -34,7 +34,7 @@ public abstract class GameObject extends Actor {
         // Define body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set((getX() + getOriginX()) / SCALE, (getY() + getOriginY()) / SCALE);
+        bodyDef.position.set((getX() + getOriginX()), (getY() + getOriginY()));
 
         // Create body
         body = game.world.createBody(bodyDef);
@@ -46,12 +46,20 @@ public abstract class GameObject extends Actor {
         // Update position based on movement of the rigid body
         this.setX(body.getPosition().x - getOriginX());
         this.setY(body.getPosition().y - getOriginY());
+        this.setRotation(body.getAngle() * (float)(180 / Math.PI));
         super.act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // Doesn't currently handle rotation
-        batch.draw(texture, getX() * SCALE, getY() * SCALE, getWidth() * SCALE , getHeight() * SCALE);
+        batch.draw(texture,
+                getX() * SCALE,
+                getY() * SCALE,
+                getOriginX(),
+                getOriginY(),
+                getWidth(),
+                getHeight(),
+                SCALE, SCALE,
+                getRotation());
     }
 }
