@@ -9,12 +9,18 @@ import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 
 public class Player extends Interactable {
-    public static float HEIGHT = 75;
-    public static float WIDTH = 50;
     /**
-     * Move speed of all players in units per second
+     * Height of all players in units
      */
-    public static float MAX_VELOCITY = 75;
+    public static float HEIGHT = 1.5f;
+    /**
+     * Width of all players in units
+     */
+    public static float WIDTH = 1f;
+    /**
+     * Move speed of all players in Box2D units per second (WARN: TAKE INTO ACCOUNT PHYS_SCALE)
+     */
+    public static float MAX_VELOCITY = 2f;
 
     public int ID;
     public float health;
@@ -30,14 +36,16 @@ public class Player extends Interactable {
 
     public Player(SocialGame game) {
         super(game);
+
         inventory = new Item[2];
 
-        // Setup animations
+        // Walk animation setup
         walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerWalk"));
         walkAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        // Set texture to prevent null reference exception
-        texture = getKeyFrame(game.elapsedTime);
+        // Idle animation setup (currently uses first from player walk animation)
+        idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerWalk"));
+        idleAnim.setPlayMode(Animation.PlayMode.LOOP);
 
         // Set position and size constants
         setPosition(0, 0);
@@ -46,14 +54,7 @@ public class Player extends Interactable {
         // This is used as an offset for the underlying rigid body
         setOrigin(getWidth() / 2f, getHeight() / 2f);
 
-        //Setup Box2D rigid body TODO: Handle collisions with other objects, this just handles velocity ATM
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX() + getOriginX(), getY() + getOriginY());
-
-        // Create our rigid body
-        body = game.world.createBody(bodyDef);
-        body.setUserData(this);
+        setupRigidBody();
     }
 
     /**
@@ -62,8 +63,9 @@ public class Player extends Interactable {
      * @return The current frame as a {@link TextureRegion}
      */
     protected TextureRegion getKeyFrame(float time) {
-        //TODO: Add idle player anims
-        return walkAnim.getKeyFrame(time);
+        if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+            return walkAnim.getKeyFrame(time);
+        return idleAnim.getKeyFrame(time);
     }
 
     public boolean isAlive() {
@@ -88,14 +90,6 @@ public class Player extends Interactable {
             texture.flip(true, false);
 
         super.draw(batch, parentAlpha);
-    }
-
-    @Override
-    public void act(float delta) {
-        // Update position based on movement of the rigid body
-        this.setX(body.getPosition().x - getOriginX());
-        this.setY(body.getPosition().y - getOriginY());
-        super.act(delta);
     }
 
     /**

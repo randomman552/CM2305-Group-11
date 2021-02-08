@@ -3,13 +3,20 @@ package com.socialgame.game.baseclasses;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
 
 /**
  * Base class from which all in game objects are derived.
  */
-public class GameObject extends Actor {
+public abstract class GameObject extends Actor {
+    /**
+     * Defines the size of the physics units compared to pixels. This applies to ALL GameObject instances.
+     * For example, scale of 50 means that 1 unit is equal to 50 pixels
+     */
+    public static float SCALE = 50;
+
     protected SocialGame game;
 
     public Body body;
@@ -19,9 +26,40 @@ public class GameObject extends Actor {
         this.game = game;
     }
 
+    /**
+     * Method used to initialise the rigidbody for this object.
+     * TODO: Currently this method only sets up a body for velocity, not collisions.
+     */
+    protected void setupRigidBody() {
+        // Define body
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set((getX() + getOriginX()), (getY() + getOriginY()));
+
+        // Create body
+        body = game.world.createBody(bodyDef);
+        body.setUserData(this);
+    }
+
+    @Override
+    public void act(float delta) {
+        // Update position based on movement of the rigid body
+        this.setX(body.getPosition().x - getOriginX());
+        this.setY(body.getPosition().y - getOriginY());
+        this.setRotation(body.getAngle() * (float)(180 / Math.PI));
+        super.act(delta);
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // Doesn't currently handle rotation
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        batch.draw(texture,
+                getX() * SCALE,
+                getY() * SCALE,
+                getOriginX(),
+                getOriginY(),
+                getWidth(),
+                getHeight(),
+                SCALE, SCALE,
+                getRotation());
     }
 }
