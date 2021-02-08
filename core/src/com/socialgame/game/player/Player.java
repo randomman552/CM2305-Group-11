@@ -1,9 +1,9 @@
 package com.socialgame.game.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
@@ -18,12 +18,17 @@ public class Player extends Interactable {
      */
     public static float WIDTH = 1f;
     /**
-     * Move speed of all players in Box2D units per second (WARN: TAKE INTO ACCOUNT PHYS_SCALE)
+     * Move speed of all players in units per second
      */
-    public static float MAX_VELOCITY = 2f;
+    public static float MAX_VEL = 2f;
+    /**
+     * Spectator velocity modifier
+     * For example, 2 gives spectators 2 times speed of players.
+     */
+    public static float SPEC_VEL_MOD = 1f;
 
     public int ID;
-    public float health;
+    public float health = 100;
 
     private Animation<TextureRegion> walkAnim;
     private Animation<TextureRegion> idleAnim;
@@ -87,7 +92,17 @@ public class Player extends Interactable {
         if (movingLeft && !texture.isFlipX() || !movingLeft && texture.isFlipX())
             texture.flip(true, false);
 
+        // If player isn't alive, make they partially transparent
+        Color batchColor = batch.getColor();
+        float alpha = batchColor.a;
+        if (!isAlive()) {
+            batch.setColor(batchColor.r, batchColor.g, batchColor.b, 0.5f);
+        }
+
         super.draw(batch, parentAlpha);
+
+        // Reset alpha if we have changed it
+        batch.setColor(batchColor.r, batchColor.g, batchColor.b, alpha);
     }
 
     /**
