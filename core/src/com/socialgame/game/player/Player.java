@@ -47,14 +47,12 @@ public class Player extends Interactable {
         idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerWalk"));
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        // Set position and size constants
-        setPosition(0, 0);
-        setSize(WIDTH, HEIGHT);
-        // Set origin of the player to be in the middle middle
-        // This is used as an offset for the underlying rigid body
-        setOrigin(getWidth() / 2f, getHeight() / 2f);
-
         setupRigidBody();
+
+        // Set position and size constants
+        setSize(WIDTH, HEIGHT);
+        setOrigin(WIDTH / 2f, HEIGHT / 2f);
+        setPosition(0, 0);
     }
 
     /**
