@@ -39,12 +39,13 @@ public class Player extends Interactable {
 
         inventory = new Item[2];
 
-        // Setup animations
+        // Walk animation setup
         walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerWalk"));
         walkAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        // Set texture to prevent null reference exception
-        texture = getKeyFrame(game.elapsedTime);
+        // Idle animation setup (currently uses first from player walk animation)
+        idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerWalk"));
+        idleAnim.setPlayMode(Animation.PlayMode.LOOP);
 
         // Set position and size constants
         setPosition(0, 0);
@@ -62,8 +63,9 @@ public class Player extends Interactable {
      * @return The current frame as a {@link TextureRegion}
      */
     protected TextureRegion getKeyFrame(float time) {
-        //TODO: Add idle player anims
-        return walkAnim.getKeyFrame(time);
+        if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+            return walkAnim.getKeyFrame(time);
+        return idleAnim.getKeyFrame(time);
     }
 
     public boolean isAlive() {
