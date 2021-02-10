@@ -3,6 +3,7 @@ package com.socialgame.game.baseclasses;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.screens.GameScreen;
 
 /**
  * Base class from which all interactable game objects are derived
@@ -20,12 +21,12 @@ public abstract class Interactable extends GameObject {
 
         @Override
         public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            super.enter(event, x, y, pointer, fromActor);
+            ((GameScreen) game.getScreen()).stage.setKeyboardFocus(parent);
         }
 
         @Override
         public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-            super.exit(event, x, y, pointer, toActor);
+            ((GameScreen) game.getScreen()).stage.setKeyboardFocus(null);
         }
 
         @Override
@@ -43,7 +44,6 @@ public abstract class Interactable extends GameObject {
 
     public Interactable(SocialGame game) {
         super(game);
-
         addListener(new InputListener(game, this));
     }
 

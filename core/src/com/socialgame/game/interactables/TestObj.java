@@ -5,13 +5,12 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 
-public class Test extends Interactable {
-    public Test(SocialGame game) {
+public class TestObj extends Interactable {
+    public TestObj(SocialGame game) {
         super(game);
 
         texture = game.spriteSheet.findRegion("square");
-
-        setSize(1, 1);
+        setBounds(0, 0, 1, 1);
     }
 
     @Override

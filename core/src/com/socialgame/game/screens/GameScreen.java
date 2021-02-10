@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
-import com.socialgame.game.interactables.Test;
+import com.socialgame.game.interactables.TestObj;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 
@@ -20,12 +20,12 @@ public class GameScreen implements Screen {
     /**
      * Stage object for use with Scene2d
      */
-    private final Stage stage;
+    public final Stage stage;
 
     /**
      * Box2d world used for physics simulation
      */
-    private final World world;
+    public final World world;
 
     /**
      * TODO: Think about how we want to do the map
@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
         stage.addActor(game.mainPlayer);
         stage.addListener(new PlayerController((Player) game.mainPlayer));
 
-        Test test = new Test(game);
+        TestObj test = new TestObj(game);
         stage.addActor(test);
     }
 
