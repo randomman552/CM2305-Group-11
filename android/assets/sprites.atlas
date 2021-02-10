@@ -6,15 +6,22 @@ filter: Nearest,Nearest
 repeat: none
 playerWalk
   rotate: false
-  xy: 2, 2
+  xy: 2, 68
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 1
 playerWalk
   rotate: false
-  xy: 399, 4
+  xy: 399, 70
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
+square
+  rotate: false
+  xy: 2, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

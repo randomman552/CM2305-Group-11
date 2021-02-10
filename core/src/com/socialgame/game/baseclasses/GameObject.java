@@ -24,6 +24,8 @@ public abstract class GameObject extends Actor {
 
     public GameObject(SocialGame game) {
         this.game = game;
+        setScale(SCALE, SCALE);
+        setupRigidBody();
     }
 
     /**

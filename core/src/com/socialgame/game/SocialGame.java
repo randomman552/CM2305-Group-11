@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
+import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.screens.GameScreen;
 
 public class SocialGame extends Game {
@@ -46,8 +47,13 @@ public class SocialGame extends Game {
 	 * Physics world used by all game objects physics
 	 */
 	public World world;
-	
-	@Override
+
+	/**
+	 * Reference to this clients primary player.
+	 */
+    public GameObject mainPlayer;
+
+    @Override
 	public void create () {
 		// Initialise Box2D engine
 		Box2D.init();

@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
+import com.socialgame.game.interactables.Test;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 
@@ -39,9 +40,12 @@ public class GameScreen implements Screen {
         // Create our physics world with no gravity
         this.world = game.world;
 
-        player = new Player(game);
-        stage.addActor(player);
-        stage.addListener(new PlayerController(player));
+        game.mainPlayer = new Player(game);
+        stage.addActor(game.mainPlayer);
+        stage.addListener(new PlayerController((Player) game.mainPlayer));
+
+        Test test = new Test(game);
+        stage.addActor(test);
     }
 
     @Override
