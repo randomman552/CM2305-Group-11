@@ -5,9 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.World;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.screens.GameScreen;
 
@@ -44,11 +42,6 @@ public class SocialGame extends Game {
 	public float playerXP;
 
 	/**
-	 * Physics world used by all game objects physics
-	 */
-	public World world;
-
-	/**
 	 * Reference to this clients primary player.
 	 */
     public GameObject mainPlayer;
@@ -57,8 +50,6 @@ public class SocialGame extends Game {
 	public void create () {
 		// Initialise Box2D engine
 		Box2D.init();
-		// Create new Box2D physics world with no gravity
-		world = new World(new Vector2(0, 0), true);
 
 		batch = new SpriteBatch();
 		font = new BitmapFont();
@@ -79,6 +70,5 @@ public class SocialGame extends Game {
 		batch.dispose();
 		spriteSheet.dispose();
 		font.dispose();
-		world.dispose();
 	}
 }

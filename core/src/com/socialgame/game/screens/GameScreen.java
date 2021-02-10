@@ -3,6 +3,7 @@ package com.socialgame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.socialgame.game.SocialGame;
@@ -38,18 +39,18 @@ public class GameScreen implements Screen {
         this.stage = new Stage();
 
         // Create our physics world with no gravity
-        this.world = game.world;
+        this.world = new World(new Vector2(0, 0), true);
+    }
 
+    @Override
+    public void show() {
         game.mainPlayer = new Player(game);
         stage.addActor(game.mainPlayer);
         stage.addListener(new PlayerController((Player) game.mainPlayer));
 
         TestObj test = new TestObj(game);
         stage.addActor(test);
-    }
 
-    @Override
-    public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
