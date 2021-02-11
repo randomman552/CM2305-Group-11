@@ -40,7 +40,7 @@ public class Player extends Interactable {
     private int curInvSlot;
 
     public Player(SocialGame game) {
-        super(game);
+        super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
 
@@ -51,13 +51,6 @@ public class Player extends Interactable {
         // Idle animation setup (currently uses first from player walk animation)
         idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerWalk"));
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
-
-        setupRigidBody();
-
-        // Set position and size constants
-        setSize(WIDTH, HEIGHT);
-        setOrigin(WIDTH / 2f, HEIGHT / 2f);
-        setPosition(0, 0);
     }
 
     /**

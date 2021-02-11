@@ -23,10 +23,20 @@ public abstract class GameObject extends Actor {
     public Body body;
     public TextureRegion texture;
 
-    public GameObject(SocialGame game) {
+    public GameObject(SocialGame game, float x, float y, float width, float height) {
         this.game = game;
         setScale(SCALE, SCALE);
+        setBounds(x, y, width, height);
+        setOrigin(getWidth() / 2, getHeight() / 2);
         setupRigidBody();
+    }
+
+    public GameObject(SocialGame game, float width, float height) {
+        this(game, 0, 0, width, height);
+    }
+
+    public GameObject(SocialGame game) {
+        this(game, 0, 0, 0, 0);
     }
 
     /**
