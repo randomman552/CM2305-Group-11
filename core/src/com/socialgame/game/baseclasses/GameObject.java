@@ -52,6 +52,9 @@ public abstract class GameObject extends Actor {
         this.setX(body.getPosition().x - getOriginX());
         this.setY(body.getPosition().y - getOriginY());
         this.setRotation(body.getAngle() * (float)(180/Math.PI));
+
+
+
         super.act(delta);
     }
 

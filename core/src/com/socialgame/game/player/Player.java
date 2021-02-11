@@ -110,13 +110,25 @@ public class Player extends Interactable {
      * @param item The item to add
      */
     public void pickupItem(Item item) {
+        if (inventory[curInvSlot] != null)
+            dropItem();
 
+        inventory[curInvSlot] = item;
+        item.setVisible(false);
     }
 
     /**
      * Drop the item in the players selected inventory slot
      */
     public void dropItem() {
+        Item item = inventory[curInvSlot];
+
+        if (item == null)
+            return;
+
+        inventory[curInvSlot] = null;
+        item.setVisible(true);
+        item.body.setTransform(getX(), getY(), 0);
 
     }
 
@@ -130,5 +142,9 @@ public class Player extends Interactable {
 
     public int getCurInvSlot() {
         return curInvSlot;
+    }
+
+    public void setCurInvSlot(int val) {
+        curInvSlot = val;
     }
 }

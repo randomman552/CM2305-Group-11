@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.interactables.TestObj;
@@ -16,7 +17,6 @@ public class GameScreen implements Screen {
     protected final SocialGame game;
 
     public GameObject focusedObj;
-    public Player player;
 
     /**
      * Stage object for use with Scene2d
@@ -68,7 +68,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        Viewport viewport = stage.getViewport();
+        viewport.setScreenSize(width, height);
     }
 
     @Override

@@ -47,6 +47,9 @@ public class PlayerController extends InputListener {
                 case Input.Keys.D:
                     vel.x = accel;
                     break;
+                case Input.Keys.Q:
+                    player.dropItem();
+                    break;
             }
         }
         player.body.setLinearVelocity(vel);
