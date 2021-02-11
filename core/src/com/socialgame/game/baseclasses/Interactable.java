@@ -1,5 +1,6 @@
 package com.socialgame.game.baseclasses;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.socialgame.game.SocialGame;
@@ -31,7 +32,8 @@ public abstract class Interactable extends GameObject {
 
         @Override
         public boolean keyDown(InputEvent event, int keycode) {
-            parent.interact(game.mainPlayer);
+            if (keycode == Input.Keys.E)
+                parent.interact(game.mainPlayer);
             return false;
         }
 
