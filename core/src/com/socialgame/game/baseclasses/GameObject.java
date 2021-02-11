@@ -49,30 +49,32 @@ public abstract class GameObject extends Actor {
     @Override
     public void act(float delta) {
         // Update position based on movement of the rigid body
-        this.setX(body.getPosition().x - getOriginX());
-        this.setY(body.getPosition().y - getOriginY());
-        this.setRotation(body.getAngle() * (float)(180/Math.PI));
-
-
-
+        this.setPosition(body.getPosition().x - getOriginX(), body.getPosition().y - getOriginY(), false);
+        this.setRotation((float) Math.toDegrees(body.getAngle()));
         super.act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(texture,
-                (getX() + getOriginX()) * SCALE,
-                (getY() + getOriginY()) * SCALE,
+                getX(),
+                getY(),
                 getOriginX(),
                 getOriginY(),
                 getWidth(),
                 getHeight(),
-                SCALE, SCALE,
+                getScaleX(), getScaleY(),
                 getRotation());
     }
 
     @Override
     public void setPosition(float x, float y) {
-        body.setTransform(x, y, body.getAngle());
+        setPosition(x, y, true);
+    }
+
+    public void setPosition(float x, float y, boolean updateBody) {
+        if (updateBody)
+            body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
+        super.setPosition(x, y);
     }
 }

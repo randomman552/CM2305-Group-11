@@ -32,14 +32,17 @@ public abstract class Interactable extends GameObject {
 
         @Override
         public boolean keyDown(InputEvent event, int keycode) {
-            if (keycode == Input.Keys.E)
+            if (keycode == Input.Keys.E) {
                 parent.interact(game.mainPlayer);
+                ((GameScreen) game.getScreen()).stage.setKeyboardFocus(null);
+            }
             return false;
         }
 
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             parent.interact(game.mainPlayer);
+            ((GameScreen) game.getScreen()).stage.setKeyboardFocus(null);
             return false;
         }
     }
@@ -53,6 +56,5 @@ public abstract class Interactable extends GameObject {
      * @param caller The GameObject which called interact on this Interactable
      */
     public void interact(GameObject caller) {
-
     }
 }

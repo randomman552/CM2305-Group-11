@@ -30,7 +30,9 @@ public class PlayerController extends InputListener {
         super.handle(e);
 
         Vector2 vel = new Vector2(0, 0);
-        float accel = (player.isAlive()) ? Player.MAX_VEL: Player.MAX_VEL * Player.SPEC_VEL_MOD;
+
+        // Acceleration is proportional to player X scale
+        float accel = ((player.isAlive()) ? Player.MAX_VEL: Player.MAX_VEL * Player.SPEC_VEL_MOD) * player.getScaleX();
 
         // Change player states depending on the keys that are pressed down
         for (int keycode: pressedKeys) {

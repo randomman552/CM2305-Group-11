@@ -128,8 +128,7 @@ public class Player extends Interactable {
 
         inventory[curInvSlot] = null;
         item.setVisible(true);
-        item.body.setTransform(getX(), getY(), 0);
-
+        item.setPosition(getX(), getY());
     }
 
     /**
