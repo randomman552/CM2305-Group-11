@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,6 +30,7 @@ public class MainMenuScreen implements Screen {
         Texture texture = new Texture("title.png");
 
         Image title = new Image(texture);
+        addBackground();
 
         Button joinGameButton = new TextButton("Join Game",mySkin,"default");
         joinGameButton.addListener(new InputListener(){
@@ -71,7 +73,7 @@ public class MainMenuScreen implements Screen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new JoinGameScreen(game));
+                Gdx.app.exit();
                 return true;
             }
         });
@@ -86,6 +88,7 @@ public class MainMenuScreen implements Screen {
 
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
                 game.setScreen(new GameScreen(game));
             }
             @Override
@@ -120,6 +123,17 @@ public class MainMenuScreen implements Screen {
 
     }
 
+
+    public void addBackground(){
+        Texture texture = new Texture(Gdx.files.internal("background.png"));
+        TextureRegion textureRegion = new TextureRegion(texture);
+
+        textureRegion.setRegion(0,0,texture.getWidth(),texture.getHeight());
+        Image background = new Image(textureRegion);
+        background.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getWidth());
+        background.setPosition(0,Gdx.graphics.getHeight()-background.getHeight());
+        stage.addActor(background);
+    }
 
     @Override
     public void show() {
