@@ -32,6 +32,15 @@ public class JoinGameScreen implements Screen {
 
         addBackground();
 
+        Label ipAddressLabel = new Label("IP Address:", mySkin,"big");
+        TextField ipAddressText = new TextField("", mySkin);
+        Label passwordLabel = new Label("Password:", mySkin,"big");
+        TextField passwordText = new TextField("", mySkin);
+
+
+
+
+
         //TEMP BUTTON
         //TODO: Fix buttons and image not showing up.
         Button backButton = new TextButton("Back",mySkin,"default");
@@ -45,10 +54,16 @@ public class JoinGameScreen implements Screen {
         });
 
         Table table = new Table();
-        table.setDebug(true); // turn on all debug lines (table, cell, and widget)
+        table.setDebug(false); // turn on all debug lines (table, cell, and widget)
         table.setFillParent(true);
         table.center();
         table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
+        table.row();
+        table.add(ipAddressLabel);
+        table.add(ipAddressText);
+        table.row();
+        table.add(passwordLabel);
+        table.add(passwordText);
         table.row();
         table.add(backButton).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10);
         stage.addActor(table);
