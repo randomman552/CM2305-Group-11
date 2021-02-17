@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.socialgame.game.SocialGame;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * Should be added to the game stage as an event listener.
  */
 public class PlayerController extends InputListener {
-    protected Player player;
+    protected SocialGame game;
 
     /**
      * Array list to store the key codes of the keys which are currently pressed down.
@@ -21,14 +22,15 @@ public class PlayerController extends InputListener {
      */
     private final ArrayList<Integer> pressedKeys = new ArrayList<>();
 
-    public PlayerController(Player player) {
-        this.player = player;
+    public PlayerController(SocialGame game) {
+        this.game = game;
     }
 
     @Override
     public boolean handle(Event e) {
         super.handle(e);
 
+        Player player = (Player) game.mainPlayer;
         Vector2 vel = new Vector2(0, 0);
 
         // Acceleration is proportional to player X scale

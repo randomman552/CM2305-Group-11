@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
     public void show() {
         game.mainPlayer = new Player(game);
         stage.addActor(game.mainPlayer);
-        stage.addListener(new PlayerController((Player) game.mainPlayer));
+        stage.addListener(new PlayerController(game));
 
         stage.setDebugAll(true);
 
