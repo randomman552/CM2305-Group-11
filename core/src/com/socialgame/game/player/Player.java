@@ -37,7 +37,7 @@ public class Player extends Interactable {
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
     private Item[] inventory;
-    private int curInvSlot;
+    private int invSlot;
 
     public Player(SocialGame game) {
         super(game, WIDTH, HEIGHT);
@@ -103,10 +103,10 @@ public class Player extends Interactable {
      * @param item The item to add
      */
     public void pickupItem(Item item) {
-        if (inventory[curInvSlot] != null)
+        if (inventory[invSlot] != null)
             dropItem();
 
-        inventory[curInvSlot] = item;
+        inventory[invSlot] = item;
         item.setVisible(false);
     }
 
@@ -114,12 +114,12 @@ public class Player extends Interactable {
      * Drop the item in the players selected inventory slot
      */
     public void dropItem() {
-        Item item = inventory[curInvSlot];
+        Item item = inventory[invSlot];
 
         if (item == null)
             return;
 
-        inventory[curInvSlot] = null;
+        inventory[invSlot] = null;
         item.setVisible(true);
         item.setPosition(getX(), getY());
     }
@@ -132,11 +132,14 @@ public class Player extends Interactable {
         return inventory.clone();
     }
 
-    public int getCurInvSlot() {
-        return curInvSlot;
+    public int getInvSLot() {
+        return invSlot;
     }
 
-    public void setCurInvSlot(int val) {
-        curInvSlot = val;
+    public void setInvSlot(int val) {
+        // % operator does not work as we want for negative numbers
+        // Instead we take take the modulo of the absolute value, and subtract that from inventory length.
+        // This means the invSlot int will always be in range for inventory
+        invSlot = (val < 0) ? inventory.length - (-val % inventory.length): val % inventory.length;
     }
 }

@@ -51,9 +51,6 @@ public class PlayerController extends InputListener {
                 case Input.Keys.D:
                     vel.x = accel;
                     break;
-                case Input.Keys.Q:
-                    player.dropItem();
-                    break;
             }
         }
         player.body.setLinearVelocity(vel);
@@ -63,6 +60,20 @@ public class PlayerController extends InputListener {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
+        // Handle any required immediate actions which arent movement here
+        Player player = (Player) game.mainPlayer;
+        switch (keycode) {
+            case Input.Keys.Q:
+                player.dropItem();
+                break;
+            case Input.Keys.NUM_1:
+                player.setInvSlot(0);
+                break;
+            case Input.Keys.NUM_2:
+                player.setInvSlot(1);
+                break;
+        }
+
         pressedKeys.add(keycode);
         return false;
     }
@@ -70,6 +81,14 @@ public class PlayerController extends InputListener {
     @Override
     public boolean keyUp(InputEvent event, int keycode) {
         pressedKeys.remove(Integer.valueOf(keycode));
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
+        Player player = ((Player) game.mainPlayer);
+        // amountY is positive when scrolling down, and we want to go DOWN a slot. So we must negate amountY
+        player.setInvSlot(player.getInvSLot() + (int)-amountY);
         return false;
     }
 }
