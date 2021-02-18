@@ -8,6 +8,10 @@ public class Lightsword extends Weapon {
     public static final float ROTATION = 90;
 
     public Lightsword(SocialGame game) {
-        super(game, game.spriteSheet.findRegion("lightsword"), SCALE, ROTATION);
+        this(game, 0, 0);
+    }
+
+    public Lightsword(SocialGame game, float x, float y) {
+        super(game, game.spriteSheet.findRegion("lightsword"), SCALE, ROTATION, x, y);
     }
 }

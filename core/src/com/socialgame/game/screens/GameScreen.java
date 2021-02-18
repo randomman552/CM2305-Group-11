@@ -9,12 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
-import com.socialgame.game.items.weapons.Wrench;
-import com.socialgame.game.items.weapons.Axe;
-import com.socialgame.game.items.weapons.Sword;
-import com.socialgame.game.items.weapons.Lightsword;
-import com.socialgame.game.items.weapons.Scythe;
-
+import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 
@@ -54,18 +49,13 @@ public class GameScreen implements Screen {
         stage.addActor(game.mainPlayer);
         stage.addListener(new PlayerController(game));
         stage.setDebugAll(true);
+        stage.getCamera().position.set(new float[] {0, 0, 0});
 
-        Wrench wrench = new Wrench(game);
-        Axe axe = new Axe(game);
-        Sword sword = new Sword(game);
-        Scythe scythe = new Scythe(game);
-        Lightsword lightsword = new Lightsword(game);
-
-        stage.addActor(wrench);
-        stage.addActor(axe);
-        stage.addActor(sword);
-        stage.addActor(scythe);
-        stage.addActor(lightsword);
+        stage.addActor(new Wrench(game, -4, 2));
+        stage.addActor(new Axe(game, -2, 2));
+        stage.addActor(new Sword(game, 0, 2));
+        stage.addActor(new Scythe(game, 2, 2));
+        stage.addActor(new Lightsword(game, 4, 2));
 
 
         Gdx.input.setInputProcessor(stage);

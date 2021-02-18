@@ -8,6 +8,10 @@ public class Scythe extends Weapon {
     public static final float ROTATION = 0;
 
     public Scythe(SocialGame game) {
-        super(game, game.spriteSheet.findRegion("scythe"), SCALE, ROTATION);
+        this(game, 0, 0);
+    }
+
+    public Scythe(SocialGame game, float x, float y) {
+        super(game, game.spriteSheet.findRegion("scythe"), SCALE, ROTATION, x, y);
     }
 }

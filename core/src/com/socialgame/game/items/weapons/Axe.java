@@ -8,6 +8,10 @@ public class Axe extends Weapon {
     public static final float ROTATION = 0;
 
     public Axe(SocialGame game) {
-        super(game, game.spriteSheet.findRegion("axe"), SCALE, ROTATION);
+        this(game, 0, 0);
+    }
+
+    public Axe(SocialGame game, float x, float y) {
+        super(game, game.spriteSheet.findRegion("axe"), SCALE, ROTATION, x, y);
     }
 }

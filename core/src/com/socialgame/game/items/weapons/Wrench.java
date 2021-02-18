@@ -8,6 +8,10 @@ public class Wrench extends Weapon {
     public static final float ROTATION = -45;
 
     public Wrench(SocialGame game) {
-        super(game, game.spriteSheet.findRegion("wrench"), SCALE, ROTATION);
+        this(game, 0, 0);
+    }
+
+    public Wrench(SocialGame game, float x, float y) {
+        super(game, game.spriteSheet.findRegion("wrench"), SCALE, ROTATION, x, y);
     }
 }
