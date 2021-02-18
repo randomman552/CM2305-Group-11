@@ -4,24 +4,38 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+axe
+  rotate: false
+  xy: 2, 2
+  size: 369, 339
+  orig: 369, 339
+  offset: 0, 0
+  index: -1
 playerWalk
   rotate: false
-  xy: 2, 68
+  xy: 2, 343
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 1
 playerWalk
   rotate: false
-  xy: 399, 70
+  xy: 399, 345
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
 square
   rotate: false
-  xy: 2, 2
+  xy: 796, 902
   size: 64, 64
   orig: 64, 64
+  offset: 0, 0
+  index: -1
+wrench
+  rotate: false
+  xy: 399, 263
+  size: 320, 80
+  orig: 320, 80
   offset: 0, 0
   index: -1
