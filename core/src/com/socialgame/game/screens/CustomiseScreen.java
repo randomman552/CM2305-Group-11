@@ -50,16 +50,59 @@ public class CustomiseScreen implements Screen {
         container.setFillParent(true);
 
         Label colour1 = new Label("colour",mySkin, "default");
+        Label colour2 = new Label("colour",mySkin, "default");
+        Label colour3 = new Label("colour",mySkin, "default");
+        Label colour4 = new Label("colour",mySkin, "default");
+        Label colour5 = new Label("colour",mySkin, "default");
+        Label colour6 = new Label("colour",mySkin, "default");
+        Label colour7 = new Label("colour",mySkin, "default");
+        Label colour8 = new Label("colour",mySkin, "default");
+        Label colour9 = new Label("colour",mySkin, "default");
+        Label colour10 = new Label("colour",mySkin, "default");
+        Label colour11 = new Label("colour",mySkin, "default");
+        Label colour12 = new Label("colour",mySkin, "default");
 
-        Label label2 = new Label("playerInfo",mySkin, "default");
-        Label label3 = new Label("playerItems",mySkin, "default");
+        Label playerName = new Label("NAME",mySkin, "default");
+        Label playerLvl = new Label("Lv.8",mySkin,"default");
+        Label playerLvlCurrentBar = new Label("8",mySkin,"default");
+
+        Label playerLvlNextBar = new Label("9",mySkin,"default");
+        Label label3 = new Label("playerItem Table",mySkin,"default");
 
         Table clrPicker = new Table();
         clrPicker.setDebug(true);
-        clrPicker.add();
+        clrPicker.add(colour1).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour2).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour4).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour5).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour6).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour7).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour8).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour9).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour10).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour11).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour12).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
 
         Table playerInfo = new Table();
-        playerInfo.add(label2);
+        playerInfo.add(playerName).colspan(2);
+        playerInfo.add(playerLvl);
+        playerInfo.row();
+        playerInfo.add(playerLvlCurrentBar);
+        playerInfo.add(playerLvlNextBar);
+        playerInfo.add(playerLvlNextBar);
 
         Table playerItems = new Table();
         playerItems.add(label3);
@@ -85,6 +128,7 @@ public class CustomiseScreen implements Screen {
         // Top
 
     // Save and Exit buttons
+
 
     public void addBackground() {
         Texture texture = new Texture(Gdx.files.internal("background.png"));
