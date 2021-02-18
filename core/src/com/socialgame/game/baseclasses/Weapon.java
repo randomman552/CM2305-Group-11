@@ -21,7 +21,7 @@ public abstract class Weapon extends Item{
         this.texture = texture;
 
         // Set the size, origin, and rotation of this weapon instance
-        float sizeRatio = texture.getRegionWidth() / texture.getRegionHeight();
+        float sizeRatio = (float)texture.getRegionWidth() / (float)texture.getRegionHeight();
         setSize(scale * sizeRatio, scale);
         setOrigin(scale * sizeRatio / 2, scale / 2);
         setRotation(rotation);

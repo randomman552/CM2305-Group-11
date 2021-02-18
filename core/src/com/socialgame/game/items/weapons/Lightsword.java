@@ -4,7 +4,7 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.Weapon;
 
 public class Lightsword extends Weapon {
-    public static final float SCALE = 0.5f;
+    public static final float SCALE = 0.15f;
     public static final float ROTATION = 90;
 
     public Lightsword(SocialGame game) {
