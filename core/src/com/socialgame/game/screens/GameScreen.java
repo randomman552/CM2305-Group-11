@@ -10,6 +10,11 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.Wrench;
+import com.socialgame.game.items.weapons.Axe;
+import com.socialgame.game.items.weapons.Sword;
+import com.socialgame.game.items.weapons.Lightsword;
+import com.socialgame.game.items.weapons.Scythe;
+
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 
@@ -51,7 +56,18 @@ public class GameScreen implements Screen {
         stage.setDebugAll(true);
 
         Wrench wrench = new Wrench(game);
+        Axe axe = new Axe(game);
+        Sword sword = new Sword(game);
+        Scythe scythe = new Scythe(game);
+        Lightsword lightsword = new Lightsword(game);
+
+
         stage.addActor(wrench);
+        stage.addActor(axe);
+        stage.addActor(sword);
+        stage.addActor(scythe);
+        stage.addActor(lightsword);
+
 
         Gdx.input.setInputProcessor(stage);
     }

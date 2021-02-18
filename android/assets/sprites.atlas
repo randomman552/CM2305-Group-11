@@ -1,40 +1,61 @@
 
 sprites.png
-size: 1024,1024
+size: 2048, 1024
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest, Nearest
 repeat: none
 axe
   rotate: false
-  xy: 2, 2
+  xy: 1497, 655
   size: 369, 339
   orig: 369, 339
   offset: 0, 0
   index: -1
+lightsword
+  rotate: false
+  xy: 703, 218
+  size: 699, 151
+  orig: 699, 151
+  offset: 0, 0
+  index: -1
 playerWalk
   rotate: false
-  xy: 2, 343
+  xy: 703, 371
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 1
 playerWalk
   rotate: false
-  xy: 399, 345
+  xy: 1100, 373
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
+scythe
+  rotate: false
+  xy: 2, 540
+  size: 699, 454
+  orig: 699, 454
+  offset: 0, 0
+  index: -1
 square
   rotate: false
-  xy: 796, 902
+  xy: 1497, 589
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+sword
+  rotate: false
+  xy: 2, 84
+  size: 699, 454
+  orig: 699, 454
+  offset: 0, 0
+  index: -1
 wrench
   rotate: false
-  xy: 399, 263
+  xy: 2, 2
   size: 320, 80
   orig: 320, 80
   offset: 0, 0
