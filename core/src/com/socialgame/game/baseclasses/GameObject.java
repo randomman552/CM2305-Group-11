@@ -26,8 +26,8 @@ public abstract class GameObject extends Actor {
     public GameObject(SocialGame game, float x, float y, float width, float height) {
         this.game = game;
         setScale(SCALE, SCALE);
-        setBounds(x, y, width, height);
-        setOrigin(getWidth() / 2, getHeight() / 2);
+        setOrigin(width / 2, height / 2);
+        setBounds(x - getOriginX(), y - getOriginY(), width, height);
         setupRigidBody();
     }
 
@@ -63,38 +63,68 @@ public abstract class GameObject extends Actor {
     @Override
     public void act(float delta) {
         // Update position based on movement of the rigid body
-        this.setPosition(body.getPosition().x - getOriginX(), body.getPosition().y - getOriginY(), false);
-        this.setRotation((float) Math.toDegrees(body.getAngle()));
+        // Need to scale up the body's position by scale so that all movements are translated in the correct way
+        super.setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
+        super.setRotation((float) Math.toDegrees(body.getAngle()));
         super.act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        // Use super getX and getY to get screen space coordinates rather than game space ones
         batch.draw(getKeyFrame(game.elapsedTime),
-                getX(),
-                getY(),
-                getOriginX(),
-                getOriginY(),
-                getWidth(),
-                getHeight(),
+                super.getX(), super.getY(),
+                getOriginX(), getOriginY(),
+                getWidth(), getHeight(),
                 getScaleX(), getScaleY(),
                 getRotation());
     }
 
+    /**
+     * Set position of this GameObject (in game world coordinates).
+     * @param x Desired x coordinate
+     * @param y Desired y coordinate
+     */
     @Override
     public void setPosition(float x, float y) {
-        setPosition(x, y, true);
+        body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
     }
 
-    public void setPosition(float x, float y, boolean updateBody) {
-        if (updateBody)
-            body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
-        super.setPosition(x, y);
+    /**
+     * Set position of this GameObject about it's origin (in game world coordinates).
+     * @param x Desired x coordinate
+     * @param y Desired y coordinate
+     */
+    public void setPositionAboutOrigin(float x, float y) {
+        body.setTransform(x, y, body.getAngle());
     }
 
+    /**
+     * Set rotation of this GameObject
+     * @param degrees The angle to apply, in degrees
+     */
     @Override
     public void setRotation(float degrees) {
-        super.setRotation(degrees);
         body.setTransform(body.getPosition().x, body.getPosition().y, (float) Math.toRadians(degrees));
+    }
+
+    /**
+     * Get the x position of this GameObject in game world coordinates.
+     * Use super.getX for screen space coordinates.
+     * @return float of x position corrected for game scale.
+     */
+    @Override
+    public float getX() {
+        return super.getX() / getScaleX();
+    }
+
+    /**
+     * Get the y position of this GameObject in game world coordinates.
+     * Use super.getY for screen space coordinates.
+     * @return float of y position corrected for game scale.
+     */
+    @Override
+    public float getY() {
+        return super.getY() / getScaleY();
     }
 }
