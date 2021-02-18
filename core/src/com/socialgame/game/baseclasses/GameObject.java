@@ -39,6 +39,10 @@ public abstract class GameObject extends Actor {
         this(game, 0, 0, 0, 0);
     }
 
+    public TextureRegion getKeyFrame(float time) {
+        return texture;
+    }
+
     /**
      * Method used to initialise the rigidbody for this object.
      * TODO: Currently this method only sets up a body for velocity, not collisions.
@@ -66,7 +70,7 @@ public abstract class GameObject extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture,
+        batch.draw(getKeyFrame(game.elapsedTime),
                 getX(),
                 getY(),
                 getOriginX(),
@@ -86,5 +90,11 @@ public abstract class GameObject extends Actor {
         if (updateBody)
             body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
         super.setPosition(x, y);
+    }
+
+    @Override
+    public void setRotation(float degrees) {
+        super.setRotation(degrees);
+        body.setTransform(body.getPosition().x, body.getPosition().y, (float) Math.toRadians(degrees));
     }
 }

@@ -58,7 +58,7 @@ public class Player extends Interactable {
      * @param time Time since game start
      * @return The current frame as a {@link TextureRegion}
      */
-    protected TextureRegion getKeyFrame(float time) {
+    public TextureRegion getKeyFrame(float time) {
         if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
             return walkAnim.getKeyFrame(time);
         return idleAnim.getKeyFrame(time);

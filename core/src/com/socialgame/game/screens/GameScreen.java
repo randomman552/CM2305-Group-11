@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
-import com.socialgame.game.interactables.TestObj;
+import com.socialgame.game.items.weapons.Wrench;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 
@@ -50,8 +50,8 @@ public class GameScreen implements Screen {
 
         stage.setDebugAll(true);
 
-        TestObj test = new TestObj(game);
-        stage.addActor(test);
+        Wrench wrench = new Wrench(game);
+        stage.addActor(wrench);
 
         Gdx.input.setInputProcessor(stage);
     }
