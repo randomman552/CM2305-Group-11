@@ -27,9 +27,9 @@ public class CustomiseScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Skin mySkin;
         mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
-        Texture texture = new Texture("title.png");
+        Texture texture = new Texture("playerCustomisePlaceholder.png");
 
-        Image title = new Image(texture);
+        Image playerDisplayImg = new Image(texture);
 
         addBackground();
 
@@ -62,54 +62,65 @@ public class CustomiseScreen implements Screen {
         Label colour11 = new Label("colour",mySkin, "default");
         Label colour12 = new Label("colour",mySkin, "default");
 
-        Label playerName = new Label("NAME",mySkin, "default");
-        Label playerLvl = new Label("Lv.8",mySkin,"default");
-        Label playerLvlCurrentBar = new Label("8",mySkin,"default");
-
-        Label playerLvlNextBar = new Label("9",mySkin,"default");
+        Label playerName = new Label("NAMEEEEEEEEEEE",mySkin, "big");
+        Label playerLvl = new Label("Lv.8",mySkin,"big");
+        Label playerLvlCurrentBar = new Label("8",mySkin,"big");
+        Label playerLvlBar = new Label("##############----",mySkin,"big");
+        Label playerLvlNextBar = new Label("9",mySkin,"big");
         Label label3 = new Label("playerItem Table",mySkin,"default");
 
         Table clrPicker = new Table();
-        clrPicker.setDebug(true);
-        clrPicker.add(colour1).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour2).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour4).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour5).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour6).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour7).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour8).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour9).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour10).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour11).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
-        clrPicker.add(colour12).height(Gdx.graphics.getHeight()/14).pad(2f);
-        clrPicker.row();
+            clrPicker.setDebug(true);
+            clrPicker.add(colour1).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour2).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour4).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour5).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour6).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour7).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour8).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour9).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour10).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour11).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
+            clrPicker.add(colour12).height(Gdx.graphics.getHeight()/14).pad(2f);
+            clrPicker.row();
 
-        Table playerInfo = new Table();
-        playerInfo.add(playerName).colspan(2);
-        playerInfo.add(playerLvl);
-        playerInfo.row();
-        playerInfo.add(playerLvlCurrentBar);
-        playerInfo.add(playerLvlNextBar);
-        playerInfo.add(playerLvlNextBar);
+        Table playerInfoContainer = new Table();
+
+            Table playerInfo = new Table();
+            playerInfo.defaults().pad(5F);
+            playerInfo.add(playerName).colspan(2).left();
+            playerInfo.add(playerLvl);
+            playerInfo.row();
+            playerInfo.add(playerLvlCurrentBar);
+            playerInfo.add(playerLvlBar);
+            playerInfo.add(playerLvlNextBar);
+
+            Table playerDisplay = new Table();
+            playerDisplay.add(playerDisplayImg);
+
+        playerInfoContainer.add(playerInfo).height(Gdx.graphics.getHeight()/14*3);;
+        playerInfoContainer.row();
+        playerInfoContainer.add(playerDisplay).height(Gdx.graphics.getHeight()/14*11);
+
 
         Table playerItems = new Table();
-        playerItems.add(label3);
+        playerItems.add();
 
 
         container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
-        container.add(playerInfo).width(Gdx.graphics.getWidth()/18*8).expandY();
+        container.add(playerInfoContainer).width(Gdx.graphics.getWidth()/18*8).expandY();
         container.add(playerItems).width(Gdx.graphics.getWidth()/18*9).expandY();
 
         stage.addActor(container);
