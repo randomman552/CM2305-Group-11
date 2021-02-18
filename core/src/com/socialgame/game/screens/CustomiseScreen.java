@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.PlayerCustomisation;
@@ -44,15 +45,46 @@ public class CustomiseScreen implements Screen {
             }
         });
 
-        Table table = new Table();
-        table.setDebug(true); // turn on all debug lines (table, cell, and widget)
-        table.setFillParent(true);
-        table.center();
-        table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
-        table.row();
-        table.add(backButton).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10);
-        stage.addActor(table);
+        Table container = new Table();
+        container.defaults().padTop(10F).padBottom(10F);
+        container.setFillParent(true);
+
+        Label colour1 = new Label("colour",mySkin, "default");
+
+        Label label2 = new Label("playerInfo",mySkin, "default");
+        Label label3 = new Label("playerItems",mySkin, "default");
+
+        Table clrPicker = new Table();
+        clrPicker.setDebug(true);
+        clrPicker.add();
+
+        Table playerInfo = new Table();
+        playerInfo.add(label2);
+
+        Table playerItems = new Table();
+        playerItems.add(label3);
+
+
+        container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
+        container.add(playerInfo).width(Gdx.graphics.getWidth()/18*8).expandY();
+        container.add(playerItems).width(Gdx.graphics.getWidth()/18*9).expandY();
+
+        stage.addActor(container);
+        stage.setDebugAll(true);
+
     }
+
+    // Container
+
+    // Colour picker
+
+    // Player info and level
+
+    // Item selections
+        // Hat
+        // Top
+
+    // Save and Exit buttons
 
     public void addBackground() {
         Texture texture = new Texture(Gdx.files.internal("background.png"));
