@@ -1,8 +1,8 @@
 
 sprites.png
-size: 2048, 1024
+size: 2048,1024
 format: RGBA8888
-filter: Nearest, Nearest
+filter: Linear,Linear
 repeat: none
 axe
   rotate: false

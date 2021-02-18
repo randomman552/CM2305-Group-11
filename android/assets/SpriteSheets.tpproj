@@ -8,8 +8,8 @@ debug=false
 duplicatePadding=false
 edgePadding=true
 fast=false
-filterMag=Nearest
-filterMin=Nearest
+filterMag=Linear
+filterMin=Linear
 ignoreBlankImages=true
 maxHeight=2048
 maxWidth=2048
@@ -32,12 +32,12 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:raw,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../../../../../../Downloads/scythe.png,type:Input,regionName:null},{path:../../../../../../../../../Downloads/sword.png,type:Input,regionName:null},{path:../../../../../../../../../Downloads/lightsword.png,type:Input,regionName:null}]
+inputFiles=[{path:raw,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false}]
 
 
 -PROJ-
 
-version=4.10.0
+version=4.9.0
 fileTypeType=png
 fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=ffffffff
