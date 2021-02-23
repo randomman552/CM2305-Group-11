@@ -67,6 +67,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Move camera to follow main player
+        stage.getCamera().position.set(game.mainPlayer.getX(false), game.mainPlayer.getY(false), game.mainPlayer.getZIndex());
+
         // Advance physics and actors
         world.step(delta, 6, 2);
         stage.act(delta);

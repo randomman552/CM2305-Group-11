@@ -125,6 +125,15 @@ public abstract class GameObject extends Actor {
     }
 
     /**
+     * Get the y position of this game object
+     * @param worldSpace If true, will return world space coordinates
+     * @return y coordinate of game object
+     */
+    public float getX(boolean worldSpace) {
+        return (worldSpace) ? getX() : super.getX();
+    }
+
+    /**
      * Get the y position of this GameObject in game world coordinates.
      * Use super.getY for screen space coordinates.
      * @return float of y position corrected for game scale.
@@ -132,5 +141,14 @@ public abstract class GameObject extends Actor {
     @Override
     public float getY() {
         return super.getY() / getScaleY();
+    }
+
+    /**
+     * Get the y position of this game object
+     * @param worldSpace If true, will return world space coordinates
+     * @return y coordinate of game object
+     */
+    public float getY(boolean worldSpace) {
+        return (worldSpace) ? getY() : super.getY();
     }
 }
