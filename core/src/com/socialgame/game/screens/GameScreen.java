@@ -56,6 +56,8 @@ public class GameScreen implements Screen {
         stage.addActor(new Sword(game, 0, 2));
         stage.addActor(new Scythe(game, 2, 2));
         stage.addActor(new Lightsword(game, 4, 2));
+        stage.addActor(new Player(game));
+
 
 
         Gdx.input.setInputProcessor(stage);
