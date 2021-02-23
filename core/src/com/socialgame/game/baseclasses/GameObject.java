@@ -1,5 +1,6 @@
 package com.socialgame.game.baseclasses;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -71,6 +72,9 @@ public abstract class GameObject extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        Color oldCol = batch.getColor();
+        batch.setColor(this.getColor());
+
         // Use super getX and getY to get screen space coordinates rather than game space ones
         batch.draw(getKeyFrame(game.elapsedTime),
                 super.getX(), super.getY(),
@@ -78,6 +82,8 @@ public abstract class GameObject extends Actor {
                 getWidth(), getHeight(),
                 getScaleX(), getScaleY(),
                 getRotation());
+
+        batch.setColor(oldCol);
     }
 
     /**

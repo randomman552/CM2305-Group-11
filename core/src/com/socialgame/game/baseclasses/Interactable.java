@@ -61,6 +61,7 @@ public abstract class Interactable extends GameObject {
     }
 
     /**
+     * Method to be called when player interacts with a GameObject, should be overridden to get desired behavior.
      * @param caller The GameObject which called interact on this Interactable
      */
     public void interact(GameObject caller) {
