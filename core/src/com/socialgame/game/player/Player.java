@@ -163,6 +163,7 @@ public class Player extends Interactable {
     public void interact(GameObject caller) {
         if (caller instanceof Player) {
             Player player = ((Player) caller);
+            if (player == this) return;
             if (player.isSaboteur || player.hasWeapon()) {
                 this.takeDamage(this.health);
             }
