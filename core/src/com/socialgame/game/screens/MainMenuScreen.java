@@ -113,7 +113,7 @@ public class MainMenuScreen implements Screen {
         table.add(optionsButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10).padRight(5);
         table.add(quitGameButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
         table.row();
-        table.add(testing).colspan(2);
+        table.add(testingButton).colspan(2);
         stage.addActor(table);
 
 
