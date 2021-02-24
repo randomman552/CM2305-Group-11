@@ -35,6 +35,8 @@ public class Player extends Interactable {
     public static float SPEC_ALPHA = 0.25f;
 
     public int ID;
+    public Item[] inventory;
+
     private float health = 100;
 
     private Animation<TextureRegion> walkAnim;
@@ -43,7 +45,6 @@ public class Player extends Interactable {
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
-    private Item[] inventory;
     private int invSlot;
 
     public Player(SocialGame game) {
