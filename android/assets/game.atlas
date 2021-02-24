@@ -1,54 +1,68 @@
 
 game.png
-size: 2048, 1024
+size: 1024, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 axe
   rotate: false
-  xy: 2, 2
+  xy: 399, 385
   size: 248, 393
   orig: 248, 393
   offset: 0, 0
   index: -1
 lightsword
   rotate: false
-  xy: 1242, 432
+  xy: 914, 1295
   size: 50, 588
   orig: 50, 588
   offset: 0, 0
   index: -1
 playerWalk
   rotate: false
-  xy: 2, 397
+  xy: 399, 1260
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 1
 playerWalk
   rotate: false
-  xy: 399, 399
+  xy: 2, 2
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
+player_Twohanded_Walk
+  rotate: false
+  xy: 2, 1250
+  size: 395, 633
+  orig: 395, 633
+  offset: 0, 0
+  index: 1
+player_Twohanded_Walk
+  rotate: false
+  xy: 2, 625
+  size: 395, 623
+  orig: 395, 623
+  offset: 0, 0
+  index: 2
 scythe
   rotate: false
-  xy: 796, 542
+  xy: 399, 780
   size: 326, 478
   orig: 326, 478
   offset: 0, 0
   index: -1
 sword
   rotate: false
-  xy: 1124, 464
+  xy: 796, 1327
   size: 116, 556
   orig: 116, 556
   offset: 0, 0
   index: -1
 wrench
   rotate: false
-  xy: 252, 75
+  xy: 399, 63
   size: 80, 320
   orig: 80, 320
   offset: 0, 0
