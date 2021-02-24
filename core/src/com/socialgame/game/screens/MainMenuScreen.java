@@ -83,16 +83,12 @@ public class MainMenuScreen implements Screen {
          *  TODO: Fix setScreen not working
          */
 
-        Button testing = new TextButton("testing",mySkin,"default");
-        quitGameButton.addListener(new InputListener(){
+        Button testingButton = new TextButton("testing",mySkin,"default");
+        testingButton.addListener(new InputListener(){
 
             @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                dispose();
-                game.setScreen(new GameScreen(game));
-            }
-            @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new GameScreen(game));
                 return true;
             }
         });
