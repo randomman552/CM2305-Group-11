@@ -124,31 +124,31 @@ public class CustomiseScreen implements Screen {
 
         // Creates the table for the player to choose colours, TODO: replace labels with buttons
         Table clrPicker = new Table();
-            clrPicker.setDebug(true);
-            clrPicker.add(colour1).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour2).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour4).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour5).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour6).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour7).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour8).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour9).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour10).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour11).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
-            clrPicker.add(colour12).height(Gdx.graphics.getHeight()/14).pad(2f);
-            clrPicker.row();
+        clrPicker.setDebug(true);
+        clrPicker.add(colour1).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour2).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour4).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour5).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour6).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour7).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour8).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour9).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour10).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour11).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
+        clrPicker.add(colour12).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.row();
 
         // Creates the table for the players info
         // TODO: Replace labels with player data when added to the game.
@@ -156,66 +156,66 @@ public class CustomiseScreen implements Screen {
 
         Table playerInfoContainer = new Table();
 
-            Table playerInfo = new Table();
-            playerInfo.defaults().pad(5F);
-            playerInfo.add(playerName).colspan(2).left();
-            playerInfo.add(playerLvl);
-            playerInfo.row();
-            playerInfo.add(playerLvlCurrentBar);
-            playerInfo.add(playerLvlBar);
-            playerInfo.add(playerLvlNextBar);
+        Table playerInfo = new Table();
+        playerInfo.defaults().pad(5F);///////
+        playerInfo.add(playerName).colspan(2).left();
+        playerInfo.add(playerLvl);
+        playerInfo.row();
+        playerInfo.add(playerLvlCurrentBar);
+        playerInfo.add(playerLvlBar);
+        playerInfo.add(playerLvlNextBar);
 
         // TODO: Once items are implemented add preview of picked items for players
-            Table playerDisplay = new Table();
-            playerDisplay.add(playerDisplayImg);
+        Table playerDisplay = new Table();
+        playerDisplay.add(playerDisplayImg);
 
         // Combines the player display and info a single table
-        playerInfoContainer.add(playerInfo).height(Gdx.graphics.getHeight()/14*3);;
+        playerInfoContainer.add(playerInfo).height(Gdx.graphics.getHeight()/14*3);/////////////////
         playerInfoContainer.row();
-        playerInfoContainer.add(playerDisplay).height(Gdx.graphics.getHeight()/14*11);
+        playerInfoContainer.add(playerDisplay).height(Gdx.graphics.getHeight()/14*11);////////////////
 
 
         // Creates the table to house the item menu side
         Table playerItemMenuContainer = new Table();
 
-            // Creates the table that houses the items for players to pick.
-            // TODO: Make buttons intractable
-            // TODO: Combine with player preview to see items picked.
-            Table playerItems = new Table();
-            playerItems.defaults().pad(5F);
-            playerItems.add(itemButton);
-            playerItems.add(itemButton);
-            playerItems.add(itemButton);
-            playerItems.row();
-            playerItems.add(itemButton);
-            playerItems.add(itemButton);
-            playerItems.add(itemButton);
+        // Creates the table that houses the items for players to pick.
+        // TODO: Make buttons intractable
+        // TODO: Combine with player preview to see items picked.
+        Table playerItems = new Table();
+        playerItems.defaults().pad(10F).width(Gdx.graphics.getWidth()/8).height(Gdx.graphics.getWidth()/8);/////////
+        playerItems.add(itemButton);
+        playerItems.add(itemButton);
+        playerItems.add(itemButton);
+        playerItems.row();
+        playerItems.add(itemButton);
+        playerItems.add(itemButton);
+        playerItems.add(itemButton);
 
-            // Table that houses the buttons for nav and items for selection.
-            // TODO: Once items added make it so the two buttons swap items from Hats to Tops
-            Table playerItemMenu = new Table();
-            playerItemMenu.defaults();
-            playerItemMenu.add(hatButton).padRight(Gdx.graphics.getWidth()/12);
-            playerItemMenu.add(topButton);
-            playerItemMenu.row();
-            playerItemMenu.add(playerItems).colspan(2);
+        // Table that houses the buttons for nav and items for selection.
+        // TODO: Once items added make it so the two buttons swap items from Hats to Tops
+        Table playerItemMenu = new Table();
+        playerItemMenu.defaults();
+        playerItemMenu.add(hatButton).padRight(Gdx.graphics.getWidth()/11);////////////
+        playerItemMenu.add(topButton);
+        playerItemMenu.row().padTop(Gdx.graphics.getWidth()/40);///////////////
+        playerItemMenu.add(playerItems).colspan(2);
 
-            Table navButtons = new Table();
-            navButtons.defaults();
-            navButtons.add(saveButton).padRight(Gdx.graphics.getWidth()/12);
-            navButtons.add(exitButton);
+        Table navButtons = new Table();
+        navButtons.defaults();
+        navButtons.add(saveButton).padRight(Gdx.graphics.getWidth()/11);
+        navButtons.add(exitButton);
 
 
         // Combines the tables with the nav buttons for the game.
         playerItemMenuContainer.defaults();
-        playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8);
+        playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8).width(Gdx.graphics.getHeight()/10*8);//////
         playerItemMenuContainer.row();
-        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*4);
+        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*2).padBottom(Gdx.graphics.getHeight()/10).width(Gdx.graphics.getHeight()/10*8);///////////
 
         //Puts all the tables together in one table.
         container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
-        container.add(playerInfoContainer).width(Gdx.graphics.getWidth()/18*8).expandY();
-        container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18*9).expandY();
+        container.add(playerInfoContainer).width(Gdx.graphics.getWidth()/18*8).expandY();/////
+        container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18*9).expandY();////
 
         stage.addActor(container);
         stage.setDebugAll(true);
@@ -229,8 +229,8 @@ public class CustomiseScreen implements Screen {
     // Player info and level
 
     // Item selections
-        // Hat
-        // Top
+    // Hat
+    // Top
 
     // Save and Exit buttons
 
