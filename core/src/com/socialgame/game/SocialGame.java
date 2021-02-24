@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.socialgame.game.screens.GameScreen;
+import com.socialgame.game.screens.MainMenuScreen;
 
 public class SocialGame extends Game {
 	/**
@@ -17,9 +19,9 @@ public class SocialGame extends Game {
 	public SpriteBatch batch;
 
 	/**
-	 * Primary font used for text in game
+	 * Skin used for styling in the game
 	 */
-	public BitmapFont font;
+	static public Skin gameSkin;
 
 	/**
 	 * Primary sprite sheet.
@@ -49,17 +51,18 @@ public class SocialGame extends Game {
 	
 	@Override
 	public void create () {
+		// Locates skin
+		gameSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 		// Initialise Box2D engine
 		Box2D.init();
 		// Create new Box2D physics world with no gravity
 		world = new World(new Vector2(0, 0), true);
 
 		batch = new SpriteBatch();
-		font = new BitmapFont();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("sprites.atlas"));
 		elapsedTime = 0;
 
-		setScreen(new GameScreen(this));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class SocialGame extends Game {
 	public void dispose () {
 		batch.dispose();
 		spriteSheet.dispose();
-		font.dispose();
 		world.dispose();
+		gameSkin.dispose();
 	}
 }
