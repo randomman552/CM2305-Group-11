@@ -53,7 +53,7 @@ public class SocialGame extends Game {
 
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		spriteSheet = new TextureAtlas(Gdx.files.internal("sprites.atlas"));
+		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
 		elapsedTime = 0;
 
 		setScreen(new GameScreen(this));
