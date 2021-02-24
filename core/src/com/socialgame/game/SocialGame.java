@@ -2,14 +2,11 @@ package com.socialgame.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.Box2D;
-import com.socialgame.game.baseclasses.GameObject;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.socialgame.game.screens.GameScreen;
+import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.screens.MainMenuScreen;
 
 public class SocialGame extends Game {
@@ -57,7 +54,6 @@ public class SocialGame extends Game {
 		Box2D.init();
 
 		batch = new SpriteBatch();
-		font = new BitmapFont();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
 		elapsedTime = 0;
 
@@ -74,8 +70,6 @@ public class SocialGame extends Game {
 	public void dispose () {
 		batch.dispose();
 		spriteSheet.dispose();
-		font.dispose();
-		world.dispose();
 		gameSkin.dispose();
 	}
 }
