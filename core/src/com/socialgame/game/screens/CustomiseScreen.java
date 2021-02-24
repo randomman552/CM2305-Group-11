@@ -210,7 +210,7 @@ public class CustomiseScreen implements Screen {
         playerItemMenuContainer.defaults();
         playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8);
         playerItemMenuContainer.row();
-        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*2);
+        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*4);
 
         //Puts all the tables together in one table.
         container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
