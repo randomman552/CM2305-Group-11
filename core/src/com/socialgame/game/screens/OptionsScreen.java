@@ -45,14 +45,73 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        Table table = new Table();
-        table.setDebug(true); // turn on all debug lines (table, cell, and widget)
-        table.setFillParent(true);
-        table.center();
-        table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
-        table.row();
-        table.add(backButton).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10);
-        stage.addActor(table);
+        Label optionsLabel = new Label("Options", mySkin, "big");
+        Label setting1 = new Label("this is the VIDEO tab", mySkin, "default");
+        Label setting2 = new Label("this is the audio tab", mySkin, "default");
+        Button videoButton = new TextButton("Video", mySkin, "default");
+        Button audioButton = new TextButton("Audio", mySkin, "default");
+
+
+        Table container = new Table();
+        container.defaults().expand();//.padTop(10F).padBottom(10F);
+        container.setFillParent(true);
+        //container.center();
+        //table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
+
+
+        Table optionsButtons = new Table();
+        optionsButtons.setDebug(true);
+        optionsButtons.add(videoButton);//.width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10).colspan(2);
+        optionsButtons.row();
+        optionsButtons.add(audioButton);
+
+
+        final Table optionsVideo = new Table();
+        optionsVideo.setVisible(true);
+        optionsVideo.add(setting1);
+        optionsVideo.add();//Can change setting here
+
+        final Table optionsAudio = new Table();
+        optionsAudio.setVisible(false);
+        optionsAudio.add(setting2);
+
+
+        videoButton.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                optionsAudio.setVisible(false);
+                optionsVideo.setVisible(true);
+                return true;
+            }
+        });
+        audioButton.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                optionsVideo.setVisible(false);
+                optionsAudio.setVisible(true);
+                return true;
+            }
+        });
+
+
+
+
+        Table optionsContainer = new Table();
+        optionsContainer.setDebug(true);
+        optionsContainer.add(optionsLabel);
+        optionsContainer.row();
+        optionsContainer.add(optionsVideo);
+        optionsContainer.row();
+        optionsContainer.add(optionsAudio);
+
+        container.add(optionsButtons).width(Gdx.graphics.getWidth()/3);
+        container.add(optionsContainer).width(Gdx.graphics.getWidth()/3*2);
+        container.row();
+        container.add(backButton).colspan(2).height(Gdx.graphics.getHeight()/12);//.width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10).colspan(2);
+        stage.addActor(container);
+        stage.setDebugAll(true); // turn on all debug lines (table, cell, and widget)
     }
 
     public void addBackground(){
