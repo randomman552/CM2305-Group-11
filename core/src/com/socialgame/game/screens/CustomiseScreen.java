@@ -45,6 +45,23 @@ public class CustomiseScreen implements Screen {
         });
 
         //TEMP: Labels for the colours
+
+        /*
+
+        Texture colour1ImageTextureUp = new Texture("exampleItem.png");
+        Drawable colour1DrawableUp = new TextureRegionDrawable(new TextureRegion(colour1ImageTextureUp));
+        Texture colour1ImageTextureDown = new Texture("exampleItem.png");
+        Drawable colour1DrawableDown = new TextureRegionDrawable(new TextureRegion(colour1ImageTextureDown));
+        ImageButton colour1 = new ImageButton(colour1DrawableUp,colour1DrawableDown);
+
+
+
+        Texture colour1ImageTexture = new Texture("exampleItem.png");
+        Drawable colour1Drawable = new TextureRegionDrawable(new TextureRegion(colour1ImageTexture));
+        ImageButton colour1 = new ImageButton(colour1Drawable);
+          */
+
+
         Label colour1 = new Label("colour",mySkin, "default");
         Label colour2 = new Label("colour",mySkin, "default");
         Label colour3 = new Label("colour",mySkin, "default");
@@ -69,6 +86,8 @@ public class CustomiseScreen implements Screen {
         //Buttons for the itemMenu table, currently they do not do anything.
         Button hatButton = new TextButton("HAT",mySkin,"default");
         Button topButton = new TextButton("TOP",mySkin,"default");
+
+
 
         Texture itemImageTexture = new Texture("exampleItem.png");
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(itemImageTexture));
