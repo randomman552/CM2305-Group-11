@@ -181,17 +181,17 @@ public class CustomiseScreen implements Screen {
             playerItemMenu.row();
             playerItemMenu.add(playerItems).colspan(2);
 
-            Table thebuttons = new Table();
-            thebuttons.defaults();
-            thebuttons.add(saveButton).padRight(Gdx.graphics.getWidth()/12);
-            thebuttons.add(exitButton);
+            Table navButtons = new Table();
+            navButtons.defaults();
+            navButtons.add(saveButton).padRight(Gdx.graphics.getWidth()/12);
+            navButtons.add(exitButton);
 
 
         // Combines the tables with the nav buttons for the game.
         playerItemMenuContainer.defaults();
         playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8);
         playerItemMenuContainer.row();
-        playerItemMenuContainer.add(thebuttons).height(Gdx.graphics.getHeight()/10*2);
+        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*2);
 
         //Puts all the tables together in one table.
         container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
