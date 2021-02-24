@@ -1,0 +1,62 @@
+
+game.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+axe
+  rotate: false
+  xy: 2, 2
+  size: 369, 339
+  orig: 369, 339
+  offset: 0, 0
+  index: -1
+lightsword
+  rotate: false
+  xy: 1208, 798
+  size: 588, 50
+  orig: 588, 50
+  offset: 0, 0
+  index: -1
+playerWalk
+  rotate: false
+  xy: 2, 343
+  size: 395, 623
+  orig: 395, 623
+  offset: 0, 0
+  index: 1
+playerWalk
+  rotate: false
+  xy: 399, 345
+  size: 395, 621
+  orig: 395, 621
+  offset: 0, 0
+  index: 2
+scythe
+  rotate: false
+  xy: 796, 517
+  size: 410, 449
+  orig: 410, 449
+  offset: 0, 0
+  index: -1
+square
+  rotate: false
+  xy: 1208, 732
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 1208, 850
+  size: 556, 116
+  orig: 556, 116
+  offset: 0, 0
+  index: -1
+wrench
+  rotate: false
+  xy: 796, 435
+  size: 320, 80
+  orig: 320, 80
+  offset: 0, 0
+  index: -1
