@@ -94,6 +94,7 @@ public abstract class GameObject extends Actor {
     @Override
     public void setPosition(float x, float y) {
         body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
+        super.setPosition(x * getScaleX(), y * getScaleY());
     }
 
     /**
@@ -103,6 +104,7 @@ public abstract class GameObject extends Actor {
      */
     public void setPositionAboutOrigin(float x, float y) {
         body.setTransform(x, y, body.getAngle());
+        super.setPosition((x - getOriginX()) * getScaleX(), (y - getOriginY()) * getScaleY());
     }
 
     /**
@@ -112,6 +114,16 @@ public abstract class GameObject extends Actor {
     @Override
     public void setRotation(float degrees) {
         body.setTransform(body.getPosition().x, body.getPosition().y, (float) Math.toRadians(degrees));
+    }
+
+    @Override
+    public void setX(float x) {
+        super.setX(x * getScaleX());
+    }
+
+    @Override
+    public void setY(float y) {
+        super.setY(y * getScaleY());
     }
 
     /**
