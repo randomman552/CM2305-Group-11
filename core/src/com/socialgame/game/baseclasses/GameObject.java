@@ -1,11 +1,13 @@
 package com.socialgame.game.baseclasses;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.screens.GameScreen;
 
 /**
  * Base class from which all in game objects are derived.
@@ -22,8 +24,24 @@ public abstract class GameObject extends Actor {
     public Body body;
     public TextureRegion texture;
 
-    public GameObject(SocialGame game) {
+    public GameObject(SocialGame game, float x, float y, float width, float height) {
         this.game = game;
+        setScale(SCALE, SCALE);
+        setOrigin(width / 2, height / 2);
+        setBounds(x - getOriginX(), y - getOriginY(), width, height);
+        setupRigidBody();
+    }
+
+    public GameObject(SocialGame game, float width, float height) {
+        this(game, 0, 0, width, height);
+    }
+
+    public GameObject(SocialGame game) {
+        this(game, 0, 0, 0, 0);
+    }
+
+    public TextureRegion getKeyFrame(float time) {
+        return texture;
     }
 
     /**
@@ -36,7 +54,7 @@ public abstract class GameObject extends Actor {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         // Create body
-        body = game.world.createBody(bodyDef);
+        body = ((GameScreen) game.getScreen()).world.createBody(bodyDef);
         body.setUserData(this);
 
         // Synchronise the position of the body and GameObject
@@ -46,27 +64,103 @@ public abstract class GameObject extends Actor {
     @Override
     public void act(float delta) {
         // Update position based on movement of the rigid body
-        this.setX(body.getPosition().x - getOriginX());
-        this.setY(body.getPosition().y - getOriginY());
-        this.setRotation(body.getAngle() * (float)(180/Math.PI));
+        // Need to scale up the body's position by scale so that all movements are translated in the correct way
+        super.setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
+        super.setRotation((float) Math.toDegrees(body.getAngle()));
         super.act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture,
-                (getX() + getOriginX()) * SCALE,
-                (getY() + getOriginY()) * SCALE,
-                getOriginX(),
-                getOriginY(),
-                getWidth(),
-                getHeight(),
-                SCALE, SCALE,
+        Color oldCol = batch.getColor();
+        batch.setColor(this.getColor());
+
+        // Use super getX and getY to get screen space coordinates rather than game space ones
+        batch.draw(getKeyFrame(game.elapsedTime),
+                super.getX(), super.getY(),
+                getOriginX(), getOriginY(),
+                getWidth(), getHeight(),
+                getScaleX(), getScaleY(),
                 getRotation());
+
+        batch.setColor(oldCol);
+    }
+
+    /**
+     * Set position of this GameObject (in game world coordinates).
+     * @param x Desired x coordinate
+     * @param y Desired y coordinate
+     */
+    @Override
+    public void setPosition(float x, float y) {
+        body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
+        super.setPosition(x * getScaleX(), y * getScaleY());
+    }
+
+    /**
+     * Set position of this GameObject about it's origin (in game world coordinates).
+     * @param x Desired x coordinate
+     * @param y Desired y coordinate
+     */
+    public void setPositionAboutOrigin(float x, float y) {
+        body.setTransform(x, y, body.getAngle());
+        super.setPosition((x - getOriginX()) * getScaleX(), (y - getOriginY()) * getScaleY());
+    }
+
+    /**
+     * Set rotation of this GameObject
+     * @param degrees The angle to apply, in degrees
+     */
+    @Override
+    public void setRotation(float degrees) {
+        body.setTransform(body.getPosition().x, body.getPosition().y, (float) Math.toRadians(degrees));
     }
 
     @Override
-    public void setPosition(float x, float y) {
-        body.setTransform(x, y, body.getAngle());
+    public void setX(float x) {
+        super.setX(x * getScaleX());
+    }
+
+    @Override
+    public void setY(float y) {
+        super.setY(y * getScaleY());
+    }
+
+    /**
+     * Get the x position of this GameObject in game world coordinates.
+     * Use super.getX for screen space coordinates.
+     * @return float of x position corrected for game scale.
+     */
+    @Override
+    public float getX() {
+        return super.getX() / getScaleX();
+    }
+
+    /**
+     * Get the y position of this game object
+     * @param worldSpace If true, will return world space coordinates
+     * @return y coordinate of game object
+     */
+    public float getX(boolean worldSpace) {
+        return (worldSpace) ? getX() : super.getX();
+    }
+
+    /**
+     * Get the y position of this GameObject in game world coordinates.
+     * Use super.getY for screen space coordinates.
+     * @return float of y position corrected for game scale.
+     */
+    @Override
+    public float getY() {
+        return super.getY() / getScaleY();
+    }
+
+    /**
+     * Get the y position of this game object
+     * @param worldSpace If true, will return world space coordinates
+     * @return y coordinate of game object
+     */
+    public float getY(boolean worldSpace) {
+        return (worldSpace) ? getY() : super.getY();
     }
 }

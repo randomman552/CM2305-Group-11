@@ -4,9 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
+import com.socialgame.game.baseclasses.Weapon;
 
 public class Player extends Interactable {
     /**
@@ -26,38 +29,47 @@ public class Player extends Interactable {
      * For example, 2 gives spectators 2 times speed of players.
      */
     public static float SPEC_VEL_MOD = 1f;
+    /**
+     * Spectator alpha modifier
+     * When in spectator mode the player is drawn with this alpha value
+     */
+    public static float SPEC_ALPHA = 0.25f;
+    /**
+     * Position of player hand for holding items
+     */
+    public static final Vector2 HAND_POS = new Vector2(0.35f, 0.55f);
 
     public int ID;
-    public float health = 100;
+    public Item[] inventory;
+
+    private float health = 100;
 
     private Animation<TextureRegion> walkAnim;
+    private Animation<TextureRegion> walkAnimHold;
     private Animation<TextureRegion> idleAnim;
+    private Animation<TextureRegion> idleAnimHold;
     private boolean movingLeft = false;
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
-    private Item[] inventory;
-    private int curInvSlot;
+    private int invSlot;
 
     public Player(SocialGame game) {
-        super(game);
+        super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
 
         // Walk animation setup
-        walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerWalk"));
+        walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("player"));
         walkAnim.setPlayMode(Animation.PlayMode.LOOP);
+        walkAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerHold"));
+        walkAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
         // Idle animation setup (currently uses first from player walk animation)
-        idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerWalk"));
+        idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("player"));
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
-
-        setupRigidBody();
-
-        // Set position and size constants
-        setSize(WIDTH, HEIGHT);
-        setOrigin(WIDTH / 2f, HEIGHT / 2f);
-        setPosition(0, 0);
+        idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
+        idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     /**
@@ -65,7 +77,12 @@ public class Player extends Interactable {
      * @param time Time since game start
      * @return The current frame as a {@link TextureRegion}
      */
-    protected TextureRegion getKeyFrame(float time) {
+    public TextureRegion getKeyFrame(float time) {
+        if (inventory[invSlot] != null) {
+            if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+                return walkAnimHold.getKeyFrame(time);
+            return idleAnimHold.getKeyFrame(time);
+        }
         if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
             return walkAnim.getKeyFrame(time);
         return idleAnim.getKeyFrame(time);
@@ -92,43 +109,83 @@ public class Player extends Interactable {
         if (movingLeft && !texture.isFlipX() || !movingLeft && texture.isFlipX())
             texture.flip(true, false);
 
-        // If player isn't alive, make they partially transparent
-        Color batchColor = batch.getColor();
-        float alpha = batchColor.a;
-        if (!isAlive()) {
-            batch.setColor(batchColor.r, batchColor.g, batchColor.b, 0.5f);
+        // If player isn't alive, make them partially transparent
+        Color curCol = getColor();
+        if (isAlive()) {
+            setColor(curCol.r, curCol.g, curCol.b, 1f);
+        } else {
+            setColor(curCol.r, curCol.g, curCol.b, SPEC_ALPHA);
         }
 
         super.draw(batch, parentAlpha);
+        drawItem(batch, parentAlpha);
+    }
 
-        // Reset alpha if we have changed it
-        batch.setColor(batchColor.r, batchColor.g, batchColor.b, alpha);
+    private void drawItem(Batch batch, float parentAlpha) {
+        Item item = inventory[invSlot];
+        if (item == null) return;
+
+        item.setFlip(movingLeft);
+        item.setPosition(getX() + ((movingLeft) ? -(HAND_POS.x + item.getOriginX()) : HAND_POS.x + item.getOriginX()), getY() + HAND_POS.y);
+        item.draw(batch, parentAlpha);
     }
 
     /**
      * Add the given item to the players inventory
+     * Will drop currently held item if holding one
      * @param item The item to add
      */
     public void pickupItem(Item item) {
+        if (inventory[invSlot] != null)
+            dropItem();
 
+        inventory[invSlot] = item;
+        item.setVisible(false);
     }
 
     /**
      * Drop the item in the players selected inventory slot
      */
     public void dropItem() {
+        Item item = inventory[invSlot];
 
+        if (item == null)
+            return;
+
+        inventory[invSlot] = null;
+        item.setVisible(true);
     }
 
-    /**
-     * Get a copy of this players inventory
-     * @return Copy of the players inventory
-     */
-    public Item[] getInventory() {
-        return inventory.clone();
+    public int getInvSlot() {
+        return invSlot;
     }
 
-    public int getCurInvSlot() {
-        return curInvSlot;
+    public void setInvSlot(int val) {
+        // % operator does not work as we want for negative numbers
+        // Instead we take take the modulo of the absolute value, and subtract that from inventory length.
+        // This means the invSlot int will always be in range for inventory
+        invSlot = (val < 0) ? inventory.length - (-val % inventory.length): val % inventory.length;
+    }
+
+    public boolean hasWeapon() {
+        for (Item item: inventory)
+            if (item instanceof Weapon)
+                return true;
+        return false;
+    }
+
+    public void takeDamage(float amount) {
+        health -= amount;
+    }
+
+    @Override
+    public void interact(GameObject caller) {
+        if (caller instanceof Player) {
+            Player player = ((Player) caller);
+            if (player == this) return;
+            if (player.isSaboteur || player.hasWeapon()) {
+                this.takeDamage(this.health);
+            }
+        }
     }
 }

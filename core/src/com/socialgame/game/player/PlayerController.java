@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.socialgame.game.SocialGame;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * Should be added to the game stage as an event listener.
  */
 public class PlayerController extends InputListener {
-    protected Player player;
+    protected SocialGame game;
 
     /**
      * Array list to store the key codes of the keys which are currently pressed down.
@@ -21,15 +22,18 @@ public class PlayerController extends InputListener {
      */
     private final ArrayList<Integer> pressedKeys = new ArrayList<>();
 
-    public PlayerController(Player player) {
-        this.player = player;
+    public PlayerController(SocialGame game) {
+        this.game = game;
     }
 
     @Override
     public boolean handle(Event e) {
         super.handle(e);
 
+        Player player = (Player) game.mainPlayer;
         Vector2 vel = new Vector2(0, 0);
+
+        // Acceleration is proportional to player X scale
         float accel = (player.isAlive()) ? Player.MAX_VEL: Player.MAX_VEL * Player.SPEC_VEL_MOD;
 
         // Change player states depending on the keys that are pressed down
@@ -56,6 +60,20 @@ public class PlayerController extends InputListener {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
+        // Handle any required immediate actions which arent movement here
+        Player player = (Player) game.mainPlayer;
+        switch (keycode) {
+            case Input.Keys.Q:
+                player.dropItem();
+                break;
+            case Input.Keys.NUM_1:
+                player.setInvSlot(0);
+                break;
+            case Input.Keys.NUM_2:
+                player.setInvSlot(1);
+                break;
+        }
+
         pressedKeys.add(keycode);
         return false;
     }
@@ -63,6 +81,14 @@ public class PlayerController extends InputListener {
     @Override
     public boolean keyUp(InputEvent event, int keycode) {
         pressedKeys.remove(Integer.valueOf(keycode));
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
+        Player player = ((Player) game.mainPlayer);
+        // amountY is positive when scrolling down, and we want to go DOWN a slot. So we must negate amountY
+        player.setInvSlot(player.getInvSlot() + (int)-amountY);
         return false;
     }
 }
