@@ -1,62 +1,69 @@
 
 game.png
-size: 2048,1024
+size: 1024, 2048
 format: RGBA8888
-filter: Linear,Linear
+filter: Linear, Linear
 repeat: none
 axe
   rotate: false
-  xy: 2, 2
-  size: 369, 339
-  orig: 369, 339
+  xy: 399, 375
+  size: 248, 393
+  orig: 248, 393
   offset: 0, 0
   index: -1
 lightsword
   rotate: false
-  xy: 1208, 798
-  size: 588, 50
-  orig: 588, 50
+  xy: 914, 1283
+  size: 50, 588
+  orig: 50, 588
   offset: 0, 0
   index: -1
-playerWalk
+player
   rotate: false
-  xy: 2, 343
+  xy: 2, 1248
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
-  index: 1
-playerWalk
+  index: 2
+player
   rotate: false
-  xy: 399, 345
+  xy: 399, 1250
+  size: 395, 621
+  orig: 395, 621
+  offset: 0, 0
+  index: 1
+playerHold
+  rotate: false
+  xy: 2, 625
+  size: 395, 621
+  orig: 395, 621
+  offset: 0, 0
+  index: 1
+playerHold
+  rotate: false
+  xy: 2, 2
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
 scythe
   rotate: false
-  xy: 796, 517
-  size: 410, 449
-  orig: 410, 449
-  offset: 0, 0
-  index: -1
-square
-  rotate: false
-  xy: 1208, 732
-  size: 64, 64
-  orig: 64, 64
+  xy: 399, 770
+  size: 326, 478
+  orig: 326, 478
   offset: 0, 0
   index: -1
 sword
   rotate: false
-  xy: 1208, 850
-  size: 556, 116
-  orig: 556, 116
+  xy: 796, 1315
+  size: 116, 556
+  orig: 116, 556
   offset: 0, 0
   index: -1
 wrench
   rotate: false
-  xy: 796, 435
-  size: 320, 80
-  orig: 320, 80
+  xy: 399, 53
+  size: 80, 320
+  orig: 80, 320
   offset: 0, 0
   index: -1
