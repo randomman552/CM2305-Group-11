@@ -37,7 +37,7 @@ public class Player extends Interactable {
     /**
      * Position of player hand for holding items
      */
-    public static final Vector2 HAND_POS = new Vector2(0.4f, 0.4f);
+    public static final Vector2 HAND_POS = new Vector2(0.35f, 0.55f);
 
     public int ID;
     public Item[] inventory;
@@ -126,12 +126,13 @@ public class Player extends Interactable {
         if (item == null) return;
 
         item.setFlip(movingLeft);
-        item.setPosition(getX() + ((movingLeft) ? -HAND_POS.x : HAND_POS.x), getY() + HAND_POS.y);
+        item.setPosition(getX() + ((movingLeft) ? -(HAND_POS.x + item.getOriginX()) : HAND_POS.x + item.getOriginX()), getY() + HAND_POS.y);
         item.draw(batch, parentAlpha);
     }
 
     /**
      * Add the given item to the players inventory
+     * Will drop currently held item if holding one
      * @param item The item to add
      */
     public void pickupItem(Item item) {
