@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.socialgame.game.HUD.HUD;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
@@ -22,6 +23,10 @@ public class GameScreen implements Screen {
      * Stage object for use with Scene2d
      */
     public final Stage stage;
+    /**
+     * Stage to handle UI elements
+     */
+    private final Stage uiStage;
 
     /**
      * Box2d world used for physics simulation
@@ -37,6 +42,16 @@ public class GameScreen implements Screen {
     public GameScreen(SocialGame game) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(600, 400));
+        this.uiStage = new Stage();
+
+        // Create our physics world with no gravity
+        this.world = game.world;
+
+        player = new Player(game);
+        stage.addActor(player);
+        stage.addListener(new PlayerController(player));
+
+        uiStage.addActor(new HUD(game));
 
         // Create our physics world with no gravity
         this.world = new World(new Vector2(0, 0), true);
@@ -77,6 +92,7 @@ public class GameScreen implements Screen {
 
         // Draw changes on screen
         stage.draw();
+        uiStage.draw();
     }
 
     @Override
