@@ -44,13 +44,6 @@ public class GameScreen implements Screen {
         this.stage = new Stage(new StretchViewport(600, 400));
         this.uiStage = new Stage();
 
-        // Create our physics world with no gravity
-        this.world = game.world;
-
-        player = new Player(game);
-        stage.addActor(player);
-        stage.addListener(new PlayerController(player));
-
         uiStage.addActor(new HUD(game));
 
         // Create our physics world with no gravity
