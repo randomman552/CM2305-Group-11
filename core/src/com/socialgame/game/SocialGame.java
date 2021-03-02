@@ -26,6 +26,11 @@ public class SocialGame extends Game {
 	 */
 	public TextureAtlas spriteSheet;
 
+    /**
+     * Sprite sheet used for menus
+     */
+	public TextureAtlas menuSpriteSheet;
+
 	/**
 	 * Elapsed time since program start.
 	 * Can be used for timing other game components
@@ -55,6 +60,7 @@ public class SocialGame extends Game {
 
 		batch = new SpriteBatch();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
+		menuSpriteSheet = new TextureAtlas(Gdx.files.internal("menu.atlas"));
 		elapsedTime = 0;
 
 		this.setScreen(new MainMenuScreen(this));

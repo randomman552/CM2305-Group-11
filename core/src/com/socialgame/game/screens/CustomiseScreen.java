@@ -9,10 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
+
+import java.awt.*;
 
 public class CustomiseScreen implements Screen {
 
@@ -44,24 +49,58 @@ public class CustomiseScreen implements Screen {
             }
         });
 
+
+        final TextureRegionDrawable c1ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c1"));
+        TextureRegionDrawable c2ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c2"));
+        TextureRegionDrawable c3ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c3"));
+        TextureRegionDrawable c4ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c4"));
+        TextureRegionDrawable c5ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c5"));
+        TextureRegionDrawable c6ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c6"));
+        TextureRegionDrawable c7ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c7"));
+        TextureRegionDrawable c8ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c8"));
+        TextureRegionDrawable c9ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c9"));
+        TextureRegionDrawable c10ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c10"));
+        TextureRegionDrawable c11ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c11"));
+        TextureRegionDrawable c12ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c12"));
+
+
+
+        //SpriteDrawable c1Drawable = new SpriteDrawable(game.spriteSheet.findRegion("axe"));
+        final ImageButton c1Button = new ImageButton(c1ButtonTexture);
+        c1Button.addListener(new InputListener(){
+            TextureRegionDrawable activeBackground = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c1", 2));
+            TextureRegionDrawable inactiveBackground = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c1", 1));
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                c1Button.setBackground(activeBackground);
+            }
+        });
+
+
+
+        //TODO: CHANGE LABELS TO CHECKBOX BUTTONS, THEN COLOUR THE BUTTONS ACCOURDING TO THE COLOURS, THEN RESIZE THEM TO FIT IN THE BOX
+
+
+
+
+        CheckBox c2Button = new CheckBox("", mySkin, "default");
+        c2Button.setColor(1,0,0,1);
+        c2Button.addListener( new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+            return true;
+            }
+        });
+
+
         //TEMP: Labels for the colours
-
-        /*
-
-        Texture colour1ImageTextureUp = new Texture("exampleItem.png");
-        Drawable colour1DrawableUp = new TextureRegionDrawable(new TextureRegion(colour1ImageTextureUp));
-        Texture colour1ImageTextureDown = new Texture("exampleItem.png");
-        Drawable colour1DrawableDown = new TextureRegionDrawable(new TextureRegion(colour1ImageTextureDown));
-        ImageButton colour1 = new ImageButton(colour1DrawableUp,colour1DrawableDown);
-
-
-
-        Texture colour1ImageTexture = new Texture("exampleItem.png");
-        Drawable colour1Drawable = new TextureRegionDrawable(new TextureRegion(colour1ImageTexture));
-        ImageButton colour1 = new ImageButton(colour1Drawable);
-          */
-
-
         Label colour1 = new Label("colour",mySkin, "default");
         Label colour2 = new Label("colour",mySkin, "default");
         Label colour3 = new Label("colour",mySkin, "default");
@@ -124,10 +163,10 @@ public class CustomiseScreen implements Screen {
 
         // Creates the table for the player to choose colours, TODO: replace labels with buttons
         Table clrPicker = new Table();
-        clrPicker.setDebug(true);
-        clrPicker.add(colour1).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.setDebug(false);
+        clrPicker.add(c1Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour2).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c2Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
         clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
@@ -218,7 +257,7 @@ public class CustomiseScreen implements Screen {
         container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18*9).expandY();////
 
         stage.addActor(container);
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
 
     }
 
