@@ -2,9 +2,11 @@ package com.socialgame.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
-
-import java.awt.*;
 
 public class CustomiseScreen implements Screen {
 
@@ -33,7 +33,7 @@ public class CustomiseScreen implements Screen {
         mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
         Texture texture = new Texture("playerCustomisePlaceholder.png");
 
-        Image playerDisplayImg = new Image(texture);
+        final Image playerDisplayImg = new Image(texture);
 
         addBackground();
 
@@ -50,55 +50,84 @@ public class CustomiseScreen implements Screen {
         });
 
 
-        final TextureRegionDrawable c1ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c1"));
-        TextureRegionDrawable c2ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c2"));
-        TextureRegionDrawable c3ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c3"));
-        TextureRegionDrawable c4ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c4"));
-        TextureRegionDrawable c5ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c5"));
-        TextureRegionDrawable c6ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c6"));
-        TextureRegionDrawable c7ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c7"));
-        TextureRegionDrawable c8ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c8"));
-        TextureRegionDrawable c9ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c9"));
-        TextureRegionDrawable c10ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c10"));
-        TextureRegionDrawable c11ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c11"));
-        TextureRegionDrawable c12ButtonTexture = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c12"));
 
 
 
-        //SpriteDrawable c1Drawable = new SpriteDrawable(game.spriteSheet.findRegion("axe"));
-        final ImageButton c1Button = new ImageButton(c1ButtonTexture);
+        // Colour Buttons
+        /* Colour IDs from 1 to 12
+        205,66,41,255
+        221,115,39,255
+        241,234,87,255
+        110,165,22,255
+        41,205,162,255
+        41,175,205,255
+        188,141,232,255
+        131,67,156,255
+        153,89,54,255
+        79,117,19,255
+        119,119,119,255
+        13,102,133,255`
+         */
+
+
+        //TODO: Change the colour of a button when pressing.
+
+        // Base.png
+        // tick.png
+        final Texture baseColourButtonTexture = new Texture("Base.png");
+        final TextureRegionDrawable baseColourButtonDraw = new TextureRegionDrawable(baseColourButtonTexture);
+
+        final ImageButton c1Button = new ImageButton(baseColourButtonDraw);
+        c1Button.getImage().setColor(new Color(205,66,41,255));
         c1Button.addListener(new InputListener(){
-            TextureRegionDrawable activeBackground = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c1", 2));
-            TextureRegionDrawable inactiveBackground = new TextureRegionDrawable(game.menuSpriteSheet.findRegion("c1", 1));
-
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
 
+
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                c1Button.setBackground(activeBackground);
+
             }
-        });
-
-
-
-        //TODO: CHANGE LABELS TO CHECKBOX BUTTONS, THEN COLOUR THE BUTTONS ACCOURDING TO THE COLOURS, THEN RESIZE THEM TO FIT IN THE BOX
-
-
-
-
-        CheckBox c2Button = new CheckBox("", mySkin, "default");
-        c2Button.setColor(1,0,0,1);
-        c2Button.addListener( new InputListener(){
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-            return true;
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                c1Button.getImage().setColor(205,66,41,255);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                c1Button.getImage().setColor(205,66,41,255);
             }
         });
 
+        final ImageButton c2Button = new ImageButton(baseColourButtonDraw);
+        c2Button.getImage().setColor(255, 0, 255, 255);
+        c2Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                c2Button.getImage().setColor(0, 255, 255, 255);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                c2Button.getImage().setColor(255, 0, 255, 255);
+            }
+        });
+
+        //TODO: CHANGE LABELS TO CHECKBOX BUTTONS, THEN COLOUR THE BUTTONS ACCOURDING TO THE COLOURS, THEN RESIZE THEM TO FIT IN THE BOX
 
         //TEMP: Labels for the colours
         Label colour1 = new Label("colour",mySkin, "default");
