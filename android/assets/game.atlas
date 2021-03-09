@@ -11,6 +11,13 @@ axe
   orig: 248, 393
   offset: 0, 0
   index: -1
+killButton
+  rotate: false
+  xy: 399, 152
+  size: 229, 221
+  orig: 229, 221
+  offset: 0, 0
+  index: -1
 lightsword
   rotate: false
   xy: 914, 1283
@@ -62,7 +69,7 @@ sword
   index: -1
 wrench
   rotate: false
-  xy: 399, 53
+  xy: 649, 448
   size: 80, 320
   orig: 80, 320
   offset: 0, 0
