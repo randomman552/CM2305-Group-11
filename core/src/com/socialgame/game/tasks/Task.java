@@ -1,90 +1,149 @@
 package com.socialgame.game.tasks;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.player.Player;
-import com.socialgame.game.tasks.async.Maze;
+import com.socialgame.game.screens.GameScreen;
 
 /**
  * Class from which all tasks are derived.
  * Functions as a factory, call the createTask method to create a Task
  * Extension of Interactable class
  */
-public class Task extends Interactable {
-    public boolean open = false;
-    protected final TaskStage taskStage;
-    protected boolean done = false;
-
+public abstract class Task extends Interactable implements Disposable {
     /**
-     * Create a new Task instance at the given world coordinates with the given task stage
-     * @param game Game instance
-     * @param taskStage Stage to use for task
-     * @param x X coordinate to spawn at
-     * @param y Y coordinate to spawn at
-     * @return A new Task object
+     * Actor extension to act as task background (common to all tasks)
      */
-    public static Task create(SocialGame game, TaskStage taskStage, float x, float y) {
-        return new Task(game, taskStage, x, y);
+    private static class BGActor extends Actor implements Disposable {
+        private final Texture texture;
+        public BGActor() {
+            Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            pixmap.setColor(Color.GRAY);
+            pixmap.fill();
+            texture = new Texture(pixmap);
+            pixmap.dispose();
+
+            this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            super.draw(batch, parentAlpha);
+            batch.draw(this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        }
+
+        @Override
+        public void dispose() {
+            this.texture.dispose();
+        }
     }
 
-    /**
-     * Create a new Task instance with the given task stage
-     * @param game Game instance
-     * @param taskStage Stage to use for task
-     * @return A new Task object
-     */
-    public static Task create(SocialGame game, TaskStage taskStage) {
-        return new Task(game, taskStage);
-    }
+    protected final Group group;
 
-    private Task(SocialGame game, TaskStage taskStage, float x, float y) {
+    private boolean complete = false;
+    private boolean failed = false;
+
+    public Task(SocialGame game, float x, float y) {
         super(game, x, y, 1, 1);
-        this.taskStage = taskStage;
+        texture = game.spriteSheet.findRegion("placeholder");
+
+        group = new Group();
+        close();
+
+        // Add common elements (needed for all tasks)
+        ImageButtonStyle style = new ImageButtonStyle();
+        ImageButton closeBtn = new ImageButton(style);
+        closeBtn.setBounds(Gdx.graphics.getWidth() - 30, Gdx.graphics.getHeight() - 30, 30, 30);
+
+        // Add InputListener to close task when close button is pressed
+        closeBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                close();
+                return true;
+            }
+        });
+
+        group.addActor(new BGActor());
+        group.addActor(closeBtn);
+
+        // Add group to UI Stage, TODO: Add method to game that does this to reduce the cross dependencies
+        ((GameScreen) game.getScreen()).uiStage.addActor(group);
     }
 
-    private Task(SocialGame game, TaskStage taskStage) {
-        this(game, taskStage, 0, 0);
+    public Task(SocialGame game) {
+        this(game, 0, 0);
     }
 
     /**
      * Method to be called on task completion
      */
     public void onComplete() {
-        done = true;
-        taskStage.close();
+        complete = true;
+        close();
     }
 
     /**
      * Method to be called on task failure
      */
     public void onFail() {
-        done = true;
-        taskStage.close();
+        complete = true;
+        failed = true;
+        close();
     }
+
+    public void open() {
+        group.setVisible(true);
+    }
+
+    public void close() {
+        group.setVisible(false);
+    }
+
+    public boolean isOpen() {
+        return group.isVisible();
+    }
+
+    public boolean isComplete() { return complete; }
+
+    public boolean isFailed() { return failed; }
 
     @Override
     public void interact(GameObject caller) {
-        if (caller instanceof Player && !done){
-            taskStage.open();
+        if (caller instanceof Player && !complete){
+            open();
         }
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (taskStage.isComplete())
-            onComplete();
-        if (taskStage.isFailed())
+        if (isFailed())
             onFail();
-        taskStage.act();
+        else if (isComplete())
+            onComplete();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        taskStage.draw();
+    }
+
+    @Override
+    public void dispose() {
+        ((GameScreen) game.getScreen()).uiStage.getActors().removeValue(group, true);
     }
 }

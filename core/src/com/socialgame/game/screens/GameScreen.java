@@ -1,6 +1,7 @@
 package com.socialgame.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +14,7 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
+import com.socialgame.game.tasks.async.ClockCalibrationTask;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -26,7 +28,9 @@ public class GameScreen implements Screen {
     /**
      * Stage to handle UI elements
      */
-    private final Stage uiStage;
+    public final Stage uiStage;
+
+    private final InputMultiplexer inputProcessor;
 
     /**
      * Box2d world used for physics simulation
@@ -48,15 +52,22 @@ public class GameScreen implements Screen {
 
         // Create our physics world with no gravity
         this.world = new World(new Vector2(0, 0), true);
+
+        // Multiplex stage and uiStage input handlers (so both can be interacted with)
+        inputProcessor = new InputMultiplexer();
+        inputProcessor.addProcessor(uiStage);
+        inputProcessor.addProcessor(stage);
+
+        // Set debug
+        stage.setDebugAll(true);
+        uiStage.setDebugAll(true);
     }
 
     @Override
     public void show() {
-
         game.mainPlayer = new Player(game);
         stage.addActor(game.mainPlayer);
         stage.addListener(new PlayerController(game));
-        stage.setDebugAll(true);
         stage.getCamera().position.set(new float[] {0, 0, 0});
 
         stage.addActor(new Wrench(game, -4, 2));
@@ -64,11 +75,11 @@ public class GameScreen implements Screen {
         stage.addActor(new Sword(game, 0, 2));
         stage.addActor(new Scythe(game, 2, 2));
         stage.addActor(new Lightsword(game, 4, 2));
-        stage.addActor(new Player(game));
+        //stage.addActor(new Player(game));
 
+        stage.addActor(new ClockCalibrationTask(game, 0, 4));
 
-
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(inputProcessor);
     }
 
     @Override
@@ -82,6 +93,7 @@ public class GameScreen implements Screen {
         // Advance physics and actors
         world.step(delta, 6, 2);
         stage.act(delta);
+        uiStage.act(delta);
 
         // Draw changes on screen
         stage.draw();
@@ -91,6 +103,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
+        uiStage.getViewport().update(width, height);
     }
 
     @Override
