@@ -101,6 +101,22 @@ public abstract class GameObject extends Actor {
     }
 
     /**
+     * Set X coordinate of this GameObject (about it's origin)
+     * @param x Desired X coordinate
+     */
+    public void setXAboutOrigin(float x) {
+        setPositionAboutOrigin(x, getY());
+    }
+
+    /**
+     * Set Y coordinate of this GameObject (about it's origin)
+     * @param y Desired Y coordinate
+     */
+    public void setYAboutOrigin(float y) {
+        setPositionAboutOrigin(getX(), y);
+    }
+
+    /**
      * Set rotation of this GameObject
      * @param degrees The angle to apply, in degrees
      */
