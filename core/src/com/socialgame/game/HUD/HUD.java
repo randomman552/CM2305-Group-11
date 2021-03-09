@@ -25,7 +25,6 @@ import javax.swing.event.ChangeEvent;
 public class HUD extends Group {
     protected SocialGame game;
 
-
     public ProgressBar progressBar;
     public ProgressBar hazardBar;
     private ImageButton killButton;
