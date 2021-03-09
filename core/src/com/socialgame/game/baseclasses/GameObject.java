@@ -13,12 +13,6 @@ import com.socialgame.game.screens.GameScreen;
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor {
-    /**
-     * Defines the size of the physics units compared to pixels. This applies to ALL GameObject instances.
-     * For example, scale of 50 means that 1 unit is equal to 50 pixels
-     */
-    public static float SCALE = 50;
-
     protected SocialGame game;
 
     public Body body;
@@ -26,7 +20,6 @@ public abstract class GameObject extends Actor {
 
     public GameObject(SocialGame game, float x, float y, float width, float height) {
         this.game = game;
-        setScale(SCALE, SCALE);
         setOrigin(width / 2, height / 2);
         setBounds(x - getOriginX(), y - getOriginY(), width, height);
         setupRigidBody();
@@ -94,7 +87,7 @@ public abstract class GameObject extends Actor {
     @Override
     public void setPosition(float x, float y) {
         body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
-        super.setPosition(x * getScaleX(), y * getScaleY());
+        super.setPosition(x, y);
     }
 
     /**
@@ -104,7 +97,7 @@ public abstract class GameObject extends Actor {
      */
     public void setPositionAboutOrigin(float x, float y) {
         body.setTransform(x, y, body.getAngle());
-        super.setPosition((x - getOriginX()) * getScaleX(), (y - getOriginY()) * getScaleY());
+        super.setPosition(x - getOriginX(), y - getOriginY());
     }
 
     /**
@@ -117,50 +110,12 @@ public abstract class GameObject extends Actor {
     }
 
     @Override
-    public void setX(float x) {
-        super.setX(x * getScaleX());
-    }
-
-    @Override
-    public void setY(float y) {
-        super.setY(y * getScaleY());
-    }
-
-    /**
-     * Get the x position of this GameObject in game world coordinates.
-     * Use super.getX for screen space coordinates.
-     * @return float of x position corrected for game scale.
-     */
-    @Override
     public float getX() {
-        return super.getX() / getScaleX();
+        return super.getX() + getOriginX();
     }
 
-    /**
-     * Get the y position of this game object
-     * @param worldSpace If true, will return world space coordinates
-     * @return y coordinate of game object
-     */
-    public float getX(boolean worldSpace) {
-        return (worldSpace) ? getX() : super.getX();
-    }
-
-    /**
-     * Get the y position of this GameObject in game world coordinates.
-     * Use super.getY for screen space coordinates.
-     * @return float of y position corrected for game scale.
-     */
     @Override
     public float getY() {
-        return super.getY() / getScaleY();
-    }
-
-    /**
-     * Get the y position of this game object
-     * @param worldSpace If true, will return world space coordinates
-     * @return y coordinate of game object
-     */
-    public float getY(boolean worldSpace) {
-        return (worldSpace) ? getY() : super.getY();
+        return super.getY() + getOriginY();
     }
 }

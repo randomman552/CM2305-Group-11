@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.socialgame.game.HUD.HUD;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
@@ -41,7 +42,10 @@ public class GameScreen implements Screen {
 
     public GameScreen(SocialGame game) {
         this.game = game;
-        this.stage = new Stage(new StretchViewport(600, 400));
+
+        // Use StretchViewport so that users with bigger screens cannot see more
+        StretchViewport vp = new StretchViewport(16, 9);
+        this.stage = new Stage(vp);
         this.uiStage = new Stage();
 
         uiStage.addActor(new HUD(game));
@@ -77,7 +81,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Move camera to follow main player
-        stage.getCamera().position.set(game.mainPlayer.getX(false), game.mainPlayer.getY(false), game.mainPlayer.getZIndex());
+        stage.getCamera().position.set(game.mainPlayer.getX(), game.mainPlayer.getY(), game.mainPlayer.getZIndex());
 
         // Advance physics and actors
         world.step(delta, 6, 2);
