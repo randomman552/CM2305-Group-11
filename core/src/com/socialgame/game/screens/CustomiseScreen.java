@@ -53,8 +53,9 @@ public class CustomiseScreen implements Screen {
 
 
 
-        // Colour Buttons
-        /* Colour IDs from 1 to 12
+
+        // Colour codes:
+        /*
         205,66,41,255
         221,115,39,255
         241,234,87,255
@@ -68,7 +69,20 @@ public class CustomiseScreen implements Screen {
         119,119,119,255
         13,102,133,255`
          */
+        Color c1 = new Color(0xcd4229ff);
+        Color c2 = new Color(0xdd7327ff);
+        Color c3 = new Color(0xf1ea57ff);
+        Color c4 = new Color(0x6ea516ff);
+        Color c5 = new Color(0x29cda2ff);
+        Color c6 = new Color(0x29afcdff);
+        Color c7 = new Color(0xbc8de8ff);
+        Color c8 = new Color(0x83439cff);
+        Color c9 = new Color(0x995936ff);
+        Color c10 = new Color(0x4f7513ff);
+        Color c11 = new Color(0x777777ff);
+        Color c12 = new Color(0x0d6685ff);
 
+        // Colour Buttons
 
         //TODO: Change the colour of a button when pressing.
 
@@ -78,7 +92,7 @@ public class CustomiseScreen implements Screen {
         final TextureRegionDrawable baseColourButtonDraw = new TextureRegionDrawable(baseColourButtonTexture);
 
         final ImageButton c1Button = new ImageButton(baseColourButtonDraw);
-        c1Button.getImage().setColor(new Color(205,66,41,255));
+        c1Button.getImage().setColor(c1);
         c1Button.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
@@ -90,20 +104,10 @@ public class CustomiseScreen implements Screen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
 
             }
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                c1Button.getImage().setColor(205,66,41,255);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                c1Button.getImage().setColor(205,66,41,255);
-            }
         });
 
         final ImageButton c2Button = new ImageButton(baseColourButtonDraw);
-        c2Button.getImage().setColor(255, 0, 255, 255);
+        c2Button.getImage().setColor(c2);
         c2Button.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
@@ -115,15 +119,155 @@ public class CustomiseScreen implements Screen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
 
             }
+        });
 
+        final ImageButton c3Button = new ImageButton(baseColourButtonDraw);
+        c3Button.getImage().setColor(c3);
+        c3Button.addListener(new InputListener(){
             @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                c2Button.getImage().setColor(0, 255, 255, 255);
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
             }
 
+
             @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                c2Button.getImage().setColor(255, 0, 255, 255);
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c4Button = new ImageButton(baseColourButtonDraw);
+        c4Button.getImage().setColor(c4);
+        c4Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c5Button = new ImageButton(baseColourButtonDraw);
+        c5Button.getImage().setColor(c5);
+        c5Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c6Button = new ImageButton(baseColourButtonDraw);
+        c6Button.getImage().setColor(c6);
+        c6Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c7Button = new ImageButton(baseColourButtonDraw);
+        c7Button.getImage().setColor(c7);
+        c7Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c8Button = new ImageButton(baseColourButtonDraw);
+        c8Button.getImage().setColor(c8);
+        c8Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c9Button = new ImageButton(baseColourButtonDraw);
+        c9Button.getImage().setColor(c9);
+        c9Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c10Button = new ImageButton(baseColourButtonDraw);
+        c10Button.getImage().setColor(c10);
+        c10Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c11Button = new ImageButton(baseColourButtonDraw);
+        c11Button.getImage().setColor(c11);
+        c11Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+        final ImageButton c12Button = new ImageButton(baseColourButtonDraw);
+        c12Button.getImage().setColor(c12);
+        c12Button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
             }
         });
 
@@ -197,25 +341,25 @@ public class CustomiseScreen implements Screen {
         clrPicker.row();
         clrPicker.add(c2Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour3).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c3Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour4).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c4Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour5).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c5Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour6).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c6Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour7).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c7Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour8).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c8Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour9).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c9Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour10).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c10Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour11).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c11Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
-        clrPicker.add(colour12).height(Gdx.graphics.getHeight()/14).pad(2f);
+        clrPicker.add(c12Button).height(Gdx.graphics.getHeight()/14).pad(2f);
         clrPicker.row();
 
         // Creates the table for the players info
