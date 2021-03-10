@@ -6,70 +6,84 @@ filter: Linear, Linear
 repeat: none
 axe
   rotate: false
-  xy: 1778, 1580
+  xy: 517, 91
   size: 248, 393
   orig: 248, 393
   offset: 0, 0
   index: -1
 lightsword
   rotate: false
-  xy: 914, 517
+  xy: 1961, 1387
   size: 50, 588
   orig: 50, 588
   offset: 0, 0
   index: -1
 placeholder
   rotate: false
-  xy: 2, 1107
+  xy: 2, 1109
   size: 980, 866
   orig: 980, 866
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 2, 482
+  xy: 2, 2
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 2
 player
   rotate: false
-  xy: 399, 484
+  xy: 1564, 1354
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 984, 1352
+  xy: 582, 486
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 1381, 1352
+  xy: 984, 872
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
 scythe
   rotate: false
-  xy: 2, 2
+  xy: 979, 392
   size: 326, 478
   orig: 326, 478
   offset: 0, 0
   index: -1
 sword
   rotate: false
-  xy: 796, 549
+  xy: 399, 69
   size: 116, 556
   orig: 116, 556
   offset: 0, 0
   index: -1
+triangleDown
+  rotate: false
+  xy: 984, 1495
+  size: 578, 480
+  orig: 578, 480
+  offset: 0, 0
+  index: -1
+triangleUp
+  rotate: false
+  xy: 2, 627
+  size: 578, 480
+  orig: 578, 480
+  offset: 0, 0
+  index: -1
 wrench
   rotate: false
-  xy: 330, 160
+  xy: 1381, 1173
   size: 80, 320
   orig: 80, 320
   offset: 0, 0

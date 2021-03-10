@@ -2,8 +2,12 @@ package com.socialgame.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.socialgame.game.baseclasses.GameObject;
@@ -45,6 +49,20 @@ public class SocialGame extends Game {
 	 * Reference to this clients primary player.
 	 */
     public GameObject mainPlayer;
+
+	/**
+	 * Helper function to generate fonts using the FreeType extension
+	 * @param path Path to the .ttf file
+	 * @param parameter FreeTypeFontParameter object defining parameters (such as font size etc)
+	 * @return Generated BitmapFont
+	 */
+	public BitmapFont generateFont(FileHandle path, FreeTypeFontParameter parameter) {
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(path);
+		BitmapFont font = generator.generateFont(parameter);
+		generator.dispose();
+
+		return font;
+	}
 
     @Override
 	public void create () {
