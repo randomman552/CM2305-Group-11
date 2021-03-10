@@ -36,8 +36,8 @@ public abstract class Task extends Interactable implements Disposable {
      */
     protected final Table table;
 
-    private boolean complete = false;
-    private boolean failed = false;
+    protected boolean complete = false;
+    protected boolean failed = false;
 
     public Task(SocialGame game, float x, float y) {
         super(game, x, y, 1, 1);
