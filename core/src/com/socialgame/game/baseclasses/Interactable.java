@@ -48,7 +48,7 @@ public abstract class Interactable extends GameObject {
     }
 
     public Interactable(SocialGame game, float x, float y, float width, float height) {
-        super(game, x, y, width, height);
+        super(game, width, height, x, y);
         addListener(new InputListener(game, this));
     }
 
