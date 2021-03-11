@@ -15,8 +15,8 @@ public abstract class Weapon extends Item{
      * @param scale Scale factor to scale the given texture region by
      * @param rotation The amount the weapon is rotated by default (in degrees)
      */
-    public Weapon(SocialGame game, TextureRegion texture, float scale, float rotation) {
-        super(game);
+    public Weapon(SocialGame game, TextureRegion texture, float scale, float rotation, float x, float y) {
+        super(game, x, y, 1, 1);
         this.texture = texture;
 
         // Set the size, origin, and rotation of this weapon instance
@@ -33,9 +33,8 @@ public abstract class Weapon extends Item{
      * @param scale Scale factor to scale the given texture region by
      * @param rotation The amount the weapon is rotated by default (in degrees)
      */
-    public Weapon(SocialGame game, TextureRegion texture, float scale, float rotation, float x, float y) {
-        this(game, texture, scale, rotation);
-        setPosition(x, y);
+    public Weapon(SocialGame game, TextureRegion texture, float scale, float rotation) {
+        this(game, texture, scale, rotation, 0, 0);
     }
 
     /**
