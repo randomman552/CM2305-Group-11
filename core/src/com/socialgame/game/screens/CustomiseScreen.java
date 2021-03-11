@@ -345,25 +345,80 @@ public class CustomiseScreen implements Screen {
         // Creates the table that houses the items for players to pick.
         // TODO: Make buttons intractable
         // TODO: Combine with player preview to see items picked.
-        Table playerItems = new Table();
-        playerItems.defaults().pad(10F).width(Gdx.graphics.getWidth()/8).height(Gdx.graphics.getWidth()/8);/////////
-        playerItems.add(itemButton);
-        playerItems.add(itemButton);
-        playerItems.add(itemButton);
-        playerItems.row();
-        playerItems.add(itemButton);
-        playerItems.add(itemButton);
 
-        /////////////0///////
+        final Texture hdjColourButtonTexture = new Texture("bowhb.png");
+        final TextureRegionDrawable hdjColourButtonDraw = new TextureRegionDrawable(hdjColourButtonTexture);
+        ImageButton hdjButton = new ImageButton(hdjColourButtonDraw);
+        hdjButton.getImage().setColor(c7);
+        hdjButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+
+
+        final Table hatShow = new Table();
+        hatShow.defaults().pad(10F).width(Gdx.graphics.getWidth()/8).height(Gdx.graphics.getWidth()/8);
+        hatShow.setVisible(true);
+        hatShow.add(hdjButton);
+        hatShow.add(hdjButton);
+        hatShow.add(hdjButton);
+        hatShow.row();
+        hatShow.add(hdjButton);
+        hatShow.add(hdjButton);
+        hatShow.add(hdjButton);
+
+        final Table topShow = new Table();
+        topShow.defaults().pad(10F).width(Gdx.graphics.getWidth()/8).height(Gdx.graphics.getWidth()/8);
+        topShow.setVisible(false);
+        topShow.add(itemButton);
+        topShow.add(itemButton);
+        topShow.add(itemButton);
+        topShow.row();
+        topShow.add(itemButton);
+        topShow.add(itemButton);
+        topShow.add(itemButton);
+
+        hatButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                hatShow.setVisible(true);
+                topShow.setVisible(false);
+                return true;
+            }
+        });
+
+
+        topButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                hatShow.setVisible(false);
+                topShow.setVisible(true);
+                return true;
+            }
+        });
+
+
+        WidgetGroup hatAndTop = new WidgetGroup();
+        hatAndTop.addActor(hatShow);
+        hatAndTop.addActor(topShow);
+
 
         // Table that houses the buttons for nav and items for selection.
         // TODO: Once items added make it so the two buttons swap items from Hats to Tops
         Table playerItemMenu = new Table();
         playerItemMenu.defaults();
-        playerItemMenu.add(hatButton).padRight(Gdx.graphics.getWidth()/11);////////////
+        playerItemMenu.add(hatButton).padRight(Gdx.graphics.getWidth()/11);
         playerItemMenu.add(topButton);
-        playerItemMenu.row().padTop(Gdx.graphics.getWidth()/40);///////////////
-        playerItemMenu.add(playerItems).colspan(2);
+        playerItemMenu.row().padTop(Gdx.graphics.getWidth()/40);
+        playerItemMenu.add(hatAndTop).colspan(2).padTop(Gdx.graphics.getHeight()/3).padBottom(Gdx.graphics.getHeight()/5);
 
         Table navButtons = new Table();
         navButtons.defaults();
@@ -373,14 +428,14 @@ public class CustomiseScreen implements Screen {
 
         // Combines the tables with the nav buttons for the game.
         playerItemMenuContainer.defaults();
-        playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8).width(Gdx.graphics.getHeight()/10*8);//////
+        playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8).width(Gdx.graphics.getHeight()/10*8);
         playerItemMenuContainer.row();
         playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*2).padBottom(Gdx.graphics.getHeight()/10).width(Gdx.graphics.getHeight()/10*8);///////////
 
         //Puts all the tables together in one table.
         container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
-        container.add(playerInfoContainer).width(Gdx.graphics.getWidth()/18*8).expandY();/////
-        container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18*9).expandY();////
+        container.add(playerInfoContainer).width(Gdx.graphics.getWidth()/18*8).expandY();
+        container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18*9).expandY();
 
         stage.addActor(container);
         stage.setDebugAll(false);
