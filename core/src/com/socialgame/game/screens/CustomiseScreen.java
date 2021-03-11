@@ -369,6 +369,25 @@ public class CustomiseScreen implements Screen {
         playerItems.add(itemButton);
         playerItems.add(itemButton);
         playerItems.add(itemButton);
+        //////////////////
+        final Texture hdjColourButtonTexture = new Texture("bowhb.png");
+        final TextureRegionDrawable hdjColourButtonDraw = new TextureRegionDrawable(hdjColourButtonTexture);
+        ImageButton hdjButton = new ImageButton(hdjColourButtonDraw);
+        hdjButton.getImage().setColor(c7);
+        hdjButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                return true;
+            }
+
+
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+            }
+        });
+        playerItems.add(hdjButton);
+        ////////////////////
 
         // Table that houses the buttons for nav and items for selection.
         // TODO: Once items added make it so the two buttons swap items from Hats to Tops
