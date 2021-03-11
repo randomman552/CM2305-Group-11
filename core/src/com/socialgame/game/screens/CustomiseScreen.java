@@ -19,6 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class CustomiseScreen implements Screen {
 
     protected final SocialGame game;
@@ -32,77 +36,56 @@ public class CustomiseScreen implements Screen {
         Skin mySkin;
         mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
         Texture texture = new Texture("playerCustomisePlaceholder.png");
-
-        final Image playerDisplayImg = new Image(texture);
-
+        Image playerDisplayImg = new Image(texture);
         addBackground();
 
-        //TEMP BUTTON
-        //TODO: Fix buttons and image not showing up.
-        Button backButton = new TextButton("Back",mySkin,"default");
-        backButton.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new MainMenuScreen(game));
-                return true;
-            }
-        });
-
-
-
-
-
-
         // Colour codes:
-        /*
-        205,66,41,255
-        221,115,39,255
-        241,234,87,255
-        110,165,22,255
-        41,205,162,255
-        41,175,205,255
-        188,141,232,255
-        131,67,156,255
-        153,89,54,255
-        79,117,19,255
-        119,119,119,255
-        13,102,133,255`
-         */
-        Color c1 = new Color(0xcd4229ff);
-        Color c2 = new Color(0xdd7327ff);
-        Color c3 = new Color(0xf1ea57ff);
-        Color c4 = new Color(0x6ea516ff);
-        Color c5 = new Color(0x29cda2ff);
-        Color c6 = new Color(0x29afcdff);
-        Color c7 = new Color(0xbc8de8ff);
-        Color c8 = new Color(0x83439cff);
-        Color c9 = new Color(0x995936ff);
-        Color c10 = new Color(0x4f7513ff);
-        Color c11 = new Color(0x777777ff);
-        Color c12 = new Color(0x0d6685ff);
+        //RGBA8888 0x[red][green][blue][alpha]
+        final Color c1 = new Color(0xcd4229ff);   // 205,66,41,255
+        Color c2 = new Color(0xdd7327ff);   // 221,115,39,255
+        Color c3 = new Color(0xf1ea57ff);   // 241,234,87,255
+        Color c4 = new Color(0x6ea516ff);   // 110,165,22,255
+        Color c5 = new Color(0x29cda2ff);   // 41,205,162,255
+        Color c6 = new Color(0x29afcdff);   // 41,175,205,255
+        Color c7 = new Color(0xbc8de8ff);   // 188,141,232,255
+        Color c8 = new Color(0x83439cff);   // 131,67,156,255
+        Color c9 = new Color(0x995936ff);   // 153,89,54,255
+        Color c10 = new Color(0x4f7513ff);  // 79,117,19,255
+        Color c11 = new Color(0x777777ff);  // 119,119,119,255
+        Color c12 = new Color(0x0d6685ff);  // 13,102,133,255
+
+        final ArrayList<Boolean> colourButtonState = new ArrayList<>(Arrays.asList(new Boolean[12]));
+        Collections.fill(colourButtonState, Boolean.FALSE);
+        colourButtonState.set(0, Boolean.TRUE); //Defaults to first colour
+
 
         // Colour Buttons
-
-        //TODO: Change the colour of a button when pressing.
-
-        // Base.png
-        // tick.png
-        final Texture baseColourButtonTexture = new Texture("Base.png");
+        final Texture baseColourButtonTexture = new Texture("Base.png");// Base.png
+        final Texture baseColourButtonTick = new Texture("tick.png");   // tick.png
         final TextureRegionDrawable baseColourButtonDraw = new TextureRegionDrawable(baseColourButtonTexture);
-
-        final ImageButton c1Button = new ImageButton(baseColourButtonDraw);
+        final Drawable baseColourButtonTickDraw = new TextureRegionDrawable(baseColourButtonTick);
+        final ImageButton c1Button = new ImageButton(baseColourButtonDraw,baseColourButtonDraw,baseColourButtonTickDraw);
         c1Button.getImage().setColor(c1);
         c1Button.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                c1Button.toggle();
+                colourButtonState.set(0, true);
                 return true;
             }
-
 
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
 
+            }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+
+
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                c1Button.getImage().setDrawable(baseColourButtonDraw);
             }
         });
 
@@ -271,22 +254,6 @@ public class CustomiseScreen implements Screen {
             }
         });
 
-        //TODO: CHANGE LABELS TO CHECKBOX BUTTONS, THEN COLOUR THE BUTTONS ACCOURDING TO THE COLOURS, THEN RESIZE THEM TO FIT IN THE BOX
-
-        //TEMP: Labels for the colours
-        Label colour1 = new Label("colour",mySkin, "default");
-        Label colour2 = new Label("colour",mySkin, "default");
-        Label colour3 = new Label("colour",mySkin, "default");
-        Label colour4 = new Label("colour",mySkin, "default");
-        Label colour5 = new Label("colour",mySkin, "default");
-        Label colour6 = new Label("colour",mySkin, "default");
-        Label colour7 = new Label("colour",mySkin, "default");
-        Label colour8 = new Label("colour",mySkin, "default");
-        Label colour9 = new Label("colour",mySkin, "default");
-        Label colour10 = new Label("colour",mySkin, "default");
-        Label colour11 = new Label("colour",mySkin, "default");
-        Label colour12 = new Label("colour",mySkin, "default");
-
 
         //TEMP: Labels for the playerInfo
         Label playerName = new Label("NAMEEEEEEEEEEE",mySkin, "big");
@@ -307,7 +274,7 @@ public class CustomiseScreen implements Screen {
 
 
         //Save button, to be used to confirm a users choice of customisation
-        Button saveButton = new TextButton("Save",mySkin,"default");
+        final Button saveButton = new TextButton("Save",mySkin,"default");
         saveButton.addListener(new InputListener(){
 
             @Override
@@ -334,7 +301,7 @@ public class CustomiseScreen implements Screen {
         container.defaults().padTop(10F).padBottom(10F);
         container.setFillParent(true);
 
-        // Creates the table for the player to choose colours, TODO: replace labels with buttons
+        // Creates the table for the player to choose colours
         Table clrPicker = new Table();
         clrPicker.setDebug(false);
         clrPicker.add(c1Button).height(Gdx.graphics.getHeight()/14).pad(2f);

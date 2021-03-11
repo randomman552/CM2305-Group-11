@@ -53,7 +53,7 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 		checkboxOn: checkbox-on
 		checkboxOff: checkbox
 		font: button
-		fontColor: black
+		fontColor: black,
 	}
 	radio: {
 		checkboxOn: radio-on
