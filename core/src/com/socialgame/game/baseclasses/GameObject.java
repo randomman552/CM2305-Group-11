@@ -7,7 +7,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
+import com.socialgame.game.screens.MainMenuScreen;
 
 /**
  * Base class from which all in game objects are derived.
@@ -54,7 +56,7 @@ public abstract class GameObject extends Actor {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         // Create body
-        body = ((GameScreen) game.getScreen()).world.createBody(bodyDef);
+        body = ((CustomiseScreen) game.getScreen()).world.createBody(bodyDef);
         body.setUserData(this);
 
         // Synchronise the position of the body and GameObject

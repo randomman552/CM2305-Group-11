@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -18,16 +20,34 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.player.Player;
 
 public class CustomiseScreen implements Screen {
 
     protected final SocialGame game;
     private Stage stage;
+    public final World world;
+
+    // Colour codes:
+    //RGBA8888 0x[red][green][blue][alpha]
+    Color c1 = new Color(0xcd4229ff);   // 205,66,41,255
+    Color c2 = new Color(0xdd7327ff);   // 221,115,39,255
+    Color c3 = new Color(0xf1ea57ff);   // 241,234,87,255
+    Color c4 = new Color(0x6ea516ff);   // 110,165,22,255
+    Color c5 = new Color(0x29cda2ff);   // 41,205,162,255
+    Color c6 = new Color(0x29afcdff);   // 41,175,205,255
+    Color c7 = new Color(0xbc8de8ff);   // 188,141,232,255
+    Color c8 = new Color(0x83439cff);   // 131,67,156,255
+    Color c9 = new Color(0x995936ff);   // 153,89,54,255
+    Color c10 = new Color(0x4f7513ff);  // 79,117,19,255
+    Color c11 = new Color(0x777777ff);  // 119,119,119,255
+    Color c12 = new Color(0x0d6685ff);  // 13,102,133,255
 
 
     public CustomiseScreen(final SocialGame game) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        this.world = new World(new Vector2(0, 0), true);
         Gdx.input.setInputProcessor(stage);
         Skin mySkin;
         mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
@@ -35,40 +55,24 @@ public class CustomiseScreen implements Screen {
         Image playerDisplayImg = new Image(texture);
         addBackground();
 
-        // Colour codes:
-        //RGBA8888 0x[red][green][blue][alpha]
-        final Color c1 = new Color(0xcd4229ff);   // 205,66,41,255
-        Color c2 = new Color(0xdd7327ff);   // 221,115,39,255
-        Color c3 = new Color(0xf1ea57ff);   // 241,234,87,255
-        Color c4 = new Color(0x6ea516ff);   // 110,165,22,255
-        Color c5 = new Color(0x29cda2ff);   // 41,205,162,255
-        Color c6 = new Color(0x29afcdff);   // 41,175,205,255
-        Color c7 = new Color(0xbc8de8ff);   // 188,141,232,255
-        Color c8 = new Color(0x83439cff);   // 131,67,156,255
-        Color c9 = new Color(0x995936ff);   // 153,89,54,255
-        Color c10 = new Color(0x4f7513ff);  // 79,117,19,255
-        Color c11 = new Color(0x777777ff);  // 119,119,119,255
-        Color c12 = new Color(0x0d6685ff);  // 13,102,133,255
-
-        /*
-        final ArrayList<Boolean> colourButtonState = new ArrayList<>(Arrays.asList(new Boolean[12]));
-        Collections.fill(colourButtonState, Boolean.FALSE);
-        colourButtonState.set(0, Boolean.TRUE); //Defaults to first colour
-        */
-
+        ///////////////////////////// COLOUR BUTTONS /////////////////////////////
         // Colour buttons images
-        //ImageButton(Drawable imageUp, Drawable imageDown, Drawable imageChecked)
         final Texture clrBtnTextureBase = new Texture("Base.png");// Base.png
         final Texture clrBtnTextureTick = new Texture("tick.png");   // tick.png
         final TextureRegionDrawable clrBtnDrawBase = new TextureRegionDrawable(clrBtnTextureBase);
         final TextureRegionDrawable clrBtnDrawTick = new TextureRegionDrawable(clrBtnTextureTick);
 
-
-
-        //Colour buttons
+        // Buttons
+        //TODO: Clean buttons code up, poss make a button class.
         final ImageButton c1Button = new ImageButton(clrBtnDrawBase, null,  clrBtnDrawTick);
         c1Button.getImage().setColor(c1);
+        c1Button.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
 
+                return true;
+            }
+        });
         final ImageButton c2Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c2Button.getImage().setColor(c2);
         c2Button.addListener(new InputListener(){
@@ -77,14 +81,7 @@ public class CustomiseScreen implements Screen {
 
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c3Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c3Button.getImage().setColor(c3);
         c3Button.addListener(new InputListener(){
@@ -92,13 +89,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-            }
         });
-
         final ImageButton c4Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c4Button.getImage().setColor(c4);
         c4Button.addListener(new InputListener(){
@@ -106,14 +97,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c5Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c5Button.getImage().setColor(c5);
         c5Button.addListener(new InputListener(){
@@ -121,14 +105,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c6Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c6Button.getImage().setColor(c6);
         c6Button.addListener(new InputListener(){
@@ -136,14 +113,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c7Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c7Button.getImage().setColor(c7);
         c7Button.addListener(new InputListener(){
@@ -151,14 +121,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c8Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c8Button.getImage().setColor(c8);
         c8Button.addListener(new InputListener(){
@@ -166,14 +129,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c9Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c9Button.getImage().setColor(c9);
         c9Button.addListener(new InputListener(){
@@ -181,14 +137,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c10Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c10Button.getImage().setColor(c10);
         c10Button.addListener(new InputListener(){
@@ -196,14 +145,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c11Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c11Button.getImage().setColor(c11);
         c11Button.addListener(new InputListener(){
@@ -211,14 +153,7 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         final ImageButton c12Button = new ImageButton(clrBtnDrawBase,null,clrBtnDrawTick);
         c12Button.getImage().setColor(c12);
         c12Button.addListener(new InputListener(){
@@ -226,20 +161,15 @@ public class CustomiseScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
-
-
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-            }
         });
-
         // Creates button group
         ButtonGroup colourButtons = new ButtonGroup(c1Button,c2Button,c3Button,c4Button,c5Button,c6Button,c7Button,c8Button,c9Button,c10Button,c11Button,c12Button);
         colourButtons.setMaxCheckCount(1);
         colourButtons.setMinCheckCount(0);
         colourButtons.setUncheckLast(true);
 
+
+        ///////////////////////////// PlayerInfo /////////////////////////////
         //TEMP: Labels for the playerInfo
         Label playerName = new Label("NAMEEEEEEEEEEE",mySkin, "big");
         Label playerLvl = new Label("Lv.8",mySkin,"big");
@@ -247,38 +177,15 @@ public class CustomiseScreen implements Screen {
         Label playerLvlBar = new Label("##############----",mySkin,"big");
         Label playerLvlNextBar = new Label("9",mySkin,"big");
 
+
+
         //Buttons for the itemMenu table, currently they do not do anything.
         Button hatButton = new TextButton("HAT",mySkin,"default");
         Button topButton = new TextButton("TOP",mySkin,"default");
 
-
-
         Texture itemImageTexture = new Texture("exampleItem.png");
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(itemImageTexture));
         ImageButton itemButton = new ImageButton(drawable);
-
-
-        //Save button, to be used to confirm a users choice of customisation
-        final Button saveButton = new TextButton("Save",mySkin,"default");
-        saveButton.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-                return true;
-            }
-        });
-
-        //Places the user back to the main menu.
-        Button exitButton = new TextButton("Exit",mySkin,"default");
-        exitButton.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new MainMenuScreen(game));
-                return true;
-            }
-        });
 
 
         //Creates a table that covers the entire screen, and allows nested tables
@@ -315,8 +222,9 @@ public class CustomiseScreen implements Screen {
         clrPicker.row();
 
         // Creates the table for the players info
-        // TODO: Replace labels with player data when added to the game.
-        // TODO: Replace level bar with actual bar that represents the progress to next level
+        //FIXME Player Info:  [DELAYED UNTIL REST OF GAME COMPLETE]
+        // - Replace labels with player data when added to the game.
+        // - Replace level bar with actual bar that represents the progress to next level.
 
         Table playerInfoContainer = new Table();
 
@@ -331,7 +239,7 @@ public class CustomiseScreen implements Screen {
 
         // TODO: Once items are implemented add preview of picked items for players
         Table playerDisplay = new Table();
-        playerDisplay.add(playerDisplayImg);
+        playerDisplay.add();
 
         // Combines the player display and info a single table
         playerInfoContainer.add(playerInfo).height(Gdx.graphics.getHeight()/14*3);/////////////////
@@ -343,8 +251,13 @@ public class CustomiseScreen implements Screen {
         Table playerItemMenuContainer = new Table();
 
         // Creates the table that houses the items for players to pick.
-        // TODO: Make buttons intractable
-        // TODO: Combine with player preview to see items picked.
+        //FIXME Item customisation and preview:
+        // - Draw the player where the preview is.
+        // - Remove the old preview.
+        // - Draw hats on the player (start with bowtie).
+        // - Draw tops on the player (need confirmation on whether or not they are to be implemented).
+        // - Get player drawn in game to display customisation (poss give each player an idea, to enable to customisation to stay separate).
+        // - Implement all items into the game, and make all items wearable.
 
         final Texture hdjColourButtonTexture = new Texture("bowhb.png");
         final TextureRegionDrawable hdjColourButtonDraw = new TextureRegionDrawable(hdjColourButtonTexture);
@@ -412,13 +325,35 @@ public class CustomiseScreen implements Screen {
 
 
         // Table that houses the buttons for nav and items for selection.
-        // TODO: Once items added make it so the two buttons swap items from Hats to Tops
         Table playerItemMenu = new Table();
         playerItemMenu.defaults();
         playerItemMenu.add(hatButton).padRight(Gdx.graphics.getWidth()/11);
         playerItemMenu.add(topButton);
         playerItemMenu.row().padTop(Gdx.graphics.getWidth()/40);
         playerItemMenu.add(hatAndTop).colspan(2).padTop(Gdx.graphics.getHeight()/3).padBottom(Gdx.graphics.getHeight()/5);
+
+        ///////////////////////////// NAV BUTTONS /////////////////////////////
+        //Save button, to be used to confirm a users choice of customisation
+        final Button saveButton = new TextButton("Save",mySkin,"default");
+        saveButton.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+
+                return true;
+            }
+        });
+
+        //Places the user back to the main menu.
+        Button exitButton = new TextButton("Exit",mySkin,"default");
+        exitButton.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                game.setScreen(new MainMenuScreen(game));
+                return true;
+            }
+        });
 
         Table navButtons = new Table();
         navButtons.defaults();
@@ -430,7 +365,7 @@ public class CustomiseScreen implements Screen {
         playerItemMenuContainer.defaults();
         playerItemMenuContainer.add(playerItemMenu).height(Gdx.graphics.getHeight()/10*8).width(Gdx.graphics.getHeight()/10*8);
         playerItemMenuContainer.row();
-        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*2).padBottom(Gdx.graphics.getHeight()/10).width(Gdx.graphics.getHeight()/10*8);///////////
+        playerItemMenuContainer.add(navButtons).height(Gdx.graphics.getHeight()/10*2).padBottom(Gdx.graphics.getHeight()/10).width(Gdx.graphics.getHeight()/10*8);
 
         //Puts all the tables together in one table.
         container.add(clrPicker).width(Gdx.graphics.getWidth()/18).expandY();
@@ -454,7 +389,6 @@ public class CustomiseScreen implements Screen {
 
     // Save and Exit buttons
 
-
     public void addBackground() {
         Texture texture = new Texture(Gdx.files.internal("background.png"));
         TextureRegion textureRegion = new TextureRegion(texture);
@@ -469,6 +403,8 @@ public class CustomiseScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        Player previewPlayer = new Player(game);
+        stage.addActor(previewPlayer);
     }
 
     @Override
