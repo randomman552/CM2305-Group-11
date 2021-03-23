@@ -72,6 +72,8 @@ public class Player extends Interactable {
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
     }
 
+
+
     /**
      * Get the currently active key frame. Handles change between different animation states.
      * @param time Time since game start

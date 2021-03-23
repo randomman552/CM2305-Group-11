@@ -3,12 +3,9 @@ package com.socialgame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.socialgame.game.HUD.HUD;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
@@ -30,11 +27,6 @@ public class GameScreen implements Screen {
     private final Stage uiStage;
 
     /**
-     * Box2d world used for physics simulation
-     */
-    public final World world;
-
-    /**
      * TODO: Think about how we want to do the map
      * libGDX has a Map and TiledMap class we could use instead of creating our own
      */
@@ -49,9 +41,6 @@ public class GameScreen implements Screen {
         this.uiStage = new Stage();
 
         uiStage.addActor(new HUD(game));
-
-        // Create our physics world with no gravity
-        this.world = new World(new Vector2(0, 0), true);
     }
 
     @Override
@@ -84,7 +73,7 @@ public class GameScreen implements Screen {
         stage.getCamera().position.set(game.mainPlayer.getX(), game.mainPlayer.getY(), game.mainPlayer.getZIndex());
 
         // Advance physics and actors
-        world.step(delta, 6, 2);
+        game.getPhysWorld().step(delta, 6, 2);
         stage.act(delta);
 
         // Draw changes on screen
@@ -115,6 +104,5 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        world.dispose();
     }
 }
