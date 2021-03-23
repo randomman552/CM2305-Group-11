@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Can be saved and loaded from disk using the save and load methods
  */
 public class PlayerCustomisation {
-    public static int userColor; //Defaults to 0
+    public int userColor; //Defaults to 0
     public TextureRegion top;
     public TextureRegion hat;
     // Colour codes:
@@ -35,6 +35,10 @@ public class PlayerCustomisation {
 
     public Color getUserColour() {
         return colourList[userColor];
+    }
+
+    public int getColourIdx() {
+        return userColor;
     }
 
     public void setUserColour(int colourListIndex) {

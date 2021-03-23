@@ -56,7 +56,7 @@ public abstract class GameObject extends Actor {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         // Create body
-        body = ((CustomiseScreen) game.getScreen()).world.createBody(bodyDef);
+        body = game.getPhysWorld().createBody(bodyDef);
         body.setUserData(this);
 
         // Synchronise the position of the body and GameObject

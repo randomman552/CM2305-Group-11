@@ -22,19 +22,19 @@ public abstract class Interactable extends GameObject {
 
         @Override
         public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            ((GameScreen) game.getScreen()).stage.setKeyboardFocus(parent);
+            game.getMainStage().setKeyboardFocus(parent);
         }
 
         @Override
         public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-            ((GameScreen) game.getScreen()).stage.setKeyboardFocus(null);
+            game.getMainStage().setKeyboardFocus(null);
         }
 
         @Override
         public boolean keyDown(InputEvent event, int keycode) {
             if (keycode == Input.Keys.E) {
                 parent.interact(game.mainPlayer);
-                ((GameScreen) game.getScreen()).stage.setKeyboardFocus(null);
+                game.getMainStage().setKeyboardFocus(null);
             }
             return false;
         }
@@ -42,7 +42,7 @@ public abstract class Interactable extends GameObject {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             parent.interact(game.mainPlayer);
-            ((GameScreen) game.getScreen()).stage.setKeyboardFocus(null);
+            game.getMainStage().setKeyboardFocus(null);
             return false;
         }
     }
