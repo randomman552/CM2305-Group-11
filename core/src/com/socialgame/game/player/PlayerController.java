@@ -88,7 +88,7 @@ public class PlayerController extends InputListener {
     public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
         Player player = ((Player) game.mainPlayer);
         // amountY is positive when scrolling down, and we want to go DOWN a slot. So we must negate amountY
-        player.setInvSlot(player.getInvSLot() + (int)-amountY);
+        player.setInvSlot(player.getInvSlot() + (int)-amountY);
         return false;
     }
 }

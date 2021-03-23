@@ -15,27 +15,21 @@ import com.socialgame.game.screens.MainMenuScreen;
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor {
-    /**
-     * Defines the size of the physics units compared to pixels. This applies to ALL GameObject instances.
-     * For example, scale of 50 means that 1 unit is equal to 50 pixels
-     */
-    public static float SCALE = 50;
-
     protected SocialGame game;
 
     public Body body;
     public TextureRegion texture;
 
-    public GameObject(SocialGame game, float x, float y, float width, float height) {
+    public GameObject(SocialGame game, float width, float height, float x, float y) {
         this.game = game;
-        setScale(SCALE, SCALE);
         setOrigin(width / 2, height / 2);
-        setBounds(x - getOriginX(), y - getOriginY(), width, height);
+        setSize(width, height);
         setupRigidBody();
+        setPositionAboutOrigin(x, y);
     }
 
     public GameObject(SocialGame game, float width, float height) {
-        this(game, 0, 0, width, height);
+        this(game, width, height, 0, 0);
     }
 
     public GameObject(SocialGame game) {
@@ -63,6 +57,56 @@ public abstract class GameObject extends Actor {
         setPosition(getX(), getY());
     }
 
+    /**
+     * Set position of this GameObject about it's origin (in game world coordinates).
+     * @param x Desired x coordinate
+     * @param y Desired y coordinate
+     */
+    public void setPositionAboutOrigin(float x, float y) {
+        super.setPosition(x - getOriginX(), y - getOriginY());
+    }
+
+    /**
+     * Set X coordinate of this GameObject (about it's origin)
+     * @param x Desired X coordinate
+     */
+    public void setXAboutOrigin(float x) {
+        setPositionAboutOrigin(x, getY());
+    }
+
+    /**
+     * Set Y coordinate of this GameObject (about it's origin)
+     * @param y Desired Y coordinate
+     */
+    public void setYAboutOrigin(float y) {
+        setPositionAboutOrigin(getX(), y);
+    }
+
+    @Override
+    protected void positionChanged() {
+        body.setTransform(getX(), getY(), body.getAngle());
+    }
+
+    @Override
+    protected void rotationChanged() {
+        body.setTransform(body.getPosition().x, body.getPosition().y, (float) Math.toRadians(getRotation()));
+    }
+
+    @Override
+    protected void sizeChanged() {
+        super.sizeChanged();
+    }
+
+    @Override
+    public float getX() {
+        return super.getX() + getOriginX();
+    }
+
+    @Override
+    public float getY() {
+        return super.getY() + getOriginY();
+    }
+
     @Override
     public void act(float delta) {
         // Update position based on movement of the rigid body
@@ -86,71 +130,5 @@ public abstract class GameObject extends Actor {
                 getRotation());
 
         batch.setColor(oldCol);
-    }
-
-    /**
-     * Set position of this GameObject (in game world coordinates).
-     * @param x Desired x coordinate
-     * @param y Desired y coordinate
-     */
-    @Override
-    public void setPosition(float x, float y) {
-        body.setTransform(x + getOriginX(), y + getOriginY(), body.getAngle());
-    }
-
-    /**
-     * Set position of this GameObject about it's origin (in game world coordinates).
-     * @param x Desired x coordinate
-     * @param y Desired y coordinate
-     */
-    public void setPositionAboutOrigin(float x, float y) {
-        body.setTransform(x, y, body.getAngle());
-    }
-
-    /**
-     * Set rotation of this GameObject
-     * @param degrees The angle to apply, in degrees
-     */
-    @Override
-    public void setRotation(float degrees) {
-        body.setTransform(body.getPosition().x, body.getPosition().y, (float) Math.toRadians(degrees));
-    }
-
-    /**
-     * Get the x position of this GameObject in game world coordinates.
-     * Use super.getX for screen space coordinates.
-     * @return float of x position corrected for game scale.
-     */
-    @Override
-    public float getX() {
-        return super.getX() / getScaleX();
-    }
-
-    /**
-     * Get the y position of this game object
-     * @param worldSpace If true, will return world space coordinates
-     * @return y coordinate of game object
-     */
-    public float getX(boolean worldSpace) {
-        return (worldSpace) ? getX() : super.getX();
-    }
-
-    /**
-     * Get the y position of this GameObject in game world coordinates.
-     * Use super.getY for screen space coordinates.
-     * @return float of y position corrected for game scale.
-     */
-    @Override
-    public float getY() {
-        return super.getY() / getScaleY();
-    }
-
-    /**
-     * Get the y position of this game object
-     * @param worldSpace If true, will return world space coordinates
-     * @return y coordinate of game object
-     */
-    public float getY(boolean worldSpace) {
-        return (worldSpace) ? getY() : super.getY();
     }
 }

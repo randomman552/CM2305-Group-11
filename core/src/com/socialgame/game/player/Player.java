@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
@@ -33,17 +34,24 @@ public class Player extends Interactable {
      * When in spectator mode the player is drawn with this alpha value
      */
     public static float SPEC_ALPHA = 0.25f;
+    /**
+     * Position of player hand for holding items
+     */
+    public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
 
     public int ID;
+    public Item[] inventory;
+
     private float health = 100;
 
     private Animation<TextureRegion> walkAnim;
+    private Animation<TextureRegion> walkAnimHold;
     private Animation<TextureRegion> idleAnim;
+    private Animation<TextureRegion> idleAnimHold;
     private boolean movingLeft = false;
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
-    private Item[] inventory;
     private int invSlot;
 
     public Player(SocialGame game) {
@@ -52,12 +60,16 @@ public class Player extends Interactable {
         inventory = new Item[2];
 
         // Walk animation setup
-        walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerWalk"));
+        walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("player"));
         walkAnim.setPlayMode(Animation.PlayMode.LOOP);
+        walkAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerHold"));
+        walkAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
         // Idle animation setup (currently uses first from player walk animation)
-        idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerWalk"));
+        idleAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("player"));
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
+        idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
+        idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
     }
 
 
@@ -68,6 +80,11 @@ public class Player extends Interactable {
      * @return The current frame as a {@link TextureRegion}
      */
     public TextureRegion getKeyFrame(float time) {
+        if (inventory[invSlot] != null) {
+            if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+                return walkAnimHold.getKeyFrame(time);
+            return idleAnimHold.getKeyFrame(time);
+        }
         if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
             return walkAnim.getKeyFrame(time);
         return idleAnim.getKeyFrame(time);
@@ -103,10 +120,21 @@ public class Player extends Interactable {
         }
 
         super.draw(batch, parentAlpha);
+        drawItem(batch, parentAlpha);
+    }
+
+    private void drawItem(Batch batch, float parentAlpha) {
+        Item item = inventory[invSlot];
+        if (item == null) return;
+
+        item.setFlip(movingLeft);
+        item.setPosition(getX() + ((movingLeft) ? -(HAND_POS.x + item.getWidth()) : HAND_POS.x), getY() + HAND_POS.y);
+        item.draw(batch, parentAlpha);
     }
 
     /**
      * Add the given item to the players inventory
+     * Will drop currently held item if holding one
      * @param item The item to add
      */
     public void pickupItem(Item item) {
@@ -128,18 +156,9 @@ public class Player extends Interactable {
 
         inventory[invSlot] = null;
         item.setVisible(true);
-        item.setPosition(getX(), getY());
     }
 
-    /**
-     * Get a copy of this players inventory
-     * @return Copy of the players inventory
-     */
-    public Item[] getInventory() {
-        return inventory.clone();
-    }
-
-    public int getInvSLot() {
+    public int getInvSlot() {
         return invSlot;
     }
 
