@@ -442,8 +442,8 @@ public class CustomiseScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Player player = new Player(game);
         stage.addActor(player);
-        player.setSize(5f, 7.5f);
-        player.setPosition(5, 4);//FIXME: Change position after merge, scaling will be fixed then.
+        player.setSize(1/5f * Gdx.graphics.getWidth(), 1/2f * Gdx.graphics.getHeight());
+        player.setPosition(200, 150);//FIXME: Change position after merge, scaling will be fixed then.
     }
 
     @Override
