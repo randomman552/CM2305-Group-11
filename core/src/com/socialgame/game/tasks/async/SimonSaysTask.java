@@ -15,7 +15,6 @@ import com.socialgame.game.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -45,6 +44,11 @@ public class SimonSaysTask extends Task {
         }
     }
 
+    /**
+     * Length of the randomly generated sequence
+     */
+    private static final int SEQUENCE_LENGTH = 6;
+
     // Sequence storage variables
     private final ArrayList<Integer> desiredSequence;
     private final ArrayList<Button> buttons;
@@ -59,13 +63,6 @@ public class SimonSaysTask extends Task {
     public SimonSaysTask(SocialGame game, float x, float y) {
         super(game, x, y);
         lastPlayedTime = game.elapsedTime;
-
-        //region Random sequence generation
-        desiredSequence = new ArrayList<>(Arrays.asList(0,1,2,3));
-
-        Random random = new Random();
-        Collections.shuffle(desiredSequence, random);
-        //endregion
 
         //region Button colours
         Color c1 = new Color(1, 0, 0, 1);
@@ -141,8 +138,19 @@ public class SimonSaysTask extends Task {
         table.row().fill();
         table.add(innerTable);
 
-        // Dispose of no longer required objects to prevent memory leaks
+        // Dispose pixmap to prevent memory leaks
         pixmap.dispose();
+
+        //region Generate random sequence
+        desiredSequence = new ArrayList<>();
+
+        Random random = new Random();
+
+        for (int i = 0; i < SEQUENCE_LENGTH; i++) {
+            desiredSequence.add(random.nextInt(buttons.size()));
+        }
+
+        //endregion
     }
 
     /**
