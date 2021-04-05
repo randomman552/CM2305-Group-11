@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
+import com.socialgame.game.player.clothing.hats.Crown;
 
 public class Player extends Interactable {
     /**
@@ -39,6 +41,8 @@ public class Player extends Interactable {
      */
     public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
 
+    private static final Vector2 HAT_POS = new Vector2(0.05f, 0.8f);
+
     public int ID;
     public Item[] inventory;
 
@@ -53,6 +57,8 @@ public class Player extends Interactable {
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
     private int invSlot;
+
+    private MultiSprite hat;
 
     public Player(SocialGame game) {
         super(game, WIDTH, HEIGHT);
@@ -70,9 +76,10 @@ public class Player extends Interactable {
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
+
+        hat = new Crown(game);
+
     }
-
-
 
     /**
      * Get the currently active key frame. Handles change between different animation states.
@@ -98,19 +105,6 @@ public class Player extends Interactable {
     public void draw(Batch batch, float parentAlpha) {
         texture = getKeyFrame(game.elapsedTime);
 
-        // Change movingLeft to flip sprite
-        // We don't change the state of movingLeft when we are stationary,
-        // this preserves the flipped state and prevents the player from flipping to default when stopped.
-        if (body.getLinearVelocity().x < 0)
-            movingLeft = true;
-        else if (body.getLinearVelocity().x > 0)
-            movingLeft = false;
-
-        // Flip texture if moving left and it is not already flipped
-        // Or flip it back to default if we are not moving left and it is already flipped
-        if (movingLeft && !texture.isFlipX() || !movingLeft && texture.isFlipX())
-            texture.flip(true, false);
-
         // If player isn't alive, make them partially transparent
         Color curCol = getColor();
         if (isAlive()) {
@@ -121,6 +115,7 @@ public class Player extends Interactable {
 
         super.draw(batch, parentAlpha);
         drawItem(batch, parentAlpha);
+        hat.draw(batch, parentAlpha);
     }
 
     private void drawItem(Batch batch, float parentAlpha) {
@@ -189,5 +184,26 @@ public class Player extends Interactable {
                 this.takeDamage(this.health);
             }
         }
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+
+        // Change movingLeft to flip sprite
+        // We don't change the state of movingLeft when we are stationary,
+        // this preserves the flipped state and prevents the player from flipping to default when stopped.
+        if (body.getLinearVelocity().x < 0) {
+            setFlip(true);
+            hat.setFlip(true);
+        } else if (body.getLinearVelocity().x > 0) {
+            setFlip(false);
+            hat.setFlip(false);
+        }
+
+        float x = getX() + ((hat.getFlip()) ? HAT_POS.x: -HAT_POS.x) - (hat.getWidth() / 2);
+        float y = getY() + HAT_POS.y - (hat.getHeight() / 2);
+        hat.setPositionAboutOrigin(x, y);
     }
 }

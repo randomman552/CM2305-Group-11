@@ -3,7 +3,6 @@ package com.socialgame.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.socialgame.game.baseclasses.GameObject;
+import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.MainMenuScreen;
@@ -39,12 +39,19 @@ public class SocialGame extends Game {
 	public TextureAtlas menuSpriteSheet;
 
 	/**
+	 * Sprite sheet used for menus
+	 */
+	public TextureAtlas wearablesSpriteSheet;
+
+	/**
 	 * Elapsed time since program start.
 	 * Can be used for timing other game components
 	 */
 	public float elapsedTime;
 
 	public Settings settings;
+
+	public PlayerCustomisation customisation = new PlayerCustomisation();
 
 	/**
 	 * TODO: Customisation rewards
@@ -92,6 +99,7 @@ public class SocialGame extends Game {
 		batch = new SpriteBatch();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
 		menuSpriteSheet = new TextureAtlas(Gdx.files.internal("menu.atlas"));
+		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
 		elapsedTime = 0;
 
 		this.setScreen(new MainMenuScreen(this));

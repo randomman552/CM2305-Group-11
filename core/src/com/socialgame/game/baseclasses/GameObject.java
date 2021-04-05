@@ -20,6 +20,8 @@ public abstract class GameObject extends Actor {
     public Body body;
     public TextureRegion texture;
 
+    private boolean flip = false;
+
     public GameObject(SocialGame game, float width, float height, float x, float y) {
         this.game = game;
         setOrigin(width / 2, height / 2);
@@ -82,6 +84,14 @@ public abstract class GameObject extends Actor {
         setPositionAboutOrigin(getX(), y);
     }
 
+    public void setFlip(boolean flip) {
+        this.flip = flip;
+    }
+
+    public boolean getFlip() {
+        return flip;
+    }
+
     @Override
     protected void positionChanged() {
         body.setTransform(getX(), getY(), body.getAngle());
@@ -120,6 +130,11 @@ public abstract class GameObject extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         Color oldCol = batch.getColor();
         batch.setColor(this.getColor());
+
+        // Flip texture if moving left and it is not already flipped
+        // Or flip it back to default if we are not moving left and it is already flipped
+        if (flip && !texture.isFlipX() || !flip && texture.isFlipX())
+            texture.flip(true, false);
 
         // Use super getX and getY to get screen space coordinates rather than game space ones
         batch.draw(getKeyFrame(game.elapsedTime),

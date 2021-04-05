@@ -48,16 +48,14 @@ public class CustomiseScreen implements Screen {
         }
     }
 
-
     protected final SocialGame game;
     protected final PlayerCustomisation customisation;
     public Stage stage;
 
-
     public CustomiseScreen(final SocialGame game) {
         this.game = game;
         this.stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        this.customisation = new PlayerCustomisation();
+        this.customisation = this.game.customisation;
 
         Gdx.input.setInputProcessor(stage);
         Skin mySkin;
@@ -73,10 +71,6 @@ public class CustomiseScreen implements Screen {
         //FIXME Change the colours of all the items in a neat and efficient way
         // -Change the colour of the sprite sheet
         // -Set up the items differently, call an array and loop to change the colour
-        // -
-        // -Set up items differently
-        // -
-        // -
 
 
 
