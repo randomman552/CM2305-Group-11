@@ -15,6 +15,7 @@ import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.async.ClockCalibrationTask;
+import com.socialgame.game.tasks.async.SimonSaysTask;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -77,7 +78,8 @@ public class GameScreen implements Screen {
         stage.addActor(new Lightsword(game, 4, 2));
         //stage.addActor(new Player(game));
 
-        stage.addActor(new ClockCalibrationTask(game, 0, 4));
+        stage.addActor(new ClockCalibrationTask(game, 0, -2));
+        stage.addActor(new SimonSaysTask(game, -2, -2));
 
         Gdx.input.setInputProcessor(inputProcessor);
     }
