@@ -32,7 +32,7 @@ public class SocialGame extends Game {
 	 */
 	public float elapsedTime;
 
-	public Settings settings;
+	public final Settings settings = new Settings();
 
 	/**
 	 * TODO: Customisation rewards
