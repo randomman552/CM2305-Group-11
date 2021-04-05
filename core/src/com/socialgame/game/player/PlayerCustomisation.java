@@ -1,7 +1,6 @@
 package com.socialgame.game.player;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Class holding information for player customisation
@@ -9,12 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Can be saved and loaded from disk using the save and load methods
  */
 public class PlayerCustomisation {
-    public int userColor; //Defaults to 0
-    public TextureRegion top;
-    public TextureRegion hat;
+    private int colorSelection = 0;
+    private int hatSelection = 0;
+    private int topSelection = 0;
 
-    // Defaults to c1
-    public final static Color[] colourList = {
+    /**
+     * Array of colors which players can choose between
+     */
+    private final static Color[] colors = {
         new Color(0xcd4229ff),   // 205,66,41,255
         new Color(0xdd7327ff),   // 221,115,39,255
         new Color(0xf1ea57ff),   // 241,234,87,255
@@ -25,27 +26,89 @@ public class PlayerCustomisation {
         new Color(0x83439cff),   // 131,67,156,255
         new Color(0x995936ff),   // 153,89,54,255
         new Color(0x4f7513ff),   // 79,117,19,255
-        new Color(0x777777ff),  // 119,119,119,255
-        new Color(0x0d6685ff),  // 13,102,133,255
+        new Color(0x777777ff),   // 119,119,119,255
+        new Color(0x0d6685ff),   // 13,102,133,255
     };
 
-    public Color colour(int colourIndex) {
-        return colourList[colourIndex];
+    /**
+     * Array of hats players can choose between.
+     * NOTE: this only contains the names of the hats, not the textures themselves.
+     */
+    private final static String[] hats = {
+            "hat1",
+            "hat2",
+            "hat3",
+            "hat4"
+    };
+
+    /**
+     * Array of tops players can choose between.
+     * NOTE: This only contains the names of these tops, not the textures themselves.
+     * TODO: Add tops (or choose to not implement them)
+     */
+    private final static String[] tops = {
+
+    };
+
+
+    /**
+     * Method to get the currently selected color for this customisation instance.
+     * @return Currently selected user color.
+     */
+    public Color getColor() {
+        return getColor(colorSelection);
     }
 
-    public Color getUserColour() {
-        return colourList[userColor];
+    /**
+     * Method to get the specified color from the permitted colors.
+     * @param idx Index to query.
+     * @return The color with the given index. Or null if index is out of range.
+     */
+    public Color getColor(int idx) {
+        if (idx < 0 || idx > colors.length) return null;
+        return colors[idx];
     }
 
-    public int getColourIdx() {
-        return userColor;
+
+    public int getColorSelection() {
+        return colorSelection;
     }
 
-    public void setUserColour(int colourListIndex) {
-        userColor = colourListIndex;
+    public void setColorSelection(int val) {
+        if (val < 0 || val > colors.length) return;
+        colorSelection = val;
     }
 
 
+    public int getHatSelection() {
+        return hatSelection;
+    }
+
+    public String getHatName() {
+        return hats[getHatSelection()];
+    }
+
+    public void setHatSelection(int val) {
+        if (val < 0 || val > hats.length) return;
+        hatSelection = val;
+    }
+
+
+    public int getTopSelection() {
+        return topSelection;
+    }
+
+    public String getTopName() {
+        return tops[getTopSelection()];
+    }
+
+    public void setTopSelection(int val) {
+        if (val < 0 || val > tops.length) return;
+        topSelection = val;
+    }
+
+
+    //TODO: Implement save and load methods
     public void save() {
 
     }
