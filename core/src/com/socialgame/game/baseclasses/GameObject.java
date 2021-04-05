@@ -7,9 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.screens.CustomiseScreen;
-import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.MainMenuScreen;
 
 /**
  * Base class from which all in game objects are derived.
@@ -92,6 +89,14 @@ public abstract class GameObject extends Actor {
         return flip;
     }
 
+    public float getBottomLeftX() {
+        return super.getX();
+    }
+
+    public float getBottomLeftY() {
+        return super.getY();
+    }
+
     @Override
     protected void positionChanged() {
         body.setTransform(getX(), getY(), body.getAngle());
@@ -138,7 +143,7 @@ public abstract class GameObject extends Actor {
 
         // Use super getX and getY to get screen space coordinates rather than game space ones
         batch.draw(getKeyFrame(game.elapsedTime),
-                super.getX(), super.getY(),
+                getBottomLeftX(), getBottomLeftY(),
                 getOriginX(), getOriginY(),
                 getWidth(), getHeight(),
                 getScaleX(), getScaleY(),

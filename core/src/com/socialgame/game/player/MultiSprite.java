@@ -1,31 +1,39 @@
 package com.socialgame.game.player;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 
-import javax.swing.plaf.multi.MultiSpinnerUI;
 import java.util.ArrayList;
 
+/**
+ * Class to represent GameObjects with multiple layers.
+ * Textures added to this class are drawn in the order they are added.
+ * All provided textures should be the same size for results to be as expected.
+ * All GameObject methods remain the same.
+ */
 public abstract class MultiSprite extends GameObject {
-    private final ArrayList<Drawable> drawables = new ArrayList<>();
-    private final ArrayList<Boolean> colorMask = new ArrayList<>();
+    protected final ArrayList<Drawable> drawables = new ArrayList<>();
+    protected final ArrayList<Boolean> colorMask = new ArrayList<>();
 
     public MultiSprite(SocialGame game) {
-        this(game, game.customisation);
+        this(game, 1, 1);
     }
 
-    public MultiSprite(SocialGame game, PlayerCustomisation customisation) {
-        super(game);
-        setColor(customisation.getUserColour());
+    public MultiSprite(SocialGame game, float width, float height) {
+        super(game, width, height, 0, 0);
     }
 
-    public void addDrawable(Drawable d, boolean colorState) {
+    public MultiSprite(SocialGame game, float width, float height, float x, float y) {
+        super(game, width, height, x, y);
+    }
+
+    public void addDrawable(Drawable d, boolean applyColor) {
         drawables.add(d);
-        colorMask.add(colorState);
+        colorMask.add(applyColor);
     }
 
     public void addDrawable(Drawable d) {
@@ -35,22 +43,36 @@ public abstract class MultiSprite extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color oldCol = batch.getColor();
+        Color newCol = this.getColor();
+        newCol.a = parentAlpha;
 
         for (int i = 0; i < drawables.size(); i++) {
-            Drawable d = drawables.get(i);
+            TransformDrawable d = (TransformDrawable) drawables.get(i);
             boolean cMask = colorMask.get(i);
 
             // Set color of batch if mask requires it
             if (cMask) {
-                batch.setColor(this.getColor());
+                batch.setColor(newCol);
             } else {
                 batch.setColor(oldCol);
             }
 
-            if (getFlip())
-                d.draw(batch, getX(), getY(), getWidth(), getHeight());
-            else
-                d.draw(batch, getX() + getWidth(), getY(), -getWidth(), getHeight());
+            // Draw with negative width to flip texture if required
+            if (getFlip()) {
+                d.draw(batch,
+                        getBottomLeftX(), getBottomLeftY(),
+                        getOriginX(), getOriginY(),
+                        getWidth(), getHeight(),
+                        getScaleX(), getScaleY(),
+                        getRotation());
+            } else {
+                d.draw(batch,
+                        getBottomLeftX() + getWidth(), getBottomLeftY(),
+                        getOriginX(), getOriginY(),
+                        -getWidth(), getHeight(),
+                        getScaleX(), getScaleY(),
+                        getRotation());
+            }
         }
 
         batch.setColor(oldCol);

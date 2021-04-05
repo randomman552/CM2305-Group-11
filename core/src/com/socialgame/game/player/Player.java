@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
-import com.socialgame.game.player.clothing.hats.Crown;
+import com.socialgame.game.player.clothing.Hat;
 
 public class Player extends Interactable {
     /**
@@ -52,7 +51,6 @@ public class Player extends Interactable {
     private Animation<TextureRegion> walkAnimHold;
     private Animation<TextureRegion> idleAnim;
     private Animation<TextureRegion> idleAnimHold;
-    private boolean movingLeft = false;
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
@@ -77,8 +75,7 @@ public class Player extends Interactable {
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
-        hat = new Crown(game);
-
+        hat = new Hat(game);
     }
 
     /**
@@ -108,23 +105,28 @@ public class Player extends Interactable {
         // If player isn't alive, make them partially transparent
         Color curCol = getColor();
         if (isAlive()) {
-            setColor(curCol.r, curCol.g, curCol.b, 1f);
+            curCol.a = 1;
         } else {
-            setColor(curCol.r, curCol.g, curCol.b, SPEC_ALPHA);
+            curCol.a = SPEC_ALPHA;
         }
+        setColor(curCol);
 
         super.draw(batch, parentAlpha);
         drawItem(batch, parentAlpha);
-        hat.draw(batch, parentAlpha);
+        drawClothing(batch, curCol.a);
     }
 
     private void drawItem(Batch batch, float parentAlpha) {
         Item item = inventory[invSlot];
         if (item == null) return;
 
-        item.setFlip(movingLeft);
-        item.setPosition(getX() + ((movingLeft) ? -(HAND_POS.x + item.getWidth()) : HAND_POS.x), getY() + HAND_POS.y);
+        item.setFlip(getFlip());
+        item.setPosition(getX() + ((getFlip()) ? -(HAND_POS.x + item.getWidth()) : HAND_POS.x), getY() + HAND_POS.y);
         item.draw(batch, parentAlpha);
+    }
+
+    private void drawClothing(Batch batch, float parentAlpha) {
+        hat.draw(batch, parentAlpha);
     }
 
     /**
@@ -190,10 +192,7 @@ public class Player extends Interactable {
     public void act(float delta) {
         super.act(delta);
 
-
-        // Change movingLeft to flip sprite
-        // We don't change the state of movingLeft when we are stationary,
-        // this preserves the flipped state and prevents the player from flipping to default when stopped.
+        // Change flip state based on movement
         if (body.getLinearVelocity().x < 0) {
             setFlip(true);
             hat.setFlip(true);
@@ -202,8 +201,9 @@ public class Player extends Interactable {
             hat.setFlip(false);
         }
 
-        float x = getX() + ((hat.getFlip()) ? HAT_POS.x: -HAT_POS.x) - (hat.getWidth() / 2);
-        float y = getY() + HAT_POS.y - (hat.getHeight() / 2);
-        hat.setPositionAboutOrigin(x, y);
+        // Update clothing position
+        float hatX = getX() + ((hat.getFlip()) ? HAT_POS.x: -HAT_POS.x);
+        float hatY = getY() + HAT_POS.y;
+        hat.setPositionAboutOrigin(hatX, hatY);
     }
 }
