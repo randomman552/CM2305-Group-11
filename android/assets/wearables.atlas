@@ -6,18 +6,18 @@ filter: Nearest, Nearest
 repeat: none
 hat1
   rotate: false
-  xy: 2, 2
-  size: 378, 378
-  orig: 378, 378
-  offset: 0, 0
-  index: -1
-hat2
-  rotate: false
   xy: 382, 2
   size: 378, 378
   orig: 378, 378
   offset: 0, 0
-  index: 2
+  index: 0
+hat2
+  rotate: false
+  xy: 382, 382
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: 0
 hat2
   rotate: false
   xy: 762, 2
@@ -27,11 +27,11 @@ hat2
   index: 1
 hat3
   rotate: false
-  xy: 382, 382
+  xy: 2, 2
   size: 378, 378
   orig: 378, 378
   offset: 0, 0
-  index: 2
+  index: 0
 hat3
   rotate: false
   xy: 762, 382
@@ -45,4 +45,4 @@ hat4
   size: 378, 378
   orig: 378, 378
   offset: 0, 0
-  index: -1
+  index: 0

@@ -53,8 +53,6 @@ public class CustomiseScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Skin mySkin;
         mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
-        Texture texture = new Texture("playerCustomisePlaceholder.png");
-        Image playerDisplayImg = new Image(texture);
         addBackground();
 
 
@@ -68,8 +66,7 @@ public class CustomiseScreen implements Screen {
 
 
 
-        final Texture hat1ColourButtonTexture = new Texture("hat1.png");
-        final TextureRegionDrawable hat1ColourButtonDraw = new TextureRegionDrawable(hat1ColourButtonTexture);
+        final TextureRegionDrawable hat1ColourButtonDraw = new TextureRegionDrawable(game.wearablesSpriteSheet.findRegion("hat1", 0));
         final ImageButton hat1Button = new ImageButton(hat1ColourButtonDraw);
         hat1Button.getImage().setColor(customisation.getColor());
         hat1Button.addListener(new InputListener(){
@@ -85,8 +82,7 @@ public class CustomiseScreen implements Screen {
             }
         });
 
-        final Texture hat2ColourButtonTexture = new Texture("hat2_changecolor.png");
-        final TextureRegionDrawable hat2ColourButtonDraw = new TextureRegionDrawable(hat2ColourButtonTexture);
+        final TextureRegionDrawable hat2ColourButtonDraw = new TextureRegionDrawable(game.wearablesSpriteSheet.findRegion("hat2", 1));
         final ImageButton hat2Button = new ImageButton(hat2ColourButtonDraw);
         hat2Button.getImage().setColor(customisation.getColor());
         hat2Button.addListener(new InputListener(){
@@ -102,16 +98,14 @@ public class CustomiseScreen implements Screen {
             }
         });
 
-        final Texture hat2NCColourButtonTexture = new Texture("hat2_nochange.png");
-        final Image hat2_top = new Image(hat2NCColourButtonTexture);
+        final Image hat2_top = new Image(game.wearablesSpriteSheet.findRegion("hat2", 0));
         WidgetGroup hat2 = new WidgetGroup();
         hat2.addActor(hat2Button);
         hat2.addActor(hat2_top);
         hat2Button.setSize(Gdx.graphics.getHeight()/5,Gdx.graphics.getHeight()/5);
         hat2_top.setSize(Gdx.graphics.getHeight()/5,Gdx.graphics.getHeight()/5);
 
-        final Texture hat3ColourButtonTexture = new Texture("hat3_changecolor.png");
-        final TextureRegionDrawable hat3ColourButtonDraw = new TextureRegionDrawable(hat3ColourButtonTexture);
+        final TextureRegionDrawable hat3ColourButtonDraw = new TextureRegionDrawable(game.wearablesSpriteSheet.findRegion("hat3", 1));
         final ImageButton hat3Button = new ImageButton(hat3ColourButtonDraw);
         hat3Button.getImage().setColor(customisation.getColor());
         hat3Button.addListener(new InputListener(){
@@ -128,16 +122,14 @@ public class CustomiseScreen implements Screen {
         });
 
 
-        final Texture hat3NCColourButtonTexture = new Texture("hat3_nochange.png");
-        final Image hat3_top = new Image(hat3NCColourButtonTexture);
+        final Image hat3_top = new Image(game.wearablesSpriteSheet.findRegion("hat3", 0));
         WidgetGroup hat3 = new WidgetGroup();
         hat3.addActor(hat3Button);
         hat3.addActor(hat3_top);
         hat3Button.setSize(Gdx.graphics.getHeight()/5,Gdx.graphics.getHeight()/5);
         hat3_top.setSize(Gdx.graphics.getHeight()/5,Gdx.graphics.getHeight()/5);
 
-        final Texture hat4ColourButtonTexture = new Texture("hat4.png");
-        final TextureRegionDrawable hat4ColourButtonDraw = new TextureRegionDrawable(hat4ColourButtonTexture);
+        final TextureRegionDrawable hat4ColourButtonDraw = new TextureRegionDrawable(game.wearablesSpriteSheet.findRegion("hat4", 0));
         final ImageButton hat4Button = new ImageButton(hat4ColourButtonDraw);
         hat4Button.getImage().setColor(customisation.getColor());
         hat4Button.addListener(new InputListener(){
@@ -210,7 +202,7 @@ public class CustomiseScreen implements Screen {
         // Creates button group
         final ButtonGroup<ImageButton> colourButtons = new ButtonGroup<>(c0Button,c1Button,c2Button,c3Button,c4Button,c5Button,c6Button,c7Button,c8Button,c9Button,c10Button,c11Button);
         colourButtons.setMaxCheckCount(1);
-        colourButtons.setMinCheckCount(0);
+        colourButtons.setMinCheckCount(1);
         colourButtons.setUncheckLast(true);
         System.out.println(customisation.getColor());
 

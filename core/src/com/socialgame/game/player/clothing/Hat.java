@@ -8,6 +8,8 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.MultiSprite;
 import com.socialgame.game.player.PlayerCustomisation;
 
+// FIXME: 05/04/2021 Hats do not all align in the same way when drawn on the player.
+// This can be fixed with an individual offset for each hat type, or standardisation of sprites.
 public class Hat extends MultiSprite {
     private static final Vector2 SIZE = new Vector2(0.65f, 0.65f);
 
