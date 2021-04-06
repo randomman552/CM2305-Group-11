@@ -46,7 +46,7 @@ public class Hat extends MultiSprite {
         }
 
         setRotation(getOffset().z);
-    }
+    }//
 
     public Vector3 getOffset() {
         return hatOffSet[customisation.getHatSelection()];
