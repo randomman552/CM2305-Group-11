@@ -202,7 +202,7 @@ public class Player extends Interactable {
         }
 
         // Update clothing position
-        float hatX = getX() + ((hat.getFlip()) ? HAT_POS.x: -HAT_POS.x);
+        float hatX = getX() + ((hat.getFlip()) ? -HAT_POS.x: HAT_POS.x);
         float hatY = getY() + HAT_POS.y;
         hat.setPositionAboutOrigin(hatX, hatY);
     }
