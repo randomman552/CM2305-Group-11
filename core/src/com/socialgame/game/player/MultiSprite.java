@@ -2,8 +2,7 @@ package com.socialgame.game.player;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * All GameObject methods remain the same.
  */
 public abstract class MultiSprite extends GameObject {
-    protected final ArrayList<Drawable> drawables = new ArrayList<>();
+    protected final ArrayList<TextureRegion> textures = new ArrayList<>();
     protected final ArrayList<Boolean> colorMask = new ArrayList<>();
 
     public MultiSprite(SocialGame game) {
@@ -31,13 +30,13 @@ public abstract class MultiSprite extends GameObject {
         super(game, width, height, x, y);
     }
 
-    public void addDrawable(Drawable d, boolean applyColor) {
-        drawables.add(d);
+    public void addDrawable(TextureRegion t, boolean applyColor) {
+        textures.add(t);
         colorMask.add(applyColor);
     }
 
-    public void addDrawable(Drawable d) {
-        addDrawable(d, false);
+    public void addDrawable(TextureRegion t) {
+        addDrawable(t, false);
     }
 
     @Override
@@ -46,8 +45,8 @@ public abstract class MultiSprite extends GameObject {
         Color newCol = this.getColor();
         newCol.a = parentAlpha;
 
-        for (int i = 0; i < drawables.size(); i++) {
-            TransformDrawable d = (TransformDrawable) drawables.get(i);
+        for (int i = 0; i < textures.size(); i++) {
+            TextureRegion t = textures.get(i);
             boolean cMask = colorMask.get(i);
 
             // Set color of batch if mask requires it
@@ -57,22 +56,15 @@ public abstract class MultiSprite extends GameObject {
                 batch.setColor(oldCol);
             }
 
-            // Draw with negative width to flip texture if required
-            if (getFlip()) {
-                d.draw(batch,
-                        getBottomLeftX(), getBottomLeftY(),
-                        getOriginX(), getOriginY(),
-                        getWidth(), getHeight(),
-                        getScaleX(), getScaleY(),
-                        getRotation());
-            } else {
-                d.draw(batch,
-                        getBottomLeftX() + getWidth(), getBottomLeftY(),
-                        getOriginX(), getOriginY(),
-                        -getWidth(), getHeight(),
-                        getScaleX(), getScaleY(),
-                        getRotation());
-            }
+            if (!(getFlip() && !t.isFlipX() || !getFlip() && t.isFlipX()))
+                t.flip(true, false);
+
+            batch.draw(t,
+                    getBottomLeftX(), getBottomLeftY(),
+                    getOriginX(), getOriginY(),
+                    getWidth(), getHeight(),
+                    getScaleX(), getScaleY(),
+                    (getFlip()) ? getRotation() : -getRotation());
         }
 
         batch.setColor(oldCol);

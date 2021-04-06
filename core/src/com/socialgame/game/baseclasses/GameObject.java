@@ -138,7 +138,7 @@ public abstract class GameObject extends Actor {
 
         // Flip texture if moving left and it is not already flipped
         // Or flip it back to default if we are not moving left and it is already flipped
-        if (flip && !texture.isFlipX() || !flip && texture.isFlipX())
+        if (getFlip() && !texture.isFlipX() || !getFlip() && texture.isFlipX())
             texture.flip(true, false);
 
         // Use super getX and getY to get screen space coordinates rather than game space ones

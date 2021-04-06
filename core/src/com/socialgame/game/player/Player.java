@@ -81,7 +81,6 @@ public class Player extends Interactable {
 
         // Clothing items and other customisation settings
         this.customisation = customisation;
-        customisation.setHatSelection(1);
         hat = new Hat(game, customisation);
     }
 
