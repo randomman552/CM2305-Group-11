@@ -16,10 +16,10 @@ import java.util.ArrayList;
 public class Hat extends MultiSprite {
     private static final Vector2 SIZE = new Vector2(0.65f, 0.65f);
     private final static Vector2[] hatOffSet = {
-            new Vector2(0f,0f),//hat1
-            new Vector2(0f,0f),//hat2
-            new Vector2(0f,0f),//hat3
-            new Vector2(0f,0f),//hat4
+            new Vector2(0.35f,0.425f),//hat1
+            new Vector2(0.35f,0.28f),//hat2
+            new Vector2(0.4f,0.6f),//hat3
+            new Vector2(0.4f,0.5f),//hat4
             new Vector2(0f,0f),
             new Vector2(0f,0f)
     };

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class PlayerCustomisation {
     private int colorSelection = 0;
-    private int hatSelection = 0;
+    private int hatSelection = 2;
     private int topSelection = 0;
 
     /**
