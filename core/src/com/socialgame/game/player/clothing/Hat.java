@@ -1,30 +1,28 @@
 package com.socialgame.game.player.clothing;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.MultiSprite;
 import com.socialgame.game.player.PlayerCustomisation;
 
-import java.util.ArrayList;
-
 // FIXME: 05/04/2021 Hats do not all align in the same way when drawn on the player.
 // This can be fixed with an individual offset for each hat type, or standardisation of sprites.
 public class Hat extends MultiSprite {
     private static final Vector2 SIZE = new Vector2(0.65f, 0.65f);
-    private final static Vector2[] hatOffSet = {
-            new Vector2(0.35f,0.425f),//hat1
-            new Vector2(0.35f,0.28f),//hat2
-            new Vector2(0.4f,0.6f),//hat3
-            new Vector2(0.4f,0.5f),//hat4
-            new Vector2(0f,0f),
-            new Vector2(0f,0f)
+    private final static Vector3[] hatOffSet = {
+            new Vector3(-0.1f,-0.1f,0),//hat1
+            new Vector3(-0.075f,0f,15),//hat2
+            new Vector3(0f,0f,0),//hat3
+            new Vector3(0f,0f,0),//hat4
+            new Vector3(0f,0f,0),
+            new Vector3(0f,0f,0)
     };
 
-
+    private final PlayerCustomisation customisation;
 
     public Hat(SocialGame game) {
         this(game, game.customisation);
@@ -32,10 +30,9 @@ public class Hat extends MultiSprite {
 
     public Hat(SocialGame game, PlayerCustomisation customisation) {
         super(game, SIZE.x, SIZE.y);
-        float x = hatOffSet[customisation.getHatSelection()].x;
-        float y = hatOffSet[customisation.getHatSelection()].y;
         setColor(customisation.getColor());
-        setOrigin(x, y);
+
+        this.customisation = customisation;
 
         // Prepare textures
         Array<TextureAtlas.AtlasRegion> textures = game.wearablesSpriteSheet.findRegions(customisation.getHatName());
@@ -44,5 +41,11 @@ public class Hat extends MultiSprite {
             // Only allow colors to be applied if this is the last texture in the array
             addDrawable(d, i == textures.size - 1);
         }
+
+        setRotation(getOffset().y);
+    }
+
+    public Vector3 getOffset() {
+        return hatOffSet[customisation.getHatSelection()];
     }
 }

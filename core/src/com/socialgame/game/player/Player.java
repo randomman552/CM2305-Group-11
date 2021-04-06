@@ -56,10 +56,10 @@ public class Player extends Interactable {
     private PlayerCustomisation customisation;
     private int invSlot;
 
-    private MultiSprite hat;
+    private Hat hat;
 
     public Player(SocialGame game) {
-        this(game, new PlayerCustomisation());
+        this(game, game.customisation);
     }
 
     public Player(SocialGame game, PlayerCustomisation customisation) {
@@ -81,6 +81,7 @@ public class Player extends Interactable {
 
         // Clothing items and other customisation settings
         this.customisation = customisation;
+        customisation.setHatSelection(1);
         hat = new Hat(game, customisation);
     }
 
@@ -214,9 +215,12 @@ public class Player extends Interactable {
             hat.setFlip(false);
         }
 
-        // Update clothing position
-        float hatX = getX() + ((hat.getFlip()) ? -HAT_POS.x: HAT_POS.x);
-        float hatY = getY() + HAT_POS.y;
+        // Update clothing positions
+        float rootHatX = getX() + ((hat.getFlip()) ? -HAT_POS.x: HAT_POS.x);
+        float hatX = rootHatX + ((hat.getFlip()) ? -hat.getOffset().x: hat.getOffset().x);
+
+        float hatY = getY() + HAT_POS.y + hat.getOffset().y;
+
         hat.setPositionAboutOrigin(hatX, hatY);
     }
 }
