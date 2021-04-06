@@ -59,6 +59,10 @@ public class Player extends Interactable {
     private MultiSprite hat;
 
     public Player(SocialGame game) {
+        this(game, new PlayerCustomisation());
+    }
+
+    public Player(SocialGame game, PlayerCustomisation customisation) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
@@ -75,7 +79,9 @@ public class Player extends Interactable {
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
-        hat = new Hat(game);
+        // Clothing items and other customisation settings
+        this.customisation = customisation;
+        hat = new Hat(game, customisation);
     }
 
     /**
@@ -111,9 +117,16 @@ public class Player extends Interactable {
         }
         setColor(curCol);
 
+        // Special case for hat with index 3, needs to be drawn behind player:
+        if (customisation.getHatSelection() == 3) {
+            drawClothing(batch, curCol.a);
+            super.draw(batch, parentAlpha);
+            drawItem(batch, curCol.a);
+            return;
+        }
         super.draw(batch, parentAlpha);
-        drawItem(batch, parentAlpha);
         drawClothing(batch, curCol.a);
+        drawItem(batch, curCol.a);
     }
 
     private void drawItem(Batch batch, float parentAlpha) {
