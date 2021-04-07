@@ -65,7 +65,7 @@ public class PlayerCustomisation {
      * @return The color with the given index. Or null if index is out of range.
      */
     public Color getColor(int idx) {
-        if (idx < 0 || idx > colors.length) return null;
+        if (idx < 0 || idx > colors.length - 1) return null;
         return colors[idx];
     }
 
@@ -75,7 +75,7 @@ public class PlayerCustomisation {
     }
 
     public void setColorSelection(int val) {
-        if (val < 0 || val > colors.length) return;
+        if (val < 0 || val > colors.length - 1) return;
         colorSelection = val;
     }
 
@@ -88,8 +88,13 @@ public class PlayerCustomisation {
         return hats[getHatSelection()];
     }
 
+    public String getHatName(int idx) {
+        if (idx < 0 || idx > hats.length - 1) return null;
+        return hats[idx];
+    }
+
     public void setHatSelection(int val) {
-        if (val < 0 || val > hats.length) return;
+        if (val < 0 || val > hats.length - 1) return;
         hatSelection = val;
     }
 
@@ -102,8 +107,13 @@ public class PlayerCustomisation {
         return tops[getTopSelection()];
     }
 
+    public String getTopName(int idx) {
+        if (idx < 0 || idx > tops.length - 1) return null;
+        return tops[idx];
+    }
+
     public void setTopSelection(int val) {
-        if (val < 0 || val > tops.length) return;
+        if (val < 0 || val > tops.length -1) return;
         topSelection = val;
     }
 
