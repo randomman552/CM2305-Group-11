@@ -1,8 +1,12 @@
 package com.socialgame.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -12,139 +16,66 @@ import java.util.Scanner;
  * Can be loaded and saved using the load and save methods
  */
 public class Settings {
-    /**
-     * Desired resolution of the game stored as a string in form "widthxheight"
-     * For example "1929x1080".
-     */
-    private String resolution = "1280x720";
-    /**
-     * Desired master volume (scalar between 0 and 1)
-     */
-    private float masterVol = 1;
-    /**
-     * Desired effects volume (scalar between 0 and 1)
-     */
-    private float SFXVol = 1;
-    /**
-     * Desired music volume (scalar between 0 and 1)
-     */
-    private float musicVol = 1;
+    private final Preferences pref;
 
-    /**
-     * Location of the file this settings object corresponds to.
-     */
-    private final String fileLoc = "./settings.cfg";
+    private final String resolutionKey = "resolution";
+    private final String masterVolKey = "masterVol";
+    private final String SFXVolKey = "SFXVol";
+    private final String musicVolKey = "musicVolKey";
+
+    private final String defaultResolution = "1280x720";
+    private final float defaultMasterVol = 1;
+    private final float defaultSFXVol = 1;
+    private final float defaultMusicVol = 1;
+
+    private final String fileName = "SocialGame/settings.xml";
 
     public Settings() {
-        load();
+        pref = Gdx.app.getPreferences(fileName);
     }
 
 
     public void setResolution(String resolution) {
-        this.resolution = resolution;
-        save();
+        pref.putString(resolutionKey, resolution);
+        pref.flush();
     }
 
     public String getResolution() {
-        return resolution;
+        return pref.getString(resolutionKey, defaultResolution);
     }
 
 
     public void setMasterVol(float vol) {
-        this.masterVol = vol;
-        save();
+        pref.putFloat(masterVolKey, vol);
+        pref.flush();
     }
 
     public float getMasterVol() {
-        return masterVol;
+        return pref.getFloat(masterVolKey, defaultMasterVol);
     }
 
 
     public void setSFXVol(float vol) {
-        this.SFXVol = vol;
-        save();
+        pref.putFloat(SFXVolKey, vol);
+        pref.flush();
     }
 
     public float getSFXVol() {
-        return this.SFXVol;
+        return pref.getFloat(SFXVolKey, defaultSFXVol);
     }
 
 
     public void setMusicVol(float vol) {
-        this.musicVol = vol;
-        save();
+        pref.putFloat(musicVolKey, vol);
+        pref.flush();
     }
 
     public float getMusicVol() {
-        return this.musicVol;
+        return pref.getFloat(musicVolKey, defaultMusicVol);
     }
 
-
-    @Override
-    public String toString() {
-        return "{\n" +
-                "\tresolution:" + resolution + ",\n" +
-                "\tmasterVol:" + masterVol + ",\n" +
-                "\tSFXVol:" + SFXVol + ",\n" +
-                "\tmusicVol:" + musicVol + ",\n" +
-                "}\n";
-    }
 
     public void save() {
-        try {
-            PrintWriter out = new PrintWriter(fileLoc);
-            out.print(toString());
-            out.close();
-        } catch (FileNotFoundException ignored){}
-    }
-
-    // FIXME: 05/04/2021 LibGDX has a built in JSON parser we can use instead of this mess
-    private void load(Scanner reader) {
-        while (reader.hasNextLine()) {
-            // Split each line by json separator and remove final , character
-            String[] pair = reader.nextLine().replace(",", "").split(":");
-
-            // Load the value for each pair into the appropriate field
-            // Ignores rows with no known match
-            switch (pair[0]) {
-                case "resolution":
-                    setResolution(pair[1]);
-                    break;
-                case "masterVol":
-                    setMasterVol(Float.parseFloat(pair[1]));
-                    break;
-                case "SFXVol":
-                    setSFXVol(Float.parseFloat(pair[1]));
-                    break;
-                case "musicVol":
-                    setMusicVol(Float.parseFloat(pair[1]));
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    private void load(String s) {
-        Scanner reader = new Scanner(s);
-        load(reader);
-        reader.close();
-    }
-
-    private void load(File f) throws FileNotFoundException {
-        File file = new File(fileLoc);
-        Scanner reader = new Scanner(file);
-        load(reader);
-        reader.close();
-    }
-
-    public void load() {
-        try {
-            File file = new File(fileLoc);
-            load(file);
-        } catch (FileNotFoundException e) {
-            // If the file is not found, save default values
-            save();
-        }
+        pref.flush();
     }
 }

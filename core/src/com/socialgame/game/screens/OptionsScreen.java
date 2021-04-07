@@ -3,7 +3,6 @@ package com.socialgame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,12 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.player.PlayerCustomisation;
 
 public class OptionsScreen implements Screen {
 
     protected final SocialGame game;
     private Stage stage;
+
 
 
     public OptionsScreen(final SocialGame game) {
@@ -26,7 +25,6 @@ public class OptionsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         Skin mySkin;
         mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
-
         Texture texture = new Texture("title.png");
 
         Image title = new Image(texture);
@@ -169,6 +167,8 @@ public class OptionsScreen implements Screen {
         background.setPosition(0,Gdx.graphics.getHeight()-background.getHeight());
         stage.addActor(background);
     }
+
+
 
     @Override
     public void show() {

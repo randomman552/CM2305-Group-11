@@ -32,7 +32,7 @@ public class SocialGame extends Game {
 	 */
 	public float elapsedTime;
 
-	public final Settings settings = new Settings();
+	public Settings settings;
 
 	/**
 	 * TODO: Customisation rewards
@@ -52,6 +52,8 @@ public class SocialGame extends Game {
 		gameSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 		// Initialise Box2D engine
 		Box2D.init();
+
+		settings = new Settings();
 
 		batch = new SpriteBatch();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
