@@ -25,7 +25,7 @@ public class Hat extends MultiSprite {
             new Vector3(-0.1f,-0.1f,0)      //hat4
     };
 
-    private final PlayerCustomisation customisation;
+    private PlayerCustomisation customisation;
 
     public Hat(SocialGame game) {
         this(game, game.customisation);
@@ -33,20 +33,29 @@ public class Hat extends MultiSprite {
 
     public Hat(SocialGame game, PlayerCustomisation customisation) {
         super(game, SIZE.x, SIZE.y);
-        setColor(customisation.getColor());
+        setCustomisation(customisation);
+    }
 
-        this.customisation = customisation;
-
-        // Prepare textures
-        Array<TextureAtlas.AtlasRegion> textures = game.wearablesSpriteSheet.findRegions(customisation.getHatName());
+    public void setHatType(int type) {
+        this.textures.clear();
+        this.colorMask.clear();
+        Array<TextureAtlas.AtlasRegion> textures = game.wearablesSpriteSheet.findRegions(customisation.getHatName(type));
         for (int i = 0; i < textures.size; i++) {
             TextureRegion t = new TextureRegion(textures.get(i));
             // Only allow colors to be applied if this is the last texture in the array
-            addDrawable(t, i == textures.size - 1);
+            addTexture(t, i == textures.size - 1);
         }
-
         setRotation(getOffset().z);
-    }//
+    }
+
+    /**
+     * Update hat customisation based on passed customisation object
+     */
+    public void setCustomisation(PlayerCustomisation customisation) {
+        this.customisation = customisation;
+        setColor(customisation.getColor());
+        setHatType(customisation.getHatSelection());
+    }
 
     public Vector3 getOffset() {
         return hatOffSet[customisation.getHatSelection()];

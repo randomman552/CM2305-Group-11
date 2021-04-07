@@ -30,18 +30,18 @@ public abstract class MultiSprite extends GameObject {
         super(game, width, height, x, y);
     }
 
-    public void addDrawable(TextureRegion t, boolean applyColor) {
+    public void addTexture(TextureRegion t, boolean applyColor) {
         textures.add(t);
         colorMask.add(applyColor);
     }
 
-    public void addDrawable(TextureRegion t) {
-        addDrawable(t, false);
+    public void addTexture(TextureRegion t) {
+        addTexture(t, false);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        Color oldCol = batch.getColor();
+        Color oldCol = new Color(batch.getColor());
         Color newCol = this.getColor();
         newCol.a = parentAlpha;
 
