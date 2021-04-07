@@ -1,5 +1,7 @@
 package com.socialgame.game.player;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -8,10 +10,17 @@ import com.badlogic.gdx.graphics.Color;
  * Can be saved and loaded from disk using the save and load methods
  */
 public class PlayerCustomisation {
-    private int colorSelection = 0;
-    private int hatSelection = 0;
-    private int topSelection = 0;
+    private Preferences pref;
 
+    private final String colorSelectionKey = "colorSelection";
+    private final String hatSelectionKey = "hatSelection";
+    private final String topSelectionKey = "topSelection";
+
+    private int defaultColorSelection = 0;
+    private int defaultHatSelection = 0;
+    private int defaultTopSelection = 0;
+
+    private final String fileName = "SocialGame/customisation.xml";
     /**
      * Array of colors which players can choose between
      */
@@ -50,13 +59,16 @@ public class PlayerCustomisation {
 
     };
 
+    public PlayerCustomisation() {
+        pref = Gdx.app.getPreferences(fileName);
+    }
 
     /**
      * Method to get the currently selected color for this customisation instance.
      * @return Currently selected user color.
      */
     public Color getColor() {
-        return getColor(colorSelection);
+        return getColor(pref.getInteger(colorSelectionKey, defaultColorSelection));
     }
 
     /**
@@ -71,17 +83,17 @@ public class PlayerCustomisation {
 
 
     public int getColorSelection() {
-        return colorSelection;
+        return pref.getInteger(colorSelectionKey, defaultColorSelection);
     }
 
     public void setColorSelection(int val) {
         if (val < 0 || val > colors.length) return;
-        colorSelection = val;
+        pref.putInteger(colorSelectionKey, val);
     }
 
 
     public int getHatSelection() {
-        return hatSelection;
+        return pref.getInteger(hatSelectionKey, defaultHatSelection);
     }
 
     public String getHatName() {
@@ -90,12 +102,11 @@ public class PlayerCustomisation {
 
     public void setHatSelection(int val) {
         if (val < 0 || val > hats.length) return;
-        hatSelection = val;
+        pref.putInteger(hatSelectionKey, val);
     }
 
-
     public int getTopSelection() {
-        return topSelection;
+        return pref.getInteger(topSelectionKey, defaultTopSelection);
     }
 
     public String getTopName() {
@@ -104,16 +115,13 @@ public class PlayerCustomisation {
 
     public void setTopSelection(int val) {
         if (val < 0 || val > tops.length) return;
-        topSelection = val;
+        pref.putInteger(topSelectionKey, val);
     }
 
 
     //TODO: Implement save and load methods
     public void save() {
-
+        pref.flush();
     }
 
-    public void load() {
-
-    }
 }

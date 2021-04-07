@@ -51,7 +51,7 @@ public class SocialGame extends Game {
 
 	public Settings settings;
 
-	public PlayerCustomisation customisation = new PlayerCustomisation();
+	public PlayerCustomisation customisation;
 
 	/**
 	 * TODO: Customisation rewards
@@ -95,6 +95,9 @@ public class SocialGame extends Game {
 		Box2D.init();
 
 		physWorld = new World(new Vector2(0, 0), true);
+
+		settings = new Settings();
+		customisation = new PlayerCustomisation();
 
 		batch = new SpriteBatch();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
