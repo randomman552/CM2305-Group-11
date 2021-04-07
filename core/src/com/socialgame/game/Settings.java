@@ -28,10 +28,13 @@ public class Settings {
         pref = Gdx.app.getPreferences(fileName);
     }
 
+    //FIXME:
+    // - Implement the save function into the options screen.
+    // - Add and implement a pref.clear function to return to defaults.
+
 
     public void setResolution(String resolution) {
         pref.putString(resolutionKey, resolution);
-        pref.flush();
     }
 
     public String getResolution() {
@@ -41,7 +44,6 @@ public class Settings {
 
     public void setMasterVol(float vol) {
         pref.putFloat(masterVolKey, vol);
-        pref.flush();
     }
 
     public float getMasterVol() {
@@ -51,7 +53,6 @@ public class Settings {
 
     public void setSFXVol(float vol) {
         pref.putFloat(SFXVolKey, vol);
-        pref.flush();
     }
 
     public float getSFXVol() {
@@ -61,7 +62,6 @@ public class Settings {
 
     public void setMusicVol(float vol) {
         pref.putFloat(musicVolKey, vol);
-        pref.flush();
     }
 
     public float getMusicVol() {
