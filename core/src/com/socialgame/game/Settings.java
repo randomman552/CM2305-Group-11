@@ -16,11 +16,13 @@ public class Settings {
     private final String masterVolKey = "masterVol";
     private final String SFXVolKey = "SFXVol";
     private final String musicVolKey = "musicVolKey";
+    private final String micVolKey = "micVolKey";
 
     private final String defaultResolution = "1280x720";
     private final float defaultMasterVol = 1;
     private final float defaultSFXVol = 1;
     private final float defaultMusicVol = 1;
+    private final float defaultMicVolKey = 1;
 
     private final String fileName = "SocialGame/settings.xml";
 
@@ -66,6 +68,14 @@ public class Settings {
 
     public float getMusicVol() {
         return pref.getFloat(musicVolKey, defaultMusicVol);
+    }
+
+    public void setMicVol(float val) {
+        pref.putFloat(micVolKey, val);
+    }
+
+    public float getMicVol() {
+        return pref.getFloat(micVolKey, defaultMicVolKey);
     }
 
 
