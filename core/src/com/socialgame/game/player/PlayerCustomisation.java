@@ -128,9 +128,6 @@ public class PlayerCustomisation {
         pref.putInteger(topSelectionKey, val);
     }
 
-
-
-    //TODO: Implement save and load methods
     public void save() {
         pref.flush();
     }

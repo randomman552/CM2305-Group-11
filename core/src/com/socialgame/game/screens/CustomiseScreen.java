@@ -224,14 +224,16 @@ public class CustomiseScreen implements Screen {
                 return true;
             }
         });
-        topButton.addListener(new InputListener(){
+
+        //Disabled due to focusing on other aspects of the game. Only hats available atm.
+        /*topButton.addListener(new InputListener(){
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { *//* touchDown = hovering over button *//*
                 hatShow.setVisible(false);
                 topShow.setVisible(true);
                 return true;
             }
-        });
+        });*/
 
         Table modeSwitches = new Table();
         modeSwitches.defaults();
@@ -243,21 +245,12 @@ public class CustomiseScreen implements Screen {
 
         // region Navigation buttons
 
-        // Save button
-        final Button saveButton = new TextButton("Save",mySkin,"default");
-        saveButton.addListener(new InputListener(){
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-
-                return true;
-            }
-        });
-
         // Exit button
         Button exitButton = new TextButton("Exit",mySkin,"default");
         exitButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                customisation.save();
                 game.setScreen(new MainMenuScreen(game));
                 return true;
             }
@@ -265,8 +258,6 @@ public class CustomiseScreen implements Screen {
 
 
         Table navButtons = new Table();
-        navButtons.add(saveButton);
-        navButtons.add().expandX();
         navButtons.add(exitButton);
 
         //endregion
