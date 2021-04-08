@@ -7,15 +7,17 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.screens.CustomiseScreen;
-import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.MainMenuScreen;
+import com.socialgame.game.networking.GameObjectNetworkingListener;
+import com.socialgame.game.networking.updates.PositionChangeEvent;
 
 /**
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor {
+    private static int CUR_ID = 0;
+
     protected SocialGame game;
+    protected final int id;
 
     public Body body;
     public TextureRegion texture;
@@ -26,6 +28,11 @@ public abstract class GameObject extends Actor {
         setSize(width, height);
         setupRigidBody();
         setPositionAboutOrigin(x, y);
+
+        id = CUR_ID;
+        CUR_ID++;
+
+        addListener(new GameObjectNetworkingListener(this));
     }
 
     public GameObject(SocialGame game, float width, float height) {
@@ -34,6 +41,10 @@ public abstract class GameObject extends Actor {
 
     public GameObject(SocialGame game) {
         this(game, 0, 0, 0, 0);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public TextureRegion getKeyFrame(float time) {
@@ -85,6 +96,7 @@ public abstract class GameObject extends Actor {
     @Override
     protected void positionChanged() {
         body.setTransform(getX(), getY(), body.getAngle());
+        game.getGameClient().sendTCP(new PositionChangeEvent(getX(), getY(), id));
     }
 
     @Override
@@ -111,8 +123,8 @@ public abstract class GameObject extends Actor {
     public void act(float delta) {
         // Update position based on movement of the rigid body
         // Need to scale up the body's position by scale so that all movements are translated in the correct way
-        super.setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
-        super.setRotation((float) Math.toDegrees(body.getAngle()));
+        setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
+        setRotation((float) Math.toDegrees(body.getAngle()));
         super.act(delta);
     }
 
