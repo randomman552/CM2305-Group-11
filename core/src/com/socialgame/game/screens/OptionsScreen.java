@@ -153,6 +153,7 @@ public class OptionsScreen implements Screen {
             }
         });
 
+        game.settings.setResolution(resSettings.getSelected());
         stage.setDebugAll(true); // turn on all debug lines (table, cell, and widget)
     }
 
