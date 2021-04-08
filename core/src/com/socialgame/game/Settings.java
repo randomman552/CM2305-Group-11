@@ -22,11 +22,15 @@ public class Settings {
     private final String masterVolKey = "masterVol";
     private final String SFXVolKey = "SFXVol";
     private final String musicVolKey = "musicVolKey";
+    private final String micKey = "mic";
+    private final String micVolKey = "micVolKey";
 
     private final String defaultResolution = "1280x720";
     private final float defaultMasterVol = 1;
     private final float defaultSFXVol = 1;
     private final float defaultMusicVol = 1;
+    private final String defaultMic = "Press to Talk";
+    private final float defaultMicVolKey = 1;
 
     private final String fileName = "SocialGame/settings.xml";
 
@@ -37,7 +41,6 @@ public class Settings {
 
     public void setResolution(String resolution) {
         pref.putString(resolutionKey, resolution);
-        pref.flush();
     }
 
     public String getResolution() {
@@ -47,7 +50,6 @@ public class Settings {
 
     public void setMasterVol(float vol) {
         pref.putFloat(masterVolKey, vol);
-        pref.flush();
     }
 
     public float getMasterVol() {
@@ -57,7 +59,6 @@ public class Settings {
 
     public void setSFXVol(float vol) {
         pref.putFloat(SFXVolKey, vol);
-        pref.flush();
     }
 
     public float getSFXVol() {
@@ -67,11 +68,24 @@ public class Settings {
 
     public void setMusicVol(float vol) {
         pref.putFloat(musicVolKey, vol);
-        pref.flush();
     }
 
     public float getMusicVol() {
         return pref.getFloat(musicVolKey, defaultMusicVol);
+    }
+
+    public void setMic(String mic) {
+        pref.putString(micKey, mic);
+    }
+
+    public String getMic() { return pref.getString(micKey, defaultMic); }
+
+    public void setMicVol(float val) {
+        pref.putFloat(micVolKey, val);
+    }
+
+    public float getMicVol() {
+        return pref.getFloat(micVolKey, defaultMicVolKey);
     }
 
 

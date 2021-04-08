@@ -5,22 +5,26 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.socialgame.game.Settings;
 import com.socialgame.game.SocialGame;
 
 public class OptionsScreen implements Screen {
 
     protected final SocialGame game;
     private Stage stage;
+    protected final Settings settings;
 
 
 
     public OptionsScreen(final SocialGame game) {
         this.game = game;
+        this.settings = this.game.settings;
         this.stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
         Skin mySkin;
@@ -55,20 +59,27 @@ public class OptionsScreen implements Screen {
         Label resLabel = new Label("Resolution:", mySkin, "default");
         Button videoButton = new TextButton("Video", mySkin, "default");
         Button audioButton = new TextButton("Audio", mySkin, "default");
-        Slider masVol = new Slider(0,1, 1, false, mySkin);
-        Slider SFX = new Slider(0,1, 1, false, mySkin);
-        Slider musVol = new Slider(0,1, 1, false, mySkin);
-        Slider micVol = new Slider(0,1, 1, false, mySkin);
-        SelectBox<String> resSettings = new SelectBox<String>(mySkin);
+        final Slider masVol = new Slider(0,1, 0.05f, false, mySkin);
+        masVol.setValue(settings.getMasterVol());
+        final Slider SFX = new Slider(0,1, 0.05f, false, mySkin);
+        SFX.setValue(settings.getSFXVol());
+        final Slider musVol = new Slider(0,1, 0.05f, false, mySkin);
+        musVol.setValue(settings.getMusicVol());
+        final Slider micVol = new Slider(0,1, 0.05f, false, mySkin);
+        micVol.setValue(settings.getMicVol());
+        final SelectBox<String> resSettings = new SelectBox<String>(mySkin);
         resSettings.setItems("1280x720", "1920x1080", "2560x1440");
-        SelectBox<String> micSettings = new SelectBox<String>(mySkin);
+        resSettings.setSelected(settings.getResolution());
+        final SelectBox<String> micSettings = new SelectBox<String>(mySkin);
         micSettings.setItems("Press to Talk", "On", "Off");
+        micSettings.setSelected(settings.getMic());
 
 
         // Global container
         Table globalTable = new Table();
         stage.addActor(globalTable);
         globalTable.setFillParent(true);
+        globalTable.add().width(Gdx.graphics.getWidth()/4);
 
         //region Buttons container
 
@@ -127,7 +138,27 @@ public class OptionsScreen implements Screen {
         WidgetGroup settingsGroup = new WidgetGroup();
         settingsGroup.addActor(videoOptions);
         settingsGroup.addActor(audioOptions);
-        globalTable.add(settingsGroup).expandX();
+        globalTable.add(settingsGroup).expand();
+
+        // Save button for settings.
+        Button saveButton = new TextButton("Save", mySkin, "default");
+        saveButton.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                settings.setResolution(resSettings.getSelected());
+                settings.setMasterVol(masVol.getValue());
+                settings.setSFXVol(SFX.getValue());
+                settings.setMusicVol(musVol.getValue());
+                settings.setMic(micSettings.getSelected());
+                settings.setMicVol(micVol.getValue());
+                settings.save();
+                return true;
+            }
+        });
+        globalTable.add().width(Gdx.graphics.getWidth()/4);
+        globalTable.row();
+        globalTable.add(saveButton).colspan(4).padBottom(150f);
 
         // Set default state
         videoOptions.setVisible(true);
@@ -153,7 +184,6 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        game.settings.setResolution(resSettings.getSelected());
         stage.setDebugAll(true); // turn on all debug lines (table, cell, and widget)
     }
 
