@@ -47,9 +47,6 @@ public class GameScreen implements Screen {
 
         uiStage.addActor(new HUD(game));
 
-        // Create our physics world with no gravity
-        this.world = new World(new Vector2(0, 0), true);
-
         // Multiplex stage and uiStage input handlers (so both can be interacted with)
         inputProcessor = new InputMultiplexer();
         inputProcessor.addProcessor(uiStage);
@@ -72,7 +69,7 @@ public class GameScreen implements Screen {
         stage.addActor(new Sword(game, 0, 2));
         stage.addActor(new Scythe(game, 2, 2));
         stage.addActor(new Lightsword(game, 4, 2));
-        //stage.addActor(new Player(game));
+        stage.addActor(new Player(game));
 
         stage.addActor(new ClockCalibrationTask(game, 0, -2));
         stage.addActor(new SimonSaysTask(game, -2, -2));
