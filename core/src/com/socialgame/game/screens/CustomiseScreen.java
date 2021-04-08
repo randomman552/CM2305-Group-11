@@ -107,6 +107,9 @@ public class CustomiseScreen implements Screen {
         }
         hatShow.setVisible(true);
 
+        // Create hat selection buttons and add to table
+        final Table topShow = new Table();
+
         //endregion
 
         // region Top buttons
@@ -117,16 +120,6 @@ public class CustomiseScreen implements Screen {
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(itemImageTexture));
         ImageButton itemButton = new ImageButton(drawable);
 
-        // Top table placeholder
-        final Table topShow = new Table();
-        topShow.setVisible(false);
-        topShow.add(itemButton);
-        topShow.add(itemButton);
-        topShow.add(itemButton);
-        topShow.row();
-        topShow.add(itemButton);
-        topShow.add(itemButton);
-        topShow.add(itemButton);
 
         //endregion
 

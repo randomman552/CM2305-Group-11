@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
-import org.graalvm.compiler.phases.common.NodeCounterPhase;
 import org.w3c.dom.Text;
 
 public class HUD extends Group {
