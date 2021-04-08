@@ -3,8 +3,15 @@ package com.socialgame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
@@ -30,7 +37,27 @@ public class GameScreen implements Screen {
      * TODO: Think about how we want to do the map
      * libGDX has a Map and TiledMap class we could use instead of creating our own
      */
-    //private Map map;
+    private TiledMap tiledMap;
+    OrthographicCamera camera;
+    TiledMapRenderer tiledMapRenderer;
+
+    public void mapCreate() {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        float unitScale = 1 / 16f;
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false,w,h);
+        camera.update();
+        tiledMap = new TmxMapLoader().load("./map/untitled.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
+        tiledMap.getLayers();
+
+    }
+
+    public void mapRender() {
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+    }
 
     public GameScreen(SocialGame game) {
         this.game = game;
@@ -39,7 +66,7 @@ public class GameScreen implements Screen {
         StretchViewport vp = new StretchViewport(16, 9);
         this.stage = new Stage(vp);
         this.uiStage = new Stage();
-
+        mapCreate();
         uiStage.addActor(new HUD(game));
     }
 
@@ -79,6 +106,9 @@ public class GameScreen implements Screen {
         // Draw changes on screen
         stage.draw();
         uiStage.draw();
+
+        // Draw map
+        mapRender();
     }
 
     @Override
