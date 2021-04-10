@@ -7,8 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.networking.GameObjectNetworkingListener;
-import com.socialgame.game.networking.updates.PositionChangeEvent;
 
 /**
  * Base class from which all in game objects are derived.
@@ -31,8 +29,6 @@ public abstract class GameObject extends Actor {
 
         id = CUR_ID;
         CUR_ID++;
-
-        addListener(new GameObjectNetworkingListener(this));
     }
 
     public GameObject(SocialGame game, float width, float height) {
@@ -96,7 +92,6 @@ public abstract class GameObject extends Actor {
     @Override
     protected void positionChanged() {
         body.setTransform(getX(), getY(), body.getAngle());
-        game.getGameClient().sendTCP(new PositionChangeEvent(getX(), getY(), id));
     }
 
     @Override

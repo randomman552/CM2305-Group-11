@@ -3,7 +3,6 @@ package com.socialgame.game.networking;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.socialgame.game.networking.updates.PositionChangeEvent;
 
 import java.io.IOException;
 
@@ -21,7 +20,6 @@ public class GameServer extends Server {
         bind(TCPPort, UDPPort);
 
         // Register event types
-        getKryo().register(PositionChangeEvent.class);
 
         addListener(new Listener() {
             @Override

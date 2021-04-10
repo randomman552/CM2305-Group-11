@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.socialgame.game.baseclasses.GameObject;
-import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
@@ -81,14 +80,6 @@ public class SocialGame extends Game {
     public World getPhysWorld() {
         return physWorld;
     }
-
-    public GameClient getGameClient() {
-		Screen screen = getScreen();
-		if (screen instanceof GameScreen) {
-			return ((GameScreen) screen).client;
-		}
-		return null;
-	}
 
     public void setPhysWorld(World world) {
         if (physWorld != null) physWorld.dispose();

@@ -10,13 +10,10 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
-import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
-
-import java.io.IOException;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -31,8 +28,6 @@ public class GameScreen implements Screen {
      * Stage to handle UI elements
      */
     public final Stage uiStage;
-
-    public GameClient client;
 
     private final InputMultiplexer inputProcessor;
 
@@ -60,12 +55,6 @@ public class GameScreen implements Screen {
         // Set debug
         stage.setDebugAll(true);
         uiStage.setDebugAll(true);
-
-        try {
-            client = new GameClient(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
