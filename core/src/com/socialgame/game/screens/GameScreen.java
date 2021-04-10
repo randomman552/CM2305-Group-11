@@ -38,25 +38,18 @@ public class GameScreen implements Screen {
      * libGDX has a Map and TiledMap class we could use instead of creating our own
      */
     private TiledMap tiledMap;
-    OrthographicCamera camera;
-    TiledMapRenderer tiledMapRenderer;
+    OrthogonalTiledMapRenderer renderer;
+    float unitScale = 1/64f; // 1 unit = 32 pixels
 
     public void mapCreate() {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        float unitScale = 1 / 16f;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
-        camera.update();
-        tiledMap = new TmxMapLoader().load("./map/untitled.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
-        tiledMap.getLayers();
-
+        tiledMap = new TmxMapLoader().load("./map/testMap.tmx");
+        renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
+        renderer.setView((OrthographicCamera) stage.getCamera());
     }
 
     public void mapRender() {
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
+        renderer.setView((OrthographicCamera) stage.getCamera());
+        renderer.render();
     }
 
     public GameScreen(SocialGame game) {
@@ -99,6 +92,9 @@ public class GameScreen implements Screen {
         // Move camera to follow main player
         stage.getCamera().position.set(game.mainPlayer.getX(), game.mainPlayer.getY(), game.mainPlayer.getZIndex());
 
+        // Draw map
+        mapRender();
+
         // Advance physics and actors
         game.getPhysWorld().step(delta, 6, 2);
         stage.act(delta);
@@ -106,9 +102,6 @@ public class GameScreen implements Screen {
         // Draw changes on screen
         stage.draw();
         uiStage.draw();
-
-        // Draw map
-        mapRender();
     }
 
     @Override
