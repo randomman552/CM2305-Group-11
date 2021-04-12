@@ -47,7 +47,9 @@ public class PlayerCustomisation {
             "hat1",
             "hat2",
             "hat3",
-            "hat4"
+            "hat4",
+            "hat5",
+            "hat6"
     };
 
     /**

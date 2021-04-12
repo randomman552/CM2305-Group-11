@@ -182,7 +182,7 @@ public class CustomiseScreen implements Screen {
         container.setFillParent(true);
 
         Table playerInfo = new Table();
-        playerInfo.defaults().pad(5F);///////
+        playerInfo.defaults().pad(5F);
         playerInfo.add(playerName).colspan(2).left();
         playerInfo.add(playerLvl);
         playerInfo.row();
