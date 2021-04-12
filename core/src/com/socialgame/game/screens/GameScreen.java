@@ -10,10 +10,13 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
+import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
+
+import java.io.IOException;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -31,6 +34,8 @@ public class GameScreen implements Screen {
 
     private final InputMultiplexer inputProcessor;
 
+    public GameClient client;
+
     /**
      * TODO: Think about how we want to do the map
      * libGDX has a Map and TiledMap class we could use instead of creating our own
@@ -38,6 +43,10 @@ public class GameScreen implements Screen {
     //private Map map;
 
     public GameScreen(SocialGame game) {
+        this(game, "localhost");
+    }
+
+    public GameScreen(SocialGame game, String host) {
         this.game = game;
 
         // Use StretchViewport so that users with bigger screens cannot see more
@@ -55,6 +64,14 @@ public class GameScreen implements Screen {
         // Set debug
         stage.setDebugAll(true);
         uiStage.setDebugAll(true);
+
+        // Connect to server
+        try {
+            client = new GameClient(host);
+            game.setClient(client);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

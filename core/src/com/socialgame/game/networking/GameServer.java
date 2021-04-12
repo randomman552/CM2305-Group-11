@@ -7,11 +7,24 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 public class GameServer extends Server {
-    public static final int TCP_PORT = 54555;
-    public static final int UDP_PORT = 54556;
+    private static class GameServerListener extends Listener {
+        private final GameServer server;
+
+        public GameServerListener(GameServer server) {
+            this.server = server;
+        }
+
+        @Override
+        public void received(Connection connection, Object object) {
+            System.out.println("Server Receives: " + object);
+            if (object instanceof Networking.PositionUpdate) {
+                server.sendToAllExceptTCP(connection.getID(), object);
+            }
+        }
+    }
 
     public GameServer() throws IOException {
-        this(TCP_PORT, UDP_PORT);
+        this(Networking.TCP_PORT, Networking.UDP_PORT);
     }
 
     public GameServer(int TCPPort, int UDPPort) throws IOException {
@@ -19,16 +32,9 @@ public class GameServer extends Server {
         start();
         bind(TCPPort, UDPPort);
 
-        // Register event types
+        // Register networking classes
+        Networking.register(this);
 
-        addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                Connection[] connections = getConnections();
-                for (Connection con: connections) {
-                    con.sendTCP(object);
-                }
-            }
-        });
+        addListener(new GameServerListener(this));
     }
 }

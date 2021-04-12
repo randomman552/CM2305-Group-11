@@ -7,12 +7,15 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.networking.Networking;
+
+import java.util.ArrayList;
 
 /**
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor {
-    private static int CUR_ID = 0;
+    public static final ArrayList<GameObject> objects = new ArrayList<>();
 
     protected SocialGame game;
     protected final int id;
@@ -27,8 +30,8 @@ public abstract class GameObject extends Actor {
         setupRigidBody();
         setPositionAboutOrigin(x, y);
 
-        id = CUR_ID;
-        CUR_ID++;
+        id = objects.size();
+        objects.add(this);
     }
 
     public GameObject(SocialGame game, float width, float height) {
@@ -70,7 +73,7 @@ public abstract class GameObject extends Actor {
      * @param y Desired y coordinate
      */
     public void setPositionAboutOrigin(float x, float y) {
-        super.setPosition(x - getOriginX(), y - getOriginY());
+        setPosition(x - getOriginX(), y - getOriginY());
     }
 
     /**
@@ -87,6 +90,14 @@ public abstract class GameObject extends Actor {
      */
     public void setYAboutOrigin(float y) {
         setPositionAboutOrigin(getX(), y);
+    }
+
+    public float getXAboutOrigin() {
+        return getX() + getOriginX();
+    }
+
+    public float getYAboutOrigin() {
+        return getY() + getOriginY();
     }
 
     @Override
@@ -120,6 +131,7 @@ public abstract class GameObject extends Actor {
         // Need to scale up the body's position by scale so that all movements are translated in the correct way
         setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
         setRotation((float) Math.toDegrees(body.getAngle()));
+        game.getClient().sendUDP(Networking.positionUpdate(getId(), getX(), getY()));
         super.act(delta);
     }
 
