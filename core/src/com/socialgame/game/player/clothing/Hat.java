@@ -21,10 +21,10 @@ public class Hat extends MultiSprite {
     private final static Vector3[] hatOffSet = {
     /*hat1*/ new Vector3(-0.075f,-0.1f,0),
     /*hat2*/ new Vector3(-0.125f,0f,-15),
-    /*hat3*/ new Vector3(-0.115f,-0.25f,0),
+    /*hat3*/ new Vector3(-0.115f,-0.2f,0),
     /*hat4*/ new Vector3(-0.1f,-0.1f,0),
     /*hat5*/ new Vector3(-0.1f,-0.1f,0),
-    /*hat6*/ new Vector3(-0.055f,0.05f,0)
+    /*hat6*/ new Vector3(-0.055f,-0.08f,0)
     };
 
     private PlayerCustomisation customisation;
