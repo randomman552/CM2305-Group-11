@@ -17,9 +17,7 @@ public class GameServer extends Server {
         @Override
         public void received(Connection connection, Object object) {
             System.out.println("Server Receives: " + object);
-            if (object instanceof Networking.PositionUpdate) {
-                server.sendToAllExceptTCP(connection.getID(), object);
-            }
+            server.sendToAllExceptTCP(connection.getID(), object);
         }
     }
 

@@ -10,6 +10,7 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
+import com.socialgame.game.networking.Networking;
 
 public class Player extends Interactable {
     /**
@@ -72,8 +73,6 @@ public class Player extends Interactable {
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
     }
 
-
-
     /**
      * Get the currently active key frame. Handles change between different animation states.
      * @param time Time since game start
@@ -92,6 +91,14 @@ public class Player extends Interactable {
 
     public boolean isAlive() {
         return health > 0;
+    }
+
+    public void setHealth(float val) {
+        health = val;
+    }
+
+    public float getHealth() {
+        return health;
     }
 
     @Override
@@ -186,7 +193,8 @@ public class Player extends Interactable {
             Player player = ((Player) caller);
             if (player == this) return;
             if (player.isSaboteur || player.hasWeapon()) {
-                this.takeDamage(this.health);
+                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getId(), getHealth()));
+                this.takeDamage(getHealth());
             }
         }
     }

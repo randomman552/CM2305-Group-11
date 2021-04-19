@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.networking.Networking;
 
 import java.util.ArrayList;
 
@@ -131,7 +130,6 @@ public abstract class GameObject extends Actor {
         // Need to scale up the body's position by scale so that all movements are translated in the correct way
         setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
         setRotation((float) Math.toDegrees(body.getAngle()));
-        game.getClient().sendUDP(Networking.positionUpdate(getId(), getX(), getY()));
         super.act(delta);
     }
 

@@ -20,6 +20,11 @@ public class Networking {
     static public void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(PositionUpdate.class);
+        kryo.register(VelocityUpdate.class);
+        kryo.register(PickupItemUpdate.class);
+        kryo.register(DropItemUpdate.class);
+        kryo.register(SwitchItemUpdate.class);
+        kryo.register(PlayerTakeDamageUpdate.class);
     }
 
     static public void resetPools() {
@@ -36,6 +41,41 @@ public class Networking {
         return obj;
     }
 
+    public static VelocityUpdate velocityUpdate(int id, float xVel, float yVel) {
+        VelocityUpdate obj = new VelocityUpdate();
+        obj.id = id;
+        obj.xVel = xVel;
+        obj.yVel = yVel;
+        return obj;
+    }
+
+    public static PickupItemUpdate pickupItemUpdate(int playerID, int itemID) {
+        PickupItemUpdate obj = new PickupItemUpdate();
+        obj.playerID = playerID;
+        obj.itemID = itemID;
+        return obj;
+    }
+
+    public static DropItemUpdate dropItemUpdate(int playerID) {
+        DropItemUpdate obj = new DropItemUpdate();
+        obj.playerID = playerID;
+        return obj;
+    }
+
+    public static SwitchItemUpdate switchItemUpdate(int playerID, int newSlot) {
+        SwitchItemUpdate obj = new SwitchItemUpdate();
+        obj.playerID = playerID;
+        obj.newSlot = newSlot;
+        return obj;
+    }
+
+    public static PlayerTakeDamageUpdate playerTakeDamageUpdate(int playerID, float damage) {
+        PlayerTakeDamageUpdate obj = new PlayerTakeDamageUpdate();
+        obj.playerID = playerID;
+        obj.damage = damage;
+        return obj;
+    }
+
     // endregion
 
     // region Network classes
@@ -43,6 +83,79 @@ public class Networking {
     public static class PositionUpdate {
         public int id;
         public float x, y;
+
+        @Override
+        public String toString() {
+            return "PositionUpdate{" +
+                    "id=" + id +
+                    ", x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
+    }
+
+    public static class VelocityUpdate {
+        public int id;
+        public float xVel, yVel;
+
+        @Override
+        public String toString() {
+            return "VelocityUpdate{" +
+                    "id=" + id +
+                    ", xVel=" + xVel +
+                    ", yVel=" + yVel +
+                    '}';
+        }
+    }
+
+    public static class PickupItemUpdate {
+        public int playerID;
+        public int itemID;
+
+        @Override
+        public String toString() {
+            return "PickupItemUpdate{" +
+                    "playerID=" + playerID +
+                    ", itemID=" + itemID +
+                    '}';
+        }
+    }
+
+    public static class DropItemUpdate {
+        public int playerID;
+
+        @Override
+        public String toString() {
+            return "DropItemUpdate{" +
+                    "playerID=" + playerID +
+                    '}';
+        }
+    }
+
+    public static class SwitchItemUpdate {
+        public int playerID;
+        public int newSlot;
+
+        @Override
+        public String toString() {
+            return "SwitchItemUpdate{" +
+                    "playerID=" + playerID +
+                    ", newSlot=" + newSlot +
+                    '}';
+        }
+    }
+
+    public static class PlayerTakeDamageUpdate {
+        public int playerID;
+        public float damage;
+
+        @Override
+        public String toString() {
+            return "PlayerTakeDamageUpdate{" +
+                    "playerID=" + playerID +
+                    ", damage=" + damage +
+                    '}';
+        }
     }
 
     // endregion

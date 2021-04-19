@@ -4,7 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.screens.GameScreen;
+import com.socialgame.game.networking.Networking;
 
 /**
  * Base class from which all interactable game objects are derived
@@ -35,6 +35,9 @@ public abstract class Interactable extends GameObject {
             if (keycode == Input.Keys.E) {
                 parent.interact(game.mainPlayer);
                 game.getMainStage().setKeyboardFocus(null);
+                if (parent instanceof Item) {
+                    game.getClient().sendTCP(Networking.pickupItemUpdate(game.mainPlayer.getId(), parent.getId()));
+                }
             }
             return false;
         }
