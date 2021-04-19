@@ -7,6 +7,10 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 public class GameServer extends Server {
+    private static final int MAX_PLAYERS = 16;
+
+    public int players = 0;
+
     private static class GameServerListener extends Listener {
         private final GameServer server;
 
@@ -17,7 +21,12 @@ public class GameServer extends Server {
         @Override
         public void received(Connection connection, Object object) {
             System.out.println("Server Receives: " + object);
-            server.sendToAllExceptTCP(connection.getID(), object);
+
+            if (object instanceof Networking.JoinRequest && server.players != GameServer.MAX_PLAYERS) {
+                server.sendToAllTCP(Networking.joinResponse(0, server.players++, 0, 0));
+            } else {
+                server.sendToAllExceptTCP(connection.getID(), object);
+            }
         }
     }
 

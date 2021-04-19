@@ -2,6 +2,7 @@ package com.socialgame.game.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.socialgame.game.player.PlayerCustomisation;
 
 public class Networking {
     public static final int TCP_PORT = 54555;
@@ -25,6 +26,8 @@ public class Networking {
         kryo.register(DropItemUpdate.class);
         kryo.register(SwitchItemUpdate.class);
         kryo.register(PlayerTakeDamageUpdate.class);
+        kryo.register(JoinRequest.class);
+        kryo.register(JoinResponse.class);
     }
 
     static public void resetPools() {
@@ -73,6 +76,20 @@ public class Networking {
         PlayerTakeDamageUpdate obj = new PlayerTakeDamageUpdate();
         obj.playerID = playerID;
         obj.damage = damage;
+        return obj;
+    }
+
+    public static JoinRequest joinRequest() {
+        JoinRequest obj = new JoinRequest();
+        return obj;
+    }
+
+    public static JoinResponse joinResponse(int mapSeed, int playerID, float x, float y) {
+        JoinResponse obj = new JoinResponse();
+        obj.mapSeed = mapSeed;
+        obj.playerID = playerID;
+        obj.x = x;
+        obj.y = y;
         return obj;
     }
 
@@ -154,6 +171,35 @@ public class Networking {
             return "PlayerTakeDamageUpdate{" +
                     "playerID=" + playerID +
                     ", damage=" + damage +
+                    '}';
+        }
+    }
+
+    // FIXME: 19/04/2021 Doesn't account for player customisation
+    public static class JoinRequest {
+        public PlayerCustomisation customisation;
+
+        @Override
+        public String toString() {
+            return "JoinRequest{" +
+                    "customisation=" + customisation +
+                    '}';
+        }
+    }
+
+    public static class JoinResponse {
+        public int mapSeed;
+        public int playerID;
+        public float x;
+        public float y;
+
+        @Override
+        public String toString() {
+            return "JoinResponse{" +
+                    "mapSeed=" + mapSeed +
+                    ", playerID=" + playerID +
+                    ", x=" + x +
+                    ", y=" + y +
                     '}';
         }
     }

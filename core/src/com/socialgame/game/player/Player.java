@@ -40,7 +40,6 @@ public class Player extends Interactable {
      */
     public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
 
-    public int ID;
     public Item[] inventory;
 
     private float health = 100;
@@ -56,6 +55,10 @@ public class Player extends Interactable {
     private int invSlot;
 
     public Player(SocialGame game) {
+        this(game, 0);
+    }
+
+    public Player(SocialGame game, int id) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
@@ -71,6 +74,10 @@ public class Player extends Interactable {
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
+
+        // Add to GameObject hashmap in correct position
+        this.id = id;
+        GameObject.objects.put(id, this);
     }
 
     /**

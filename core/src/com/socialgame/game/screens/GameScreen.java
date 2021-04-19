@@ -11,7 +11,6 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.networking.GameClient;
-import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
@@ -67,7 +66,7 @@ public class GameScreen implements Screen {
 
         // Connect to server
         try {
-            client = new GameClient(host);
+            client = new GameClient(game, host);
             game.setClient(client);
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,8 +75,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        game.mainPlayer = new Player(game);
-        stage.addActor(game.mainPlayer);
         stage.addListener(new PlayerController(game));
         stage.getCamera().position.set(new float[] {0, 0, 0});
 
@@ -86,7 +83,6 @@ public class GameScreen implements Screen {
         stage.addActor(new Sword(game, 0, 2));
         stage.addActor(new Scythe(game, 2, 2));
         stage.addActor(new Lightsword(game, 4, 2));
-        stage.addActor(new Player(game));
 
         stage.addActor(new ClockCalibrationTask(game, 0, -2));
         stage.addActor(new SimonSaysTask(game, -2, -2));
@@ -100,7 +96,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Move camera to follow main player
-        stage.getCamera().position.set(game.mainPlayer.getX(), game.mainPlayer.getY(), game.mainPlayer.getZIndex());
+        if (game.mainPlayer != null) {
+            stage.getCamera().position.set(game.mainPlayer.getX(), game.mainPlayer.getY(), game.mainPlayer.getZIndex());
+        }
 
         // Advance physics and actors
         game.getPhysWorld().step(delta, 6, 2);

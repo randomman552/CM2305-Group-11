@@ -18,6 +18,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.MainMenuScreen;

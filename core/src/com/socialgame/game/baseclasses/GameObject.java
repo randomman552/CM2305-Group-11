@@ -8,16 +8,24 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor {
-    public static final ArrayList<GameObject> objects = new ArrayList<>();
+    //public static final ArrayList<GameObject> objects = new ArrayList<>();
+    public static final Map<Integer, GameObject> objects = new HashMap<>();
+    /**
+     * Global counter for storage of game objects.
+     * Is automatically incremented.
+     * Starts at 16 to allow for 16 players below this number.
+     */
+    public static int nextID = 16;
 
     protected SocialGame game;
-    protected final int id;
+    protected int id;
 
     public Body body;
     public TextureRegion texture;
@@ -29,8 +37,8 @@ public abstract class GameObject extends Actor {
         setupRigidBody();
         setPositionAboutOrigin(x, y);
 
-        id = objects.size();
-        objects.add(this);
+        id = nextID++;
+        objects.put(id, this);
     }
 
     public GameObject(SocialGame game, float width, float height) {
