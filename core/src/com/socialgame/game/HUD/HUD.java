@@ -1,33 +1,25 @@
 package com.socialgame.game.HUD;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
-import org.graalvm.compiler.phases.common.NodeCounterPhase;
-import org.w3c.dom.Text;
-
-import javax.swing.event.ChangeEvent;
 
 public class HUD extends Group {
     protected SocialGame game;
 
     public ProgressBar progressBar;
     public ProgressBar hazardBar;
-    private ImageButton killButton;
+    private ImageButton interactButton;
+    private ImageButton mapButton;
+    private ImageButton dropButton;
 
     public HUD(SocialGame game) {
         this.game = game;
@@ -78,30 +70,53 @@ public class HUD extends Group {
         hazardBar.setAnimateDuration(0.25f);
         hazardBar.setBounds(10, 10, 100, 10);
 
-        //Add actors to this HUD group
-        addActor(progressBar);
-        addActor(hazardBar);
 
 
-        TextureRegionDrawable killButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
 
-        killButton = new ImageButton(killButtonDrawable);
+        TextureRegionDrawable interactButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
 
-        killButton.setPosition(2f +100f,
-                2f - 50f);
-        killButton.addListener(new ChangeListener() {
+        interactButton = new ImageButton(interactButtonDrawable);
+
+        interactButton.setPosition(2f + 1100f, 10f);
+        interactButton.setSize(100f, 100f);
+        interactButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
             }
         });
 
-        addActor(killButton);
+        TextureRegionDrawable mapButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
 
+        mapButton = new ImageButton(mapButtonDrawable);
 
+        mapButton.setPosition(2f + 1100f, 600f);
+        mapButton.setSize(100f, 100f);
+        mapButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
 
+            }
+        });
 
+        TextureRegionDrawable dropButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
 
+        dropButton = new ImageButton(dropButtonDrawable);
+
+        dropButton.setPosition(2f + 900f, 10f);
+        dropButton.setSize(100f, 100f);
+        dropButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+            }
+        });
+
+        //Add actors to this HUD group
+        addActor(progressBar);
+        addActor(hazardBar);
+        addActor(interactButton);
+        addActor(mapButton);
+        addActor(dropButton);
     }
-
 }
