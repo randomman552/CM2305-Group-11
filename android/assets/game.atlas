@@ -4,11 +4,25 @@ size: 2048, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
+MapOverlay
+  rotate: false
+  xy: 2, 1730
+  size: 951, 205
+  orig: 951, 205
+  offset: 0, 0
+  index: -1
 axe
   rotate: false
   xy: 517, 91
   size: 248, 393
   orig: 248, 393
+  offset: 0, 0
+  index: -1
+killButton
+  rotate: false
+  xy: 580, 261
+  size: 229, 221
+  orig: 229, 221
   offset: 0, 0
   index: -1
 lightsword

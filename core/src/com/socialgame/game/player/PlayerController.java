@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 
 import java.util.ArrayList;
@@ -72,6 +73,10 @@ public class PlayerController extends InputListener {
             case Input.Keys.NUM_2:
                 player.setInvSlot(1);
                 break;
+            /*case Input.Keys.TAB:
+
+                HUD.showMap(this.game);
+                break;*/
         }
 
         pressedKeys.add(keycode);
