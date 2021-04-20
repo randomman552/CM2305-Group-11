@@ -7,15 +7,25 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.screens.CustomiseScreen;
-import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.MainMenuScreen;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor {
+    //public static final ArrayList<GameObject> objects = new ArrayList<>();
+    public static final Map<Integer, GameObject> objects = new HashMap<>();
+    /**
+     * Global counter for storage of game objects.
+     * Is automatically incremented.
+     * Starts at 16 to allow for 16 players below this number.
+     */
+    public static int nextID = 16;
+
     protected SocialGame game;
+    protected int id;
 
     public Body body;
     public TextureRegion texture;
@@ -26,6 +36,9 @@ public abstract class GameObject extends Actor {
         setSize(width, height);
         setupRigidBody();
         setPositionAboutOrigin(x, y);
+
+        id = nextID++;
+        objects.put(id, this);
     }
 
     public GameObject(SocialGame game, float width, float height) {
@@ -34,6 +47,10 @@ public abstract class GameObject extends Actor {
 
     public GameObject(SocialGame game) {
         this(game, 0, 0, 0, 0);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public TextureRegion getKeyFrame(float time) {
@@ -63,7 +80,7 @@ public abstract class GameObject extends Actor {
      * @param y Desired y coordinate
      */
     public void setPositionAboutOrigin(float x, float y) {
-        super.setPosition(x - getOriginX(), y - getOriginY());
+        setPosition(x - getOriginX(), y - getOriginY());
     }
 
     /**
@@ -80,6 +97,14 @@ public abstract class GameObject extends Actor {
      */
     public void setYAboutOrigin(float y) {
         setPositionAboutOrigin(getX(), y);
+    }
+
+    public float getXAboutOrigin() {
+        return getX() + getOriginX();
+    }
+
+    public float getYAboutOrigin() {
+        return getY() + getOriginY();
     }
 
     @Override
@@ -111,8 +136,8 @@ public abstract class GameObject extends Actor {
     public void act(float delta) {
         // Update position based on movement of the rigid body
         // Need to scale up the body's position by scale so that all movements are translated in the correct way
-        super.setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
-        super.setRotation((float) Math.toDegrees(body.getAngle()));
+        setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
+        setRotation((float) Math.toDegrees(body.getAngle()));
         super.act(delta);
     }
 

@@ -3,21 +3,27 @@ package com.socialgame.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.esotericsoftware.kryonet.Connection;
 import com.socialgame.game.baseclasses.GameObject;
+import com.socialgame.game.networking.GameClient;
+import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.MainMenuScreen;
+
+import java.io.IOException;
 
 public class SocialGame extends Game {
 	/**
@@ -82,6 +88,17 @@ public class SocialGame extends Game {
         if (physWorld != null) physWorld.dispose();
         physWorld = world;
     }
+
+    public GameServer server;
+    public GameClient client;
+
+	public Connection getClient() {
+		return client;
+	}
+
+	public void setClient(GameClient client) {
+		this.client = client;
+	}
 	
 	/**
 	 * Helper function to generate fonts using the FreeType extension
@@ -103,6 +120,14 @@ public class SocialGame extends Game {
 		gameSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 		// Initialise Box2D engine
 		Box2D.init();
+
+		// region Server setup
+		try {
+			server = new GameServer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 
 		physWorld = new World(new Vector2(0, 0), true);
 

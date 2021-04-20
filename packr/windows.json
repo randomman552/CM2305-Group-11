@@ -1,0 +1,16 @@
+{
+  "platform": "windows64",
+  "jdk": "Java.zip",
+  "executable": "UglyDuckling",
+  "classpath": [
+    "../desktop/build/libs/desktop-1.0.jar"
+  ],
+  "mainclass": "com.socialgame.game.desktop.DesktopLauncher",
+  "vmargs": [
+    "Xmx1G"
+  ],
+  "resources": [
+
+  ],
+  "output": "out/windows"
+}

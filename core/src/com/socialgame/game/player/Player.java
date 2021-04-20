@@ -10,6 +10,7 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
+import com.socialgame.game.networking.Networking;
 
 public class Player extends Interactable {
     /**
@@ -39,7 +40,6 @@ public class Player extends Interactable {
      */
     public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
 
-    public int ID;
     public Item[] inventory;
 
     private float health = 100;
@@ -55,6 +55,10 @@ public class Player extends Interactable {
     private int invSlot;
 
     public Player(SocialGame game) {
+        this(game, 0);
+    }
+
+    public Player(SocialGame game, int id) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
@@ -70,9 +74,11 @@ public class Player extends Interactable {
         idleAnim.setPlayMode(Animation.PlayMode.LOOP);
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
+
+        // Add to GameObject hashmap in correct position
+        this.id = id;
+        GameObject.objects.put(id, this);
     }
-
-
 
     /**
      * Get the currently active key frame. Handles change between different animation states.
@@ -92,6 +98,14 @@ public class Player extends Interactable {
 
     public boolean isAlive() {
         return health > 0;
+    }
+
+    public void setHealth(float val) {
+        health = val;
+    }
+
+    public float getHealth() {
+        return health;
     }
 
     @Override
@@ -186,7 +200,8 @@ public class Player extends Interactable {
             Player player = ((Player) caller);
             if (player == this) return;
             if (player.isSaboteur || player.hasWeapon()) {
-                this.takeDamage(this.health);
+                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getId(), getHealth()));
+                this.takeDamage(getHealth());
             }
         }
     }
