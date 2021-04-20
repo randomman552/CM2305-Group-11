@@ -59,6 +59,10 @@ public class CustomiseScreen implements Screen {
             this.hatIdx = hatIdx;
         }
 
+        public int getHatIdx() {
+            return hatIdx;
+        }
+
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             customisation.setHatSelection(hatIdx);
@@ -191,7 +195,6 @@ public class CustomiseScreen implements Screen {
         hatPreview = new Hat(game);
         hatPreview.setPosition(Gdx.graphics.getWidth()/28*5,Gdx.graphics.getHeight()/18*11);
         hatPreview.setSize(Gdx.graphics.getWidth()/6,Gdx.graphics.getWidth()/6);
-        stage.addActor(hatPreview);
 
         // Creates the table to house the item menu side
         Table playerItemMenuContainer = new Table();
@@ -262,6 +265,7 @@ public class CustomiseScreen implements Screen {
         container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18f*9).fillY();
 
         stage.addActor(container);
+        stage.addActor(hatPreview);
 
         // endregion
     }
