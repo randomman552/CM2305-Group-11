@@ -115,6 +115,7 @@ public class CustomiseScreen implements Screen {
 
 
 
+
         WidgetGroup hatAndTop = new WidgetGroup();
         hatAndTop.setSize(450, 300);
         hatAndTop.addActor(hatShow);
