@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.PlayerCustomisation;
 
+import java.io.IOException;
+
 public class MainMenuScreen implements Screen {
 
     protected final SocialGame game;
@@ -88,7 +90,11 @@ public class MainMenuScreen implements Screen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game));
+                try {
+                    game.setScreen(new GameScreen(game));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return true;
             }
         });

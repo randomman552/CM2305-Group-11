@@ -3,7 +3,6 @@ package com.socialgame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,12 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.player.PlayerCustomisation;
+
+import java.io.IOException;
 
 public class JoinGameScreen implements Screen {
 
     protected final SocialGame game;
-    private Stage stage;
+    private final Stage stage;
 
 
     public JoinGameScreen(final SocialGame game) {
@@ -53,8 +53,20 @@ public class JoinGameScreen implements Screen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                System.out.println(ipAddressText.getText());//Example of grabbing text
-                System.out.println(passwordText.getText());//Example of grabbing text
+                String ip = ipAddressText.getText();
+                // TODO: Add IP validation
+                System.out.println("IP: " + ipAddressText.getText());
+                System.out.println("Password: " + passwordText.getText());
+
+                if (ip.length() == 0)
+                    ip = "127.0.0.1";
+
+                try {
+                    game.setScreen(new GameScreen(game, ipAddressText.getText()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 return true;
             }
         });
@@ -63,16 +75,16 @@ public class JoinGameScreen implements Screen {
         table.setDebug(false); // turn on all debug lines (table, cell, and widget)
         table.setFillParent(true);
         table.center();
-        table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
+        table.add(title).width(Gdx.graphics.getWidth()/3f).height(Gdx.graphics.getHeight()/3f).colspan(2);
         table.row();
         table.add(ipAddressLabel);
-        table.add(ipAddressText).width(Gdx.graphics.getWidth()/5).uniform().pad(5f);
+        table.add(ipAddressText).width(Gdx.graphics.getWidth()/5f).uniform().pad(5f);
         table.row();
         table.add(passwordLabel);
-        table.add(passwordText).width(Gdx.graphics.getWidth()/5).uniform().pad(5f);
+        table.add(passwordText).width(Gdx.graphics.getWidth()/5f).uniform().pad(5f);
         table.row();
-        table.add(backButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
-        table.add(joinButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
+        table.add(backButton).width(Gdx.graphics.getWidth()/6f).height(Gdx.graphics.getHeight()/10f).padBottom(10).padTop(10);
+        table.add(joinButton).width(Gdx.graphics.getWidth()/6f).height(Gdx.graphics.getHeight()/10f).padBottom(10).padTop(10);
         stage.addActor(table);
     }
 
