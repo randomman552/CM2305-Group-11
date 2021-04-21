@@ -4,86 +4,100 @@ size: 2048, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
+MapOverlay
+  rotate: false
+  xy: 2, 964
+  size: 951, 205
+  orig: 951, 205
+  offset: 0, 0
+  index: -1
 axe
   rotate: false
-  xy: 517, 91
+  xy: 330, 87
   size: 248, 393
   orig: 248, 393
   offset: 0, 0
   index: -1
+killButton
+  rotate: false
+  xy: 580, 118
+  size: 229, 221
+  orig: 229, 221
+  offset: 0, 0
+  index: -1
 lightsword
   rotate: false
-  xy: 1961, 1387
+  xy: 1961, 1449
   size: 50, 588
   orig: 50, 588
   offset: 0, 0
   index: -1
 placeholder
   rotate: false
-  xy: 2, 1109
+  xy: 2, 1171
   size: 980, 866
   orig: 980, 866
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 2, 2
+  xy: 1564, 1414
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 2
 player
   rotate: false
-  xy: 1564, 1354
+  xy: 984, 934
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 582, 486
+  xy: 582, 341
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 984, 872
+  xy: 979, 311
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
 scythe
   rotate: false
-  xy: 979, 392
+  xy: 2, 2
   size: 326, 478
   orig: 326, 478
   offset: 0, 0
   index: -1
 sword
   rotate: false
-  xy: 399, 69
+  xy: 1381, 999
   size: 116, 556
   orig: 116, 556
   offset: 0, 0
   index: -1
 triangleDown
   rotate: false
-  xy: 984, 1495
+  xy: 2, 482
   size: 578, 480
   orig: 578, 480
   offset: 0, 0
   index: -1
 triangleUp
   rotate: false
-  xy: 2, 627
+  xy: 984, 1557
   size: 578, 480
   orig: 578, 480
   offset: 0, 0
   index: -1
 wrench
   rotate: false
-  xy: 1381, 1173
+  xy: 1499, 1092
   size: 80, 320
   orig: 80, 320
   offset: 0, 0
