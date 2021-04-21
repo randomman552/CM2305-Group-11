@@ -90,15 +90,14 @@ public class GameClient extends Client {
     public GameClient(SocialGame game, String host, int tcpPort, int udpPort) throws IOException {
         super();
 
-        start();
-        connect(5000, host, tcpPort, udpPort);
-
         // Register networking classes
         Networking.register(this);
 
+        addListener(new GameClientListener(game));
+        start();
+        connect(5000, host, tcpPort, udpPort);
+
         // Send player join request
         sendTCP(Networking.joinRequest());
-
-        addListener(new GameClientListener(game));
     }
 }
