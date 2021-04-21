@@ -13,13 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 
 public class HUD extends Group {
-    protected SocialGame game;
+    protected final SocialGame game;
 
-    public ProgressBar progressBar;
-    public ProgressBar hazardBar;
-    private ImageButton interactButton;
-    private ImageButton mapButton;
-    private ImageButton dropButton;
+    private final ProgressBar progressBar;
+    private final ProgressBar hazardBar;
+    private final ImageButton interactButton;
+    private final ImageButton mapButton;
+    private final ImageButton dropButton;
 
     public HUD(SocialGame game) {
         this.game = game;
@@ -54,7 +54,7 @@ public class HUD extends Group {
 
         // Create progress bar
         progressBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, progressBarStyle);
-        progressBar.setValue(0.6f);
+        progressBar.setValue(0);
         progressBar.setAnimateDuration(0.25f);
         progressBar.setBounds(10, 10, 100, 30);
 
@@ -66,7 +66,7 @@ public class HUD extends Group {
 
         // Create hazard bar
         hazardBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, hazardBarStyle);
-        hazardBar.setValue(0.2f);
+        hazardBar.setValue(0f);
         hazardBar.setAnimateDuration(0.25f);
         hazardBar.setBounds(10, 10, 100, 10);
 
@@ -118,5 +118,17 @@ public class HUD extends Group {
         addActor(interactButton);
         addActor(mapButton);
         addActor(dropButton);
+    }
+
+    public void incrementProgress() {
+        float step = 1f / game.getTasks().size();
+        float curStep = progressBar.getValue() * game.getTasks().size();
+        progressBar.setValue(curStep + step);
+    }
+
+    public void incrementHazard() {
+        float step = 1f / game.getTasks().size();
+        float curStep = progressBar.getValue() * game.getTasks().size();
+        hazardBar.setValue(curStep + step);
     }
 }

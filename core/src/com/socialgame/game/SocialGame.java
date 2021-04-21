@@ -15,15 +15,17 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.esotericsoftware.kryonet.Connection;
+import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
-import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.MainMenuScreen;
+import com.socialgame.game.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SocialGame extends Game {
 	/**
@@ -69,7 +71,13 @@ public class SocialGame extends Game {
 
     protected World physWorld;
 
-    public Stage getMainStage() {
+	/**
+	 * Method to get the primary stage of the current screen.
+	 * Currently only handles Game and Customise screens.
+	 * Any other screen will return a new Stage instance.
+	 * @return Primary stage of current screen, will never be null.
+	 */
+	public Stage getMainStage() {
         Screen curScreen = getScreen();
 
         if (curScreen instanceof GameScreen) {
@@ -77,8 +85,22 @@ public class SocialGame extends Game {
         } else if (curScreen instanceof CustomiseScreen) {
             return ((CustomiseScreen) curScreen).stage;
         }
-        return null;
+        return new Stage();
     }
+
+	/**
+	 * Method to get the UI stage of the game screen.
+	 * If the current screen is not game screen, a new Stage will be returned instead.
+	 * @return UI Stage of game screen, will never be null
+	 */
+	public Stage getUIStage() {
+		Screen curScreen = getScreen();
+
+		if (curScreen instanceof GameScreen) {
+			return ((GameScreen) curScreen).uiStage;
+		}
+		return new Stage();
+	}
 
     public World getPhysWorld() {
         return physWorld;
@@ -98,6 +120,32 @@ public class SocialGame extends Game {
 
 	public void setClient(GameClient client) {
 		this.client = client;
+	}
+
+	/**
+	 * Method to get the current list of tasks from the game screen.
+	 * If not present will return an empty ArrayList.
+	 * @return Current list of tasks, will never be null.
+	 */
+	public ArrayList<Task> getTasks() {
+		Screen screen = getScreen();
+		if (screen instanceof GameScreen) {
+			return ((GameScreen) screen).getTasks();
+		}
+		return new ArrayList<>();
+	}
+
+	/**
+	 * Method to get the HUD of the game screen.
+	 * If the current screen is not a game screen, a new HUD instance will be returned.
+	 * @return Current HUD, will never be null.
+	 */
+	public HUD getHud() {
+		Screen screen = getScreen();
+		if (screen instanceof GameScreen) {
+			return ((GameScreen) screen).getHud();
+		}
+		return new HUD(this);
 	}
 	
 	/**

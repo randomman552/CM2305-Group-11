@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -38,6 +37,10 @@ public abstract class Task extends Interactable implements Disposable {
 
     protected boolean complete = false;
     protected boolean failed = false;
+    /**
+     * Variable storing whether onComplete and onFail have been called once before.
+     */
+    private boolean eventsFired = false;
 
     public Task(SocialGame game, float x, float y) {
         super(game, x, y, 1, 1);
@@ -94,8 +97,8 @@ public abstract class Task extends Interactable implements Disposable {
 
         group.addActor(baseTable);
 
-        // Add group to UI Stage, TODO: Add method to game that does this to reduce the cross dependencies
-        ((GameScreen) game.getScreen()).uiStage.addActor(group);
+        // Add group to UI Stage
+        game.getUIStage().addActor(group);
     }
 
     public Task(SocialGame game) {
@@ -107,6 +110,7 @@ public abstract class Task extends Interactable implements Disposable {
      */
     public void onComplete() {
         complete = true;
+        game.getHud().incrementProgress();
         close();
     }
 
@@ -116,6 +120,7 @@ public abstract class Task extends Interactable implements Disposable {
     public void onFail() {
         complete = true;
         failed = true;
+        game.getHud().incrementHazard();
         close();
     }
 
@@ -145,15 +150,13 @@ public abstract class Task extends Interactable implements Disposable {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (isFailed())
-            onFail();
-        else if (isComplete())
+        // Call on complete and on fail events ONCE after completion
+        if (isComplete() && !eventsFired) {
             onComplete();
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+            if (isFailed()) onFail();
+            // Prevent events from firing again
+            eventsFired = true;
+        }
     }
 
     @Override
