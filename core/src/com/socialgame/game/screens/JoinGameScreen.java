@@ -33,9 +33,9 @@ public class JoinGameScreen implements Screen {
         addBackground();
 
         Label ipAddressLabel = new Label("IP Address:", mySkin,"big");
-        TextField ipAddressText = new TextField("", mySkin);
+        final TextField ipAddressText = new TextField("", mySkin);
         Label passwordLabel = new Label("Password:", mySkin,"big");
-        TextField passwordText = new TextField("", mySkin);
+        final TextField passwordText = new TextField("", mySkin);
 
 
         Button backButton = new TextButton("Back",mySkin,"default");
@@ -53,6 +53,8 @@ public class JoinGameScreen implements Screen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                System.out.println(ipAddressText.getText());//Example of grabbing text
+                System.out.println(passwordText.getText());//Example of grabbing text
                 return true;
             }
         });

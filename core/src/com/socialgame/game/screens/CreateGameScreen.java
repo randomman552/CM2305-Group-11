@@ -33,6 +33,9 @@ public class CreateGameScreen implements Screen {
 
         addBackground();
 
+        Label passwordLabel = new Label("Password:", mySkin,"big");
+        final TextField passwordText = new TextField("", mySkin);
+
         //TEMP BUTTON
         //TODO: Fix buttons and image not showing up.
         Button backButton = new TextButton("Back",mySkin,"default");
@@ -45,13 +48,26 @@ public class CreateGameScreen implements Screen {
             }
         });
 
+        Button createButton = new TextButton("Create",mySkin,"default");
+        createButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
+                System.out.println(passwordText.getText());//Example of grabbing text
+                return true;
+            }
+        });
+
         Table table = new Table();
-        table.setDebug(true); // turn on all debug lines (table, cell, and widget)
+        table.setDebug(false); // turn on all debug lines (table, cell, and widget)
         table.setFillParent(true);
         table.center();
         table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
         table.row();
-        table.add(backButton).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10);
+        table.add(passwordLabel);
+        table.add(passwordText).width(Gdx.graphics.getWidth()/5).uniform().pad(5f);
+        table.row();
+        table.add(backButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
+        table.add(createButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
         stage.addActor(table);
     }
 
