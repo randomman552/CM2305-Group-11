@@ -38,17 +38,21 @@ public class JoinGameScreen implements Screen {
         TextField passwordText = new TextField("", mySkin);
 
 
-
-
-
-        //TEMP BUTTON
-        //TODO: Fix buttons and image not showing up.
         Button backButton = new TextButton("Back",mySkin,"default");
         backButton.addListener(new InputListener(){
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 game.setScreen(new MainMenuScreen(game));
+                return true;
+            }
+        });
+
+        Button joinButton = new TextButton("Join",mySkin,"default");
+        joinButton.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 return true;
             }
         });
@@ -60,12 +64,13 @@ public class JoinGameScreen implements Screen {
         table.add(title).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/3).colspan(2);
         table.row();
         table.add(ipAddressLabel);
-        table.add(ipAddressText);
+        table.add(ipAddressText).width(Gdx.graphics.getWidth()/5).uniform().pad(5f);
         table.row();
         table.add(passwordLabel);
-        table.add(passwordText);
+        table.add(passwordText).width(Gdx.graphics.getWidth()/5).uniform().pad(5f);
         table.row();
-        table.add(backButton).width(Gdx.graphics.getWidth()/3).height(Gdx.graphics.getHeight()/10).colspan(2).padBottom(10).padTop(10);
+        table.add(backButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
+        table.add(joinButton).width(Gdx.graphics.getWidth()/6).height(Gdx.graphics.getHeight()/10).padBottom(10).padTop(10);
         stage.addActor(table);
     }
 
