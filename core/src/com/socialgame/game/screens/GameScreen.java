@@ -125,7 +125,7 @@ public class GameScreen implements Screen {
         //render objects
         //FIXME - Cannot pass the ((Ortho) stage.getCamera).combined
 
-        sr.setProjectionMatrix(((OrthographicCamera) stage.getCamera()).combined);
+        /*sr.setProjectionMatrix(((OrthographicCamera) stage.getCamera()).combined);
         for(MapObject object : tiledMap.getLayers().get("Tasks").getObjects()) {
             if(object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -138,7 +138,7 @@ public class GameScreen implements Screen {
                 sr.circle(circle.x, circle.y, circle.radius);
                 sr.end();
             }
-        }
+        }*/
         //Walk-in textures.
         renderer.render(foregroundLayers);
     }
