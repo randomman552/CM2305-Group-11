@@ -26,10 +26,12 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.PlayerController;
+import com.socialgame.game.tasks.Task;
 import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import java.awt.*;
 
@@ -50,6 +52,9 @@ public class GameScreen implements Screen {
     private final InputMultiplexer inputProcessor;
 
     public GameClient client;
+
+    private final ArrayList<Task> tasks;
+    private final HUD hud;
 
     /**
      * TODO: Think about how we want to do the map
@@ -90,7 +95,10 @@ public class GameScreen implements Screen {
         this.stage = new Stage(vp);
         this.uiStage = new Stage();
         mapCreate();
-        uiStage.addActor(new HUD(game));
+        
+        // Hud creation
+        hud = new HUD(game);
+        uiStage.addActor(hud);
 
         // Multiplex stage and uiStage input handlers (so both can be interacted with)
         inputProcessor = new InputMultiplexer();
@@ -104,6 +112,23 @@ public class GameScreen implements Screen {
         // Connect to server
         client = new GameClient(game, host);
         game.setClient(client);
+        try {
+            client = new GameClient(game, host);
+            game.setClient(client);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Initialise tasks array
+        tasks = new ArrayList<>();
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public HUD getHud() {
+        return hud;
     }
 
     @Override
@@ -117,8 +142,16 @@ public class GameScreen implements Screen {
         stage.addActor(new Scythe(game, 2, 2));
         stage.addActor(new Lightsword(game, 4, 2));
 
-        stage.addActor(new ClockCalibrationTask(game, 0, -2));
-        stage.addActor(new SimonSaysTask(game, -2, -2));
+        // region Task generation
+
+        tasks.add(new ClockCalibrationTask(game, 0, -2));
+        tasks.add(new SimonSaysTask(game, -2, -2));
+
+        for (Task task: tasks) {
+            stage.addActor(task);
+        }
+
+        // endregion
 
         Gdx.input.setInputProcessor(inputProcessor);
     }
