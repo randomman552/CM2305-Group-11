@@ -11,6 +11,7 @@ import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
 import com.socialgame.game.networking.Networking;
+import com.socialgame.game.player.clothing.Hat;
 
 public class Player extends Interactable {
     /**
@@ -40,6 +41,8 @@ public class Player extends Interactable {
      */
     public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
 
+    private static final Vector2 HAT_POS = new Vector2(0.05f, 0.8f);
+
     public Item[] inventory;
 
     private float health = 100;
@@ -48,17 +51,22 @@ public class Player extends Interactable {
     private Animation<TextureRegion> walkAnimHold;
     private Animation<TextureRegion> idleAnim;
     private Animation<TextureRegion> idleAnimHold;
-    private boolean movingLeft = false;
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
     private int invSlot;
+
+    private Hat hat;
 
     public Player(SocialGame game) {
         this(game, 0);
     }
 
     public Player(SocialGame game, int id) {
+        this(game, game.customisation);
+    }
+
+    public Player(SocialGame game, PlayerCustomisation customisation) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
@@ -75,9 +83,10 @@ public class Player extends Interactable {
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
-        // Add to GameObject hashmap in correct position
         this.id = id;
         GameObject.objects.put(id, this);
+        // Clothing items and other customisation settings
+        hat = new Hat(game, customisation);
     }
 
     /**
@@ -112,38 +121,38 @@ public class Player extends Interactable {
     public void draw(Batch batch, float parentAlpha) {
         texture = getKeyFrame(game.elapsedTime);
 
-        // Change movingLeft to flip sprite
-        // We don't change the state of movingLeft when we are stationary,
-        // this preserves the flipped state and prevents the player from flipping to default when stopped.
-        if (body.getLinearVelocity().x < 0)
-            movingLeft = true;
-        else if (body.getLinearVelocity().x > 0)
-            movingLeft = false;
-
-        // Flip texture if moving left and it is not already flipped
-        // Or flip it back to default if we are not moving left and it is already flipped
-        if (movingLeft && !texture.isFlipX() || !movingLeft && texture.isFlipX())
-            texture.flip(true, false);
-
         // If player isn't alive, make them partially transparent
         Color curCol = getColor();
         if (isAlive()) {
-            setColor(curCol.r, curCol.g, curCol.b, 1f);
+            curCol.a = 1;
         } else {
-            setColor(curCol.r, curCol.g, curCol.b, SPEC_ALPHA);
+            curCol.a = SPEC_ALPHA;
         }
+        setColor(curCol);
 
+        // Special case for hat with index 3, needs to be drawn behind player:
+        if (customisation.getHatSelection() == 3) {
+            drawClothing(batch, curCol.a);
+            super.draw(batch, parentAlpha);
+            drawItem(batch, curCol.a);
+            return;
+        }
         super.draw(batch, parentAlpha);
-        drawItem(batch, parentAlpha);
+        drawClothing(batch, curCol.a);
+        drawItem(batch, curCol.a);
     }
 
     private void drawItem(Batch batch, float parentAlpha) {
         Item item = inventory[invSlot];
         if (item == null) return;
 
-        item.setFlip(movingLeft);
-        item.setPosition(getX() + ((movingLeft) ? -(HAND_POS.x + item.getWidth()) : HAND_POS.x), getY() + HAND_POS.y);
+        item.setFlip(getFlip());
+        item.setPosition(getX() + ((getFlip()) ? -(HAND_POS.x + item.getWidth()) : HAND_POS.x), getY() + HAND_POS.y);
         item.draw(batch, parentAlpha);
+    }
+
+    private void drawClothing(Batch batch, float parentAlpha) {
+        hat.draw(batch, parentAlpha);
     }
 
     /**
@@ -204,5 +213,27 @@ public class Player extends Interactable {
                 this.takeDamage(getHealth());
             }
         }
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        // Change flip state based on movement
+        if (body.getLinearVelocity().x < 0) {
+            setFlip(true);
+            hat.setFlip(true);
+        } else if (body.getLinearVelocity().x > 0) {
+            setFlip(false);
+            hat.setFlip(false);
+        }
+
+        // Update clothing positions
+        float rootHatX = getX() + ((hat.getFlip()) ? -HAT_POS.x: HAT_POS.x);
+        float hatX = rootHatX + ((hat.getFlip()) ? -hat.getOffset().x: hat.getOffset().x);
+
+        float hatY = getY() + HAT_POS.y + hat.getOffset().y;
+
+        hat.setPositionAboutOrigin(hatX, hatY);
     }
 }

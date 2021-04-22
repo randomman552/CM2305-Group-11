@@ -1,0 +1,62 @@
+
+wearables.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+hat1
+  rotate: false
+  xy: 382, 2
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: -1
+hat2
+  rotate: false
+  xy: 382, 382
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: 0
+hat2
+  rotate: false
+  xy: 1142, 2
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: 1
+hat3
+  rotate: false
+  xy: 2, 382
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: 0
+hat3
+  rotate: false
+  xy: 762, 2
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: 1
+hat4
+  rotate: false
+  xy: 2, 2
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: -1
+hat5
+  rotate: false
+  xy: 1142, 382
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: -1
+hat6
+  rotate: false
+  xy: 762, 382
+  size: 378, 378
+  orig: 378, 378
+  offset: 0, 0
+  index: -1

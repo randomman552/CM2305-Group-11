@@ -4,8 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
@@ -16,6 +30,8 @@ import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
+
+import java.awt.*;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -39,7 +55,28 @@ public class GameScreen implements Screen {
      * TODO: Think about how we want to do the map
      * libGDX has a Map and TiledMap class we could use instead of creating our own
      */
-    //private Map map;
+    private TiledMap tiledMap;
+    OrthogonalTiledMapRenderer renderer;
+    ShapeRenderer sr;
+    float unitScale = 1/64f; // 1 unit = 32 pixels
+    int[] backgroundLayers = { 0, 1 };  //Drawn behind the player
+    int[] taskLayer = { 2 };
+    int[] foregroundLayers = { 3 };     //Drawn in-front the player
+
+
+    public void mapCreate() {
+        tiledMap = new TmxMapLoader().load("./map/testMap.tmx");
+        renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
+        renderer.setView((OrthographicCamera) stage.getCamera());
+
+    }
+
+    /*
+    public void mapRender() {
+        renderer.setView((OrthographicCamera) stage.getCamera());
+        renderer.render(layer);
+    }
+    */
 
     public GameScreen(SocialGame game) {
         this(game, "localhost");
@@ -52,7 +89,7 @@ public class GameScreen implements Screen {
         StretchViewport vp = new StretchViewport(16, 9);
         this.stage = new Stage(vp);
         this.uiStage = new Stage();
-
+        mapCreate();
         uiStage.addActor(new HUD(game));
 
         // Multiplex stage and uiStage input handlers (so both can be interacted with)
@@ -105,9 +142,34 @@ public class GameScreen implements Screen {
         stage.act(delta);
         uiStage.act(delta);
 
+        // Draw map
+        renderer.setView((OrthographicCamera) stage.getCamera());
+        renderer.render(backgroundLayers);
+
         // Draw changes on screen
         stage.draw();
         uiStage.draw();
+
+        //Map - Draws in-front of player
+        //render objects
+        //FIXME - Cannot pass the ((Ortho) stage.getCamera).combined
+
+        /*sr.setProjectionMatrix(((OrthographicCamera) stage.getCamera()).combined);
+        for(MapObject object : tiledMap.getLayers().get("Tasks").getObjects()) {
+            if(object instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.rect(rect.x, rect.y, rect.width, rect.height);
+                sr.end();
+            } else if(object instanceof CircleMapObject) {
+                Circle circle = ((CircleMapObject) object).getCircle();
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.circle(circle.x, circle.y, circle.radius);
+                sr.end();
+            }
+        }*/
+        //Walk-in textures.
+        renderer.render(foregroundLayers);
     }
 
     @Override

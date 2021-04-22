@@ -48,12 +48,19 @@ public class SocialGame extends Game {
 	public TextureAtlas menuSpriteSheet;
 
 	/**
+	 * Sprite sheet used for menus
+	 */
+	public TextureAtlas wearablesSpriteSheet;
+
+	/**
 	 * Elapsed time since program start.
 	 * Can be used for timing other game components
 	 */
 	public float elapsedTime;
 
 	public Settings settings;
+
+	public PlayerCustomisation customisation;
 
 	/**
 	 * TODO: Customisation rewards
@@ -131,9 +138,13 @@ public class SocialGame extends Game {
 
 		physWorld = new World(new Vector2(0, 0), true);
 
+		settings = new Settings();
+		customisation = new PlayerCustomisation();
+
 		batch = new SpriteBatch();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
 		menuSpriteSheet = new TextureAtlas(Gdx.files.internal("menu.atlas"));
+		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
 		elapsedTime = 0;
 
 		this.setScreen(new MainMenuScreen(this));
