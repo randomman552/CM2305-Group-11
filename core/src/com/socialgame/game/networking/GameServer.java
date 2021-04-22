@@ -26,7 +26,7 @@ public class GameServer extends Server {
 
         @Override
         public void connected(Connection connection) {
-            connection.sendTCP(Networking.joinResponse(server.players++, 0, 0, 0));
+            server.sendToAllTCP(Networking.joinResponse(server.players++, 0, 0, 0));
         }
 
         @Override
