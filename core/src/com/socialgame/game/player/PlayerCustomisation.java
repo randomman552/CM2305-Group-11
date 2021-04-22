@@ -47,7 +47,9 @@ public class PlayerCustomisation {
             "hat1",
             "hat2",
             "hat3",
-            "hat4"
+            "hat4",
+            "hat5",
+            "hat6"
     };
 
     /**
@@ -96,9 +98,6 @@ public class PlayerCustomisation {
         return pref.getInteger(hatSelectionKey, defaultHatSelection);
     }
 
-    public String getHatName() {
-        return hats[getHatSelection()];
-    }
 
     public String getHatName(int idx) {
         if (idx < 0 || idx > hats.length - 1) return null;

@@ -59,6 +59,10 @@ public class CustomiseScreen implements Screen {
             this.hatIdx = hatIdx;
         }
 
+        public int getHatIdx() {
+            return hatIdx;
+        }
+
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             customisation.setHatSelection(hatIdx);
@@ -69,6 +73,7 @@ public class CustomiseScreen implements Screen {
     protected final SocialGame game;
     protected final PlayerCustomisation customisation;
     public Stage stage;
+    private final Hat hatPreview;
 
     public CustomiseScreen(final SocialGame game) {
         this.game = game;
@@ -107,26 +112,13 @@ public class CustomiseScreen implements Screen {
         }
         hatShow.setVisible(true);
 
-        // Create hat selection buttons and add to table
-        final Table topShow = new Table();
-
-        //endregion
-
-        // region Top buttons
-
-        // TODO: Tops
-
-        Texture itemImageTexture = new Texture("exampleItem.png");
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(itemImageTexture));
-        ImageButton itemButton = new ImageButton(drawable);
 
 
-        //endregion
+
 
         WidgetGroup hatAndTop = new WidgetGroup();
         hatAndTop.setSize(450, 300);
         hatAndTop.addActor(hatShow);
-        hatAndTop.addActor(topShow);
 
         // endregion
 
@@ -182,7 +174,7 @@ public class CustomiseScreen implements Screen {
         container.setFillParent(true);
 
         Table playerInfo = new Table();
-        playerInfo.defaults().pad(5F);///////
+        playerInfo.defaults().pad(5F);
         playerInfo.add(playerName).colspan(2).left();
         playerInfo.add(playerLvl);
         playerInfo.row();
@@ -200,6 +192,11 @@ public class CustomiseScreen implements Screen {
         playerInfoContainer.row();
         playerInfoContainer.add(playerPreview).size(350, 525);
 
+        // Create hat preview (free floating from table)
+        hatPreview = new Hat(game);
+        hatPreview.setPosition(Gdx.graphics.getWidth()/28*5,Gdx.graphics.getHeight()/18*11);
+        hatPreview.setSize(Gdx.graphics.getWidth()/6,Gdx.graphics.getWidth()/6);
+
         // Creates the table to house the item menu side
         Table playerItemMenuContainer = new Table();
 
@@ -213,7 +210,6 @@ public class CustomiseScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 hatShow.setVisible(true);
-                topShow.setVisible(false);
                 return true;
             }
         });
@@ -270,10 +266,10 @@ public class CustomiseScreen implements Screen {
         container.add(playerItemMenuContainer).width(Gdx.graphics.getWidth()/18f*9).fillY();
 
         stage.addActor(container);
+        stage.addActor(hatPreview);
 
         // endregion
     }
-
 
     public void addBackground() {
         Texture texture = new Texture(Gdx.files.internal("background.png"));
@@ -295,6 +291,10 @@ public class CustomiseScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Update player preview
+        hatPreview.setCustomisation(customisation);
+
         stage.act();
         stage.draw();
     }

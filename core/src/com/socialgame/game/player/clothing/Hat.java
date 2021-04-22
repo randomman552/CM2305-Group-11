@@ -20,9 +20,11 @@ public class Hat extends MultiSprite {
      */
     private final static Vector3[] hatOffSet = {
     /*hat1*/ new Vector3(-0.075f,-0.1f,0),
-    /*hat2*/ new Vector3(-0.125f,0f,-15),
-    /*hat3*/ new Vector3(-0.115f,-0.25f,0),
-    /*hat4*/ new Vector3(-0.1f,-0.1f,0)
+    /*hat2*/ new Vector3(-0.15f,0f,-13),
+    /*hat3*/ new Vector3(-0.1f,-0.1f,5),
+    /*hat4*/ new Vector3(-0.1f,-0.1f,0),
+    /*hat5*/ new Vector3(-0.1f,-0.1f,0),
+    /*hat6*/ new Vector3(-0.16f,-0.02f,-17)
     };
 
     private PlayerCustomisation customisation;
@@ -56,6 +58,7 @@ public class Hat extends MultiSprite {
         setColor(customisation.getColor());
         setHatType(customisation.getHatSelection());
     }
+
 
     public Vector3 getOffset() {
         return hatOffSet[customisation.getHatSelection()];
