@@ -97,12 +97,6 @@ public class GameScreen implements Screen {
         // Connect to server
         client = new GameClient(game, host);
         game.setClient(client);
-        try {
-            client = new GameClient(game, host);
-            game.setClient(client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
 /**
  * Base class from which all in game objects are derived.
  */
-public abstract class GameObject extends Actor {
+public abstract class GameObject extends Actor implements Disposable {
     //public static final ArrayList<GameObject> objects = new ArrayList<>();
     public static final Map<Integer, GameObject> objects = new HashMap<>();
     /**
@@ -49,6 +50,15 @@ public abstract class GameObject extends Actor {
 
     public GameObject(SocialGame game) {
         this(game, 0, 0, 0, 0);
+    }
+
+    /**
+     * Delete this game object from the stage and objects map.
+     */
+    public void delete() {
+        dispose();
+        getStage().getActors().removeValue(this, true);
+        objects.remove(getId());
     }
 
     public int getId() {
@@ -178,5 +188,11 @@ public abstract class GameObject extends Actor {
                 getRotation());
 
         batch.setColor(oldCol);
+    }
+
+    @Override
+    public void dispose() {
+        // Ensure to delete rigid body when deleting a GameObject
+        body.getWorld().destroyBody(body);
     }
 }
