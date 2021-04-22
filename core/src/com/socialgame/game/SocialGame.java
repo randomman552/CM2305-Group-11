@@ -19,6 +19,7 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.MainMenuScreen;
@@ -64,7 +65,7 @@ public class SocialGame extends Game {
 
 	public PlayerCustomisation customisation;
 
-	/**
+	/*
 	 * TODO: Customisation rewards
 	 * Stores this client's current XP, used to unlock rewards.
 	 * It might be better to move this to be stored under the settings object
