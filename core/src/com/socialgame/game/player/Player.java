@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
@@ -47,16 +51,16 @@ public class Player extends Interactable {
 
     private float health = 100;
 
-    private Animation<TextureRegion> walkAnim;
-    private Animation<TextureRegion> walkAnimHold;
-    private Animation<TextureRegion> idleAnim;
-    private Animation<TextureRegion> idleAnimHold;
+    private final Animation<TextureRegion> walkAnim;
+    private final Animation<TextureRegion> walkAnimHold;
+    private final Animation<TextureRegion> idleAnim;
+    private final Animation<TextureRegion> idleAnimHold;
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
     private int invSlot;
 
-    private Hat hat;
+    private final Hat hat;
 
     public Player(SocialGame game) {
         this(game, 0);
@@ -88,6 +92,25 @@ public class Player extends Interactable {
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
         this.customisation = customisation;
+    }
+
+    @Override
+    protected void setupRigidBody() {
+        // Create body
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        body = game.getPhysWorld().createBody(bodyDef);
+        body.setUserData(this);
+
+        // Create fixture
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(0.5f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        Fixture fixture = body.createFixture(fixtureDef);
+
+        // Dispose of unneeded resources
+        circleShape.dispose();
     }
 
     /**
