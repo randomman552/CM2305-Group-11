@@ -64,6 +64,7 @@ public class Player extends Interactable {
 
     public Player(SocialGame game, int id) {
         this(game, game.customisation);
+        this.id = id;
     }
 
     public Player(SocialGame game, PlayerCustomisation customisation) {
@@ -83,10 +84,10 @@ public class Player extends Interactable {
         idleAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegion("playerHold"));
         idleAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
-        this.id = id;
-        GameObject.objects.put(id, this);
+        GameObject.objects.put(getId(), this);
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
+        this.customisation = customisation;
     }
 
     /**
