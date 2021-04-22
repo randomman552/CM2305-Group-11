@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
 
         // region Initialise map
 
-        tiledMap = new TmxMapLoader().load("./map/testMap.tmx");
+        tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/testMap.tmx").toString());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
 
