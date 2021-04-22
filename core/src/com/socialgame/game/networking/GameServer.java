@@ -36,12 +36,13 @@ public class GameServer extends Server {
 
     public GameServer(int TCPPort, int UDPPort) throws IOException {
         super();
-        start();
-        bind(TCPPort, UDPPort);
 
         // Register networking classes
         Networking.register(this);
 
         addListener(new GameServerListener(this));
+
+        start();
+        bind(TCPPort, UDPPort);
     }
 }

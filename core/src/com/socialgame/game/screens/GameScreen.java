@@ -78,11 +78,11 @@ public class GameScreen implements Screen {
     }
     */
 
-    public GameScreen(SocialGame game) {
+    public GameScreen(SocialGame game) throws IOException {
         this(game, "localhost");
     }
 
-    public GameScreen(SocialGame game, String host) {
+    public GameScreen(SocialGame game, String host) throws IOException {
         this.game = game;
 
         // Use StretchViewport so that users with bigger screens cannot see more
@@ -102,12 +102,8 @@ public class GameScreen implements Screen {
         uiStage.setDebugAll(true);
 
         // Connect to server
-        try {
-            client = new GameClient(game, host);
-            game.setClient(client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        client = new GameClient(game, host);
+        game.setClient(client);
     }
 
     @Override
