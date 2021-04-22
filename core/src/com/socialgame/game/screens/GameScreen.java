@@ -5,10 +5,12 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.HUD.HUD;
@@ -18,7 +20,6 @@ import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.Task;
-import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
@@ -51,26 +52,11 @@ public class GameScreen implements Screen {
      */
     private TiledMap tiledMap;
     OrthogonalTiledMapRenderer renderer;
-    ShapeRenderer sr;
+    Box2DDebugRenderer box2DDebugRenderer;
     float unitScale = 1/64f; // 1 unit = 32 pixels
     int[] backgroundLayers = { 0, 1 };  //Drawn behind the player
     int[] taskLayer = { 2 };
     int[] foregroundLayers = { 3 };     //Drawn in-front the player
-
-
-    public void mapCreate() {
-        tiledMap = new TmxMapLoader().load("./map/testMap.tmx");
-        renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
-        renderer.setView((OrthographicCamera) stage.getCamera());
-
-    }
-
-    /*
-    public void mapRender() {
-        renderer.setView((OrthographicCamera) stage.getCamera());
-        renderer.render(layer);
-    }
-    */
 
     public GameScreen(SocialGame game) throws IOException {
         this(game, "localhost");
@@ -83,7 +69,14 @@ public class GameScreen implements Screen {
         StretchViewport vp = new StretchViewport(16, 9);
         this.stage = new Stage(vp);
         this.uiStage = new Stage();
-        mapCreate();
+
+        // region Initialise map
+
+        tiledMap = new TmxMapLoader().load("./map/testMap.tmx");
+        renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
+        renderer.setView((OrthographicCamera) stage.getCamera());
+
+        // endregion
         
         // Hud creation
         hud = new HUD(game);
@@ -97,6 +90,9 @@ public class GameScreen implements Screen {
         // Set debug
         stage.setDebugAll(true);
         uiStage.setDebugAll(true);
+        box2DDebugRenderer = new Box2DDebugRenderer();
+        box2DDebugRenderer.setDrawVelocities(true);
+        box2DDebugRenderer.VELOCITY_COLOR.set(1, 0, 0, 1);
 
         // Connect to server
         client = new GameClient(game, host);
@@ -108,7 +104,7 @@ public class GameScreen implements Screen {
             e.printStackTrace();
         }
 
-        // Initialise tasks array
+        // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();
     }
 
@@ -133,8 +129,14 @@ public class GameScreen implements Screen {
 
         // region Task generation
 
-        tasks.add(new ClockCalibrationTask(game, 0, -2));
-        tasks.add(new SimonSaysTask(game, -2, -2));
+        for (MapObject mapObject: tiledMap.getLayers().get(taskLayer[0]).getObjects()) {
+            if (mapObject instanceof EllipseMapObject) {
+                float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
+                float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
+                // TODO Random task generation
+                tasks.add(new SimonSaysTask(game, x, y));
+            }
+        }
 
         for (Task task: tasks) {
             stage.addActor(task);
@@ -166,6 +168,8 @@ public class GameScreen implements Screen {
 
         // Draw changes on screen
         stage.draw();
+        renderer.render(foregroundLayers);
+        box2DDebugRenderer.render(game.getPhysWorld(), stage.getCamera().combined);
         uiStage.draw();
 
         //Map - Draws in-front of player
@@ -187,7 +191,7 @@ public class GameScreen implements Screen {
             }
         }*/
         //Walk-in textures.
-        renderer.render(foregroundLayers);
+
     }
 
     @Override
