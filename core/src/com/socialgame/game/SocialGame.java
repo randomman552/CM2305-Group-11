@@ -14,18 +14,17 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.esotericsoftware.kryonet.Connection;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.menu.MenuScreen;
+import com.socialgame.game.screens.menu.Error;
 import com.socialgame.game.screens.menu.Main;
+import com.socialgame.game.screens.menu.MenuScreen;
 import com.socialgame.game.tasks.Task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SocialGame extends Game {
@@ -123,16 +122,26 @@ public class SocialGame extends Game {
         physWorld = world;
     }
 
-    public GameServer server;
-    public GameClient client;
 
-	public Connection getClient() {
+    private GameServer server;
+    private GameClient client;
+
+	public GameClient getClient() {
 		return client;
 	}
 
 	public void setClient(GameClient client) {
 		this.client = client;
 	}
+
+	public GameServer getServer() {
+		return server;
+	}
+
+	public void setServer(GameServer server) {
+		this.server = server;
+	}
+
 
 	/**
 	 * Method to get the current list of tasks from the game screen.
@@ -181,14 +190,6 @@ public class SocialGame extends Game {
 		// Initialise Box2D engine
 		Box2D.init();
 
-		// region Server setup
-		try {
-			server = new GameServer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
 		physWorld = new World(new Vector2(0, 0), true);
 
 		settings = new Settings();
@@ -206,6 +207,13 @@ public class SocialGame extends Game {
 	@Override
 	public void render () {
 		elapsedTime += Gdx.graphics.getDeltaTime();
+
+		// Detect if we have lost connection to the game
+		GameClient client = getClient();
+		if (client != null && !getClient().isConnected()) {
+			setScreen(new Error(this, "Connection lost", new Main(this)));
+			setClient(null);
+		}
 		super.render();
 	}
 	

@@ -5,6 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.screens.GameScreen;
+
+import java.io.IOException;
 
 public class CreateGame extends MenuScreen {
     public CreateGame(final SocialGame game) {
@@ -14,8 +18,7 @@ public class CreateGame extends MenuScreen {
         Label passwordLabel = new Label("Password:", skin,"big");
         final TextField passwordText = new TextField("", skin);
 
-        //TEMP BUTTON
-        //TODO: Fix buttons and image not showing up.
+        // Back button
         Button backButton = new TextButton("Back",skin,"default");
         backButton.addListener(new InputListener(){
 
@@ -26,11 +29,19 @@ public class CreateGame extends MenuScreen {
             }
         });
 
+        // Create button
         Button createButton = new TextButton("Create",skin,"default");
         createButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                System.out.println(passwordText.getText());//Example of grabbing text
+                try {
+                    game.setServer(new GameServer());
+                    game.setScreen(new GameScreen(game, "localhost"));
+                } catch (IOException e) {
+                    String message = "Server failed to start.\nIs another server already running?";
+                    e.printStackTrace();
+                    game.setScreen(new Error(game, message));
+                }
                 return true;
             }
         });

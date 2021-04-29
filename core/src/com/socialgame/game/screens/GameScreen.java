@@ -15,21 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
+import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.Task;
 import com.socialgame.game.tasks.async.SimonSaysTask;
-import com.socialgame.game.map.MapBodyBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
-
-    public GameObject focusedObj;
 
     /**
      * Stage object for use with Scene2d
@@ -196,5 +193,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        game.setClient(null);
     }
 }

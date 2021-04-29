@@ -4,9 +4,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.networking.Networking;
+import com.socialgame.game.screens.menu.Main;
 
 import java.util.ArrayList;
 
@@ -74,10 +74,9 @@ public class PlayerController extends InputListener {
                 player.setInvSlot(1);
                 game.getClient().sendTCP(Networking.switchItemUpdate(player.getId(), player.getInvSlot()));
                 break;
-            /*case Input.Keys.TAB:
-
-                HUD.showMap(this.game);
-                break;*/
+            case Input.Keys.ESCAPE:
+                game.setScreen(new Main(game));
+                break;
         }
 
         pressedKeys.add(keycode);

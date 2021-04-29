@@ -38,15 +38,14 @@ public class JoinGame extends MenuScreen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 String ip = ipAddressText.getText();
                 // TODO: Add IP validation
-                System.out.println("IP: " + ipAddressText.getText());
-                System.out.println("Password: " + passwordText.getText());
 
                 if (ip.length() == 0)
-                    ip = "127.0.0.1";
+                    ip = "localhost";
 
                 try {
-                    game.setScreen(new GameScreen(game, ipAddressText.getText()));
+                    game.setScreen(new GameScreen(game, ip));
                 } catch (IOException e) {
+                    game.setScreen(new Error(game, "Connection failed!"));
                     e.printStackTrace();
                 }
 
