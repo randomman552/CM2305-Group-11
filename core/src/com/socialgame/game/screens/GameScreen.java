@@ -21,6 +21,7 @@ import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.Task;
 import com.socialgame.game.tasks.async.SimonSaysTask;
+import com.socialgame.game.map.MapBodyBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,6 +83,8 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/testMap.tmx").toString());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
+
+        MapBodyBuilder.buildShapes(tiledMap, 64, game.getPhysWorld());
 
         // endregion
         
