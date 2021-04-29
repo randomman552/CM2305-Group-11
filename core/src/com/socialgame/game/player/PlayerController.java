@@ -76,6 +76,11 @@ public class PlayerController extends InputListener {
                 break;
             case Input.Keys.ESCAPE:
                 game.setScreen(new Main(game));
+                // Close server if it is running
+                if (game.getServer() != null) {
+                    game.getServer().close();
+                    game.setServer(null);
+                }
                 break;
         }
 

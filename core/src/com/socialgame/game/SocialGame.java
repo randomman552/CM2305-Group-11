@@ -221,6 +221,8 @@ public class SocialGame extends Game {
 	public void dispose () {
 		batch.dispose();
 		spriteSheet.dispose();
+		menuSpriteSheet.dispose();
+		wearablesSpriteSheet.dispose();
 		gameSkin.dispose();
 	}
 }
