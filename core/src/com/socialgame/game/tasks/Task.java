@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
@@ -23,7 +22,7 @@ import com.socialgame.game.screens.GameScreen;
  * Task can be customised by editing the Task.table attribute after instanciating
  * Extension of Interactable class
  */
-public abstract class Task extends Interactable implements Disposable {
+public abstract class Task extends Interactable {
     /**
      * Group which is added to the uiStage.
      * If you want to add elements outside of the primary table, add them here.
@@ -161,6 +160,7 @@ public abstract class Task extends Interactable implements Disposable {
 
     @Override
     public void dispose() {
+        super.dispose();
         ((GameScreen) game.getScreen()).uiStage.getActors().removeValue(group, true);
     }
 }

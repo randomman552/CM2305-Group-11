@@ -74,6 +74,11 @@ public class GameClient extends Client {
                     connection.sendTCP(Networking.positionUpdate(id, x, y));
                 }
             }
+            else if (object instanceof Networking.LeaveNotification) {
+                Networking.LeaveNotification update = ((Networking.LeaveNotification) object);
+                GameObject player = GameObject.objects.get(update.playerID);
+                player.delete();
+            }
         }
     }
 
@@ -96,8 +101,5 @@ public class GameClient extends Client {
         addListener(new GameClientListener(game));
         start();
         connect(5000, host, tcpPort, udpPort);
-
-        // Send player join request
-        sendTCP(Networking.joinRequest());
     }
 }

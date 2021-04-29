@@ -21,6 +21,7 @@ import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.player.PlayerController;
 import com.socialgame.game.tasks.Task;
 import com.socialgame.game.tasks.async.SimonSaysTask;
+import com.socialgame.game.map.MapBodyBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,9 +80,11 @@ public class GameScreen implements Screen {
 
         // region Initialise map
 
-        tiledMap = new TmxMapLoader().load("./map/testMap.tmx");
+        tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/testMap.tmx").toString());
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
+
+        MapBodyBuilder.buildShapes(tiledMap, 64, game.getPhysWorld());
 
         // endregion
         
@@ -97,12 +100,6 @@ public class GameScreen implements Screen {
         // Connect to server
         client = new GameClient(game, host);
         game.setClient(client);
-        try {
-            client = new GameClient(game, host);
-            game.setClient(client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();

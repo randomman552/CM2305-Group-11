@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
@@ -25,7 +26,7 @@ public class Player extends Interactable {
     /**
      * Move speed of all players in units per second
      */
-    public static float MAX_VEL = 2f;
+    public static float MAX_VEL = 5f;
     /**
      * Spectator velocity modifier
      * For example, 2 gives spectators 2 times speed of players.
@@ -47,16 +48,16 @@ public class Player extends Interactable {
 
     private float health = 100;
 
-    private Animation<TextureRegion> walkAnim;
-    private Animation<TextureRegion> walkAnimHold;
-    private Animation<TextureRegion> idleAnim;
-    private Animation<TextureRegion> idleAnimHold;
+    private final Animation<TextureRegion> walkAnim;
+    private final Animation<TextureRegion> walkAnimHold;
+    private final Animation<TextureRegion> idleAnim;
+    private final Animation<TextureRegion> idleAnimHold;
 
     private boolean isSaboteur;
     private PlayerCustomisation customisation;
     private int invSlot;
 
-    private Hat hat;
+    private final Hat hat;
 
     public Player(SocialGame game) {
         this(game, 0);
@@ -88,6 +89,45 @@ public class Player extends Interactable {
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
         this.customisation = customisation;
+    }
+
+    @Override
+    protected void setupRigidBody() {
+        // Create body
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        body = game.getPhysWorld().createBody(bodyDef);
+        body.setUserData(this);
+
+        FixtureDef fixtureDef = new FixtureDef();
+
+
+        // Central rectangle
+        PolygonShape rectShape = new PolygonShape();
+        float rectX = getHeight()/6 - (getWidth()/24);
+        float rectY = getHeight()/6;
+        rectShape.setAsBox(rectX, rectY, new Vector2(0, -getHeight()/3), 0);
+        fixtureDef.shape = rectShape;
+        body.createFixture(fixtureDef);
+
+        // Circle shapes
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(getHeight()/6);
+        fixtureDef.shape = circleShape;
+        float xOffset = getWidth()/4 - (getWidth()/24);
+        float yOffset = -getHeight()/3;
+
+        // Left circle
+        circleShape.setPosition(new Vector2(-xOffset, yOffset));
+        body.createFixture(fixtureDef);
+
+        // Right circle
+        circleShape.setPosition(new Vector2(xOffset, yOffset));
+        body.createFixture(fixtureDef);
+
+        // Dispose of unneeded resources
+        circleShape.dispose();
+        rectShape.dispose();
     }
 
     /**

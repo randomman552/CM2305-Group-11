@@ -21,12 +21,18 @@ public class GameServer extends Server {
         @Override
         public void received(Connection connection, Object object) {
             System.out.println("Server Receives: " + object);
+            server.sendToAllExceptTCP(connection.getID(), object);
+        }
 
-            if (object instanceof Networking.JoinRequest && server.players != GameServer.MAX_PLAYERS) {
-                server.sendToAllTCP(Networking.joinResponse(0, server.players++, 0, 0));
-            } else {
-                server.sendToAllExceptTCP(connection.getID(), object);
-            }
+        @Override
+        public void connected(Connection connection) {
+            server.sendToAllTCP(Networking.joinResponse(server.players++, 0, 0, 0));
+        }
+
+        @Override
+        public void disconnected(Connection connection) {
+            // FIXME: 22/04/2021 This doesn't account for reshuffling players to allow a player to replace one that has left (players cannot rejoin)
+            server.sendToAllTCP(Networking.leaveNotification(connection.getID() - 1));
         }
     }
 

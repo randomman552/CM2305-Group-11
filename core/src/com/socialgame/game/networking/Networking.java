@@ -2,7 +2,6 @@ package com.socialgame.game.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.socialgame.game.player.PlayerCustomisation;
 
 public class Networking {
     public static final int TCP_PORT = 54555;
@@ -26,8 +25,8 @@ public class Networking {
         kryo.register(DropItemUpdate.class);
         kryo.register(SwitchItemUpdate.class);
         kryo.register(PlayerTakeDamageUpdate.class);
-        kryo.register(JoinRequest.class);
         kryo.register(JoinResponse.class);
+        kryo.register(LeaveNotification.class);
     }
 
     static public void resetPools() {
@@ -79,17 +78,22 @@ public class Networking {
         return obj;
     }
 
-    public static JoinRequest joinRequest() {
-        JoinRequest obj = new JoinRequest();
-        return obj;
-    }
-
-    public static JoinResponse joinResponse(int mapSeed, int playerID, float x, float y) {
+    public static JoinResponse joinResponse(int playerID, float x, float y, int mapSeed) {
         JoinResponse obj = new JoinResponse();
         obj.mapSeed = mapSeed;
         obj.playerID = playerID;
         obj.x = x;
         obj.y = y;
+        return obj;
+    }
+
+    public static JoinResponse joinResponse(int playerID, float x, float y) {
+        return joinResponse(playerID, x, y, 0);
+    }
+
+    public static LeaveNotification leaveNotification(int playerID) {
+        LeaveNotification obj = new LeaveNotification();
+        obj.playerID = playerID;
         return obj;
     }
 
@@ -175,18 +179,6 @@ public class Networking {
         }
     }
 
-    // FIXME: 19/04/2021 Doesn't account for player customisation
-    public static class JoinRequest {
-        public PlayerCustomisation customisation;
-
-        @Override
-        public String toString() {
-            return "JoinRequest{" +
-                    "customisation=" + customisation +
-                    '}';
-        }
-    }
-
     public static class JoinResponse {
         public int mapSeed;
         public int playerID;
@@ -202,6 +194,10 @@ public class Networking {
                     ", y=" + y +
                     '}';
         }
+    }
+
+    public static class LeaveNotification {
+        public int playerID;
     }
 
     // endregion
