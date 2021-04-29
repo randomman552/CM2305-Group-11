@@ -70,6 +70,13 @@ public class GameScreen implements Screen {
         this.stage = new Stage(vp);
         this.uiStage = new Stage();
 
+        // Set debug
+        this.stage.setDebugAll(game.settings.getDebug());
+        this.uiStage.setDebugAll(game.settings.getDebug());
+        box2DDebugRenderer = new Box2DDebugRenderer();
+        box2DDebugRenderer.setDrawVelocities(true);
+        box2DDebugRenderer.VELOCITY_COLOR.set(1, 0, 0, 1);
+
         // region Initialise map
 
         tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/testMap.tmx").toString());
@@ -86,13 +93,6 @@ public class GameScreen implements Screen {
         inputProcessor = new InputMultiplexer();
         inputProcessor.addProcessor(uiStage);
         inputProcessor.addProcessor(stage);
-
-        // Set debug
-        stage.setDebugAll(true);
-        uiStage.setDebugAll(true);
-        box2DDebugRenderer = new Box2DDebugRenderer();
-        box2DDebugRenderer.setDrawVelocities(true);
-        box2DDebugRenderer.VELOCITY_COLOR.set(1, 0, 0, 1);
 
         // Connect to server
         client = new GameClient(game, host);
@@ -163,29 +163,10 @@ public class GameScreen implements Screen {
         // Draw changes on screen
         stage.draw();
         renderer.render(foregroundLayers);
-        box2DDebugRenderer.render(game.getPhysWorld(), stage.getCamera().combined);
         uiStage.draw();
 
-        //Map - Draws in-front of player
-        //render objects
-        //FIXME - Cannot pass the ((Ortho) stage.getCamera).combined
-
-        /*sr.setProjectionMatrix(((OrthographicCamera) stage.getCamera()).combined);
-        for(MapObject object : tiledMap.getLayers().get("Tasks").getObjects()) {
-            if(object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.rect(rect.x, rect.y, rect.width, rect.height);
-                sr.end();
-            } else if(object instanceof CircleMapObject) {
-                Circle circle = ((CircleMapObject) object).getCircle();
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.circle(circle.x, circle.y, circle.radius);
-                sr.end();
-            }
-        }*/
-        //Walk-in textures.
-
+        // Draw debug if required
+        if (game.settings.getDebug()) box2DDebugRenderer.render(game.getPhysWorld(), stage.getCamera().combined);
     }
 
     @Override
