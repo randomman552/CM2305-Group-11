@@ -20,9 +20,9 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.player.PlayerCustomisation;
-import com.socialgame.game.screens.CustomiseScreen;
+import com.socialgame.game.screens.menu.Customise;
 import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.MainMenuScreen;
+import com.socialgame.game.screens.menu.Main;
 import com.socialgame.game.tasks.Task;
 
 import java.io.IOException;
@@ -90,8 +90,8 @@ public class SocialGame extends Game {
 
         if (curScreen instanceof GameScreen) {
             return ((GameScreen) curScreen).stage;
-        } else if (curScreen instanceof CustomiseScreen) {
-            return ((CustomiseScreen) curScreen).stage;
+        } else if (curScreen instanceof Customise) {
+            return ((Customise) curScreen).stage;
         }
         return new Stage();
     }
@@ -196,7 +196,7 @@ public class SocialGame extends Game {
 		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
 		elapsedTime = 0;
 
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new Main(this));
 	}
 
 	@Override
