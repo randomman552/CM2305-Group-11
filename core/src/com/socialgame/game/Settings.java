@@ -18,6 +18,7 @@ public class Settings {
     private static final String SFXVolKey = "SFXVol";
     private static final String musicVolKey = "musicVol";
     private static final String micVolKey = "micVol";
+    private static final String micKey = "mic";
     private static final String debugKey = "debug";
 
     private static final String defaultResolution = "1280x720";
@@ -25,6 +26,7 @@ public class Settings {
     private static final float defaultSFXVol = 1;
     private static final float defaultMusicVol = 1;
     private static final float defaultMicVolKey = 1;
+    private static final String defaultMic = "Press to talk";
     private static final boolean defaultDebug = false;
 
     public Settings() {
