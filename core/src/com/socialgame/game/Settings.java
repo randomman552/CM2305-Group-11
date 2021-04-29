@@ -67,14 +67,6 @@ public class Settings {
         return pref.getFloat(musicVolKey, defaultMusicVol);
     }
 
-    public void setMicVol(float val) {
-        pref.putFloat(micVolKey, val);
-    }
-
-    public float getMicVol() {
-        return pref.getFloat(micVolKey, defaultMicVolKey);
-    }
-
 
     public boolean getDebug() {
         return pref.getBoolean(debugKey, defaultDebug);
@@ -82,6 +74,24 @@ public class Settings {
 
     public void setDebug(boolean val) {
         pref.putBoolean(debugKey, val);
+    }
+
+
+    public void setMic(String mic) {
+        pref.putString(micKey, mic);
+    }
+
+    public String getMic() { 
+        return pref.getString(micKey, defaultMic); 
+    }
+
+
+    public void setMicVol(float val) {
+        pref.putFloat(micVolKey, val);
+    }
+
+    public float getMicVol() {
+        return pref.getFloat(micVolKey, defaultMicVolKey);
     }
 
 
