@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.socialgame.game.SocialGame;
 
-public class Options extends BaseMenuScreen {
+public class Options extends MenuScreen {
     public Options(final SocialGame game) {
         super(game);
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));

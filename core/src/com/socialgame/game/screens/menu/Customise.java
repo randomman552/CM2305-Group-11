@@ -14,7 +14,7 @@ import com.socialgame.game.player.clothing.Hat;
 
 import java.util.ArrayList;
 
-public class Customise extends BaseMenuScreen {
+public class Customise extends MenuScreen {
     /**
      * Input listener to be placed on all color selection buttons
      * This is defined as it's own class to avoid repeating code with anonymous classes.
@@ -51,10 +51,6 @@ public class Customise extends BaseMenuScreen {
         public HatButtonInputListener(PlayerCustomisation customisation, int hatIdx) {
             this.customisation = customisation;
             this.hatIdx = hatIdx;
-        }
-
-        public int getHatIdx() {
-            return hatIdx;
         }
 
         @Override
@@ -255,5 +251,11 @@ public class Customise extends BaseMenuScreen {
         stage.addActor(hatPreview);
 
         // endregion
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        hatPreview.setHatType(customisation.getHatSelection());
     }
 }

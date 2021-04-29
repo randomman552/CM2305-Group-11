@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.socialgame.game.SocialGame;
 
-public class CreateGame extends BaseMenuScreen {
+public class CreateGame extends MenuScreen {
     public CreateGame(final SocialGame game) {
         super(game);
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));

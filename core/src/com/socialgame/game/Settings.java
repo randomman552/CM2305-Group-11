@@ -11,28 +11,25 @@ import com.badlogic.gdx.Preferences;
  */
 public class Settings {
     private final Preferences pref;
+    private static final String fileName = "SocialGame/settings.xml";
 
-    private final String resolutionKey = "resolution";
-    private final String masterVolKey = "masterVol";
-    private final String SFXVolKey = "SFXVol";
-    private final String musicVolKey = "musicVolKey";
-    private final String micVolKey = "micVolKey";
+    private static final String resolutionKey = "resolution";
+    private static final String masterVolKey = "masterVol";
+    private static final String SFXVolKey = "SFXVol";
+    private static final String musicVolKey = "musicVol";
+    private static final String micVolKey = "micVol";
+    private static final String debugKey = "debug";
 
-    private final String defaultResolution = "1280x720";
-    private final float defaultMasterVol = 1;
-    private final float defaultSFXVol = 1;
-    private final float defaultMusicVol = 1;
-    private final float defaultMicVolKey = 1;
-
-    private final String fileName = "SocialGame/settings.xml";
+    private static final String defaultResolution = "1280x720";
+    private static final float defaultMasterVol = 1;
+    private static final float defaultSFXVol = 1;
+    private static final float defaultMusicVol = 1;
+    private static final float defaultMicVolKey = 1;
+    private static final boolean defaultDebug = false;
 
     public Settings() {
         pref = Gdx.app.getPreferences(fileName);
     }
-
-    //FIXME:
-    // - Implement the save function into the options screen.
-    // - Add and implement a pref.clear function to return to defaults.
 
 
     public void setResolution(String resolution) {
@@ -79,7 +76,20 @@ public class Settings {
     }
 
 
+    public boolean getDebug() {
+        return pref.getBoolean(debugKey, defaultDebug);
+    }
+
+    public void setDebug(boolean val) {
+        pref.putBoolean(debugKey, val);
+    }
+
+
     public void save() {
         pref.flush();
+    }
+
+    public void reset() {
+        pref.clear();
     }
 }

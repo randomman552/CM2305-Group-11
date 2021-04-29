@@ -14,14 +14,15 @@ import com.socialgame.game.SocialGame;
  * Base menu screen which ALL menu screens are extended from.
  * Handles implementation of basic steps common to all menu screens.
  */
-public abstract class BaseMenuScreen implements Screen {
+public abstract class MenuScreen implements Screen {
     protected final SocialGame game;
     public final Stage stage;
     public final Skin skin;
 
-    public BaseMenuScreen(SocialGame game) {
+    public MenuScreen(SocialGame game) {
         this.game = game;
-        this.stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));;
+        this.stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
+        this.stage.setDebugAll(game.settings.getDebug());
         this.skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
         // region Add menu background

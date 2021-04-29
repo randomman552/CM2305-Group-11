@@ -12,7 +12,7 @@ import com.socialgame.game.screens.GameScreen;
 
 import java.io.IOException;
 
-public class Main extends BaseMenuScreen {
+public class Main extends MenuScreen {
     public Main(final SocialGame game) {
         super(game);
 
