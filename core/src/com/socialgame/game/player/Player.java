@@ -119,8 +119,11 @@ public class Player extends Interactable {
             setColor(curCol.r, curCol.g, curCol.b, SPEC_ALPHA);
         }
 
-        super.draw(batch, parentAlpha);
-        drawItem(batch, parentAlpha);
+        if(!isAlive() && game.mainPlayer.isAlive()){
+            super.draw(batch, parentAlpha);
+            drawItem(batch, parentAlpha);
+        }
+
     }
 
     private void drawItem(Batch batch, float parentAlpha) {

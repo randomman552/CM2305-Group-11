@@ -131,4 +131,8 @@ public abstract class GameObject extends Actor {
 
         batch.setColor(oldCol);
     }
+
+    public boolean isAlive() {
+        return isAlive();
+    }
 }
