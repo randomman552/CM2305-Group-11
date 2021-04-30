@@ -41,8 +41,14 @@ public class Player extends Interactable {
      * Position of player hand for holding items
      */
     public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
-
+    /**
+     * Position of player hat
+     */
     private static final Vector2 HAT_POS = new Vector2(0.05f, 0.8f);
+    /**
+     * Box2D category mask for all players to prevent them from colliding.
+     */
+    private static final int CATEGORY_MASK = -1;
 
     public Item[] inventory;
 
@@ -101,6 +107,7 @@ public class Player extends Interactable {
         body.setUserData(this);
 
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.filter.groupIndex = CATEGORY_MASK;
 
 
         // Central rectangle
