@@ -53,8 +53,8 @@ public class PlayerController extends InputListener {
             }
         }
         player.body.setLinearVelocity(vel);
-        game.getClient().sendTCP(Networking.velocityUpdate(player.getId(), vel.x, vel.y));
-        game.getClient().sendTCP(Networking.positionUpdate(player.getId(), player.getX(), player.getY()));
+        game.getClient().sendTCP(Networking.velocityUpdate(player.getID(), vel.x, vel.y));
+        game.getClient().sendTCP(Networking.positionUpdate(player.getID(), player.getX(), player.getY()));
     }
 
     @Override
@@ -64,15 +64,15 @@ public class PlayerController extends InputListener {
         switch (keycode) {
             case Input.Keys.Q:
                 player.dropItem();
-                game.getClient().sendTCP(Networking.dropItemUpdate(player.getId()));
+                game.getClient().sendTCP(Networking.dropItemUpdate(player.getID()));
                 break;
             case Input.Keys.NUM_1:
                 player.setInvSlot(0);
-                game.getClient().sendTCP(Networking.switchItemUpdate(player.getId(), player.getInvSlot()));
+                game.getClient().sendTCP(Networking.switchItemUpdate(player.getID(), player.getInvSlot()));
                 break;
             case Input.Keys.NUM_2:
                 player.setInvSlot(1);
-                game.getClient().sendTCP(Networking.switchItemUpdate(player.getId(), player.getInvSlot()));
+                game.getClient().sendTCP(Networking.switchItemUpdate(player.getID(), player.getInvSlot()));
                 break;
             case Input.Keys.ESCAPE:
                 game.setScreen(new Main(game));
@@ -102,7 +102,7 @@ public class PlayerController extends InputListener {
         Player player = ((Player) game.mainPlayer);
         // amountY is positive when scrolling down, and we want to go DOWN a slot. So we must negate amountY
         player.setInvSlot(player.getInvSlot() + (int)-amountY);
-        game.getClient().sendUDP(Networking.switchItemUpdate(player.getId(), player.getInvSlot()));
+        game.getClient().sendUDP(Networking.switchItemUpdate(player.getID(), player.getInvSlot()));
         return false;
     }
 }

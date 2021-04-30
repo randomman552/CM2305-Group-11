@@ -36,7 +36,7 @@ public abstract class Interactable extends GameObject {
                 parent.interact(game.mainPlayer);
                 game.getMainStage().setKeyboardFocus(null);
                 if (parent instanceof Item) {
-                    game.getClient().sendTCP(Networking.pickupItemUpdate(game.mainPlayer.getId(), parent.getId()));
+                    game.getClient().sendTCP(Networking.pickupItemUpdate(game.mainPlayer.getID(), parent.getID()));
                 }
             }
             return false;

@@ -2,6 +2,9 @@ package com.socialgame.game.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.socialgame.game.player.PlayerCustomisation;
+
+import java.util.Arrays;
 
 public class Networking {
     public static final int TCP_PORT = 54555;
@@ -19,18 +22,74 @@ public class Networking {
      */
     static public void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
+
+        kryo.register(PlayerInfo[].class);
+        kryo.register(PlayerInfo.class);
+        kryo.register(int[].class);
+
         kryo.register(PositionUpdate.class);
         kryo.register(VelocityUpdate.class);
         kryo.register(PickupItemUpdate.class);
         kryo.register(DropItemUpdate.class);
         kryo.register(SwitchItemUpdate.class);
         kryo.register(PlayerTakeDamageUpdate.class);
-        kryo.register(JoinResponse.class);
         kryo.register(LeaveNotification.class);
+        kryo.register(JoinRequest.class);
+        kryo.register(JoinAccepted.class);
     }
 
     static public void resetPools() {
 
+    }
+
+    /**
+     * Class used to convey player information between clients
+     */
+    public static class PlayerInfo {
+        public int connectionID;
+        public int hatSelection;
+        public int topSelection;
+        public int colorSelection;
+        public int[] inventory = new int[2];
+        public float x, y;
+
+        public PlayerInfo() {
+
+        }
+
+        public PlayerInfo(int connectionID, PlayerCustomisation customisation) {
+            this(connectionID, customisation, 0, 0);
+        }
+
+        public PlayerInfo(int connectionID, PlayerCustomisation customisation, float x, float y) {
+            this.connectionID = connectionID;
+            this.hatSelection = customisation.getHatSelection();
+            this.topSelection = customisation.getTopSelection();
+            this.colorSelection = customisation.getColorSelection();
+            this.x = x;
+            this.y = y;
+        }
+
+        public PlayerCustomisation getCustomisation() {
+            PlayerCustomisation customisation = new PlayerCustomisation();
+            customisation.setHatSelection(hatSelection);
+            customisation.setTopSelection(topSelection);
+            customisation.setColorSelection(colorSelection);
+            return customisation;
+        }
+
+        @Override
+        public String toString() {
+            return "PlayerInfo{" +
+                    "connectionID=" + connectionID +
+                    ", hatSelection=" + hatSelection +
+                    ", topSelection=" + topSelection +
+                    ", colorSelection=" + colorSelection +
+                    ", inventory=" + Arrays.toString(inventory) +
+                    ", x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
     }
 
     // region Network classes pool access methods
@@ -78,17 +137,28 @@ public class Networking {
         return obj;
     }
 
-    public static JoinResponse joinResponse(int playerID, float x, float y, int mapSeed) {
-        JoinResponse obj = new JoinResponse();
-        obj.mapSeed = mapSeed;
-        obj.playerID = playerID;
-        obj.x = x;
-        obj.y = y;
+    // region Initial connection classes
+
+    public static JoinRequest joinRequest(PlayerCustomisation customisation, String password) {
+        JoinRequest obj = new JoinRequest();
+        obj.hatSelection = customisation.getHatSelection();
+        obj.topSelection = customisation.getTopSelection();
+        obj.colorSelection = customisation.getColorSelection();
+        obj.password = password;
         return obj;
     }
 
-    public static JoinResponse joinResponse(int playerID, float x, float y) {
-        return joinResponse(playerID, x, y, 0);
+    public static JoinRefused joinRefused(String reason) {
+        JoinRefused obj = new JoinRefused();
+        obj.reason = reason;
+        return obj;
+    }
+
+    public static JoinAccepted joinAccepted(PlayerInfo[] playerInfos, int playerID) {
+        JoinAccepted obj = new JoinAccepted();
+        obj.playerInfos = playerInfos;
+        obj.playerID = playerID;
+        return obj;
     }
 
     public static LeaveNotification leaveNotification(int playerID) {
@@ -96,6 +166,8 @@ public class Networking {
         obj.playerID = playerID;
         return obj;
     }
+
+    // endregion
 
     // endregion
 
@@ -179,26 +251,69 @@ public class Networking {
         }
     }
 
-    public static class JoinResponse {
-        public int mapSeed;
-        public int playerID;
-        public float x;
-        public float y;
+    // region Initial connection classes
+
+    public static class JoinRequest {
+        public int hatSelection;
+        public int topSelection;
+        public int colorSelection;
+        public String password;
+
+        public PlayerCustomisation getCustomisation() {
+            PlayerCustomisation customisation = new PlayerCustomisation();
+            customisation.setHatSelection(hatSelection);
+            customisation.setTopSelection(topSelection);
+            customisation.setColorSelection(colorSelection);
+            return customisation;
+        }
 
         @Override
         public String toString() {
-            return "JoinResponse{" +
-                    "mapSeed=" + mapSeed +
+            return "JoinRequest{" +
+                    "hatSelection=" + hatSelection +
+                    ", topSelection=" + topSelection +
+                    ", colorSelection=" + colorSelection +
+                    ", password='" + password + '\'' +
+                    '}';
+        }
+    }
+
+    public static class JoinRefused {
+        public String reason;
+
+        @Override
+        public String toString() {
+            return "JoinRefused{" +
+                    "reason='" + reason + '\'' +
+                    '}';
+        }
+    }
+
+    public static class JoinAccepted {
+        public PlayerInfo[] playerInfos = new PlayerInfo[GameServer.MAX_PLAYERS];
+        public int playerID;
+
+        @Override
+        public String toString() {
+            return "JoinAccepted{" +
+                    "playerInfos=" + Arrays.toString(playerInfos) +
                     ", playerID=" + playerID +
-                    ", x=" + x +
-                    ", y=" + y +
                     '}';
         }
     }
 
     public static class LeaveNotification {
         public int playerID;
+
+        @Override
+        public String toString() {
+            return "LeaveNotification{" +
+                    "playerID=" + playerID +
+                    '}';
+        }
     }
+
+    //endregion
 
     // endregion
 }

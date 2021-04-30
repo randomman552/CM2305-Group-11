@@ -64,6 +64,13 @@ public class SocialGame extends Game {
 
 	public PlayerCustomisation customisation;
 
+	/**
+	 * Variable to store an error message in.
+	 * Used to communicate between networking threads and main render thread.
+	 * When not null, an error screen will be displayed with the given message on, and it will then be returned to it's null state.
+	 */
+	volatile private String errorMessage;
+
 	/*
 	 * TODO: Customisation rewards
 	 * Stores this client's current XP, used to unlock rewards.
@@ -183,6 +190,20 @@ public class SocialGame extends Game {
 		return font;
 	}
 
+
+	/**
+	 * Method to change screens to an error screen on the next frame.
+	 * @param message The message to display on the error screen.
+	 */
+	synchronized public void setErrorMessage(String message) {
+		this.errorMessage = message;
+	}
+
+	synchronized public void setErrorMessage() {
+		setErrorMessage("An error has occurred");
+	}
+
+
     @Override
 	public void create () {
 		// Locates skin
@@ -208,12 +229,12 @@ public class SocialGame extends Game {
 	public void render () {
 		elapsedTime += Gdx.graphics.getDeltaTime();
 
-		// Detect if we have lost connection to the game
-		GameClient client = getClient();
-		if (client != null && !getClient().isConnected()) {
-			setScreen(new Error(this, "Connection lost", new Main(this)));
-			setClient(null);
+		// Check if we need to display an error message.
+		if (errorMessage != null) {
+			setScreen(new Error(this, errorMessage));
+			errorMessage = null;
 		}
+
 		super.render();
 	}
 	

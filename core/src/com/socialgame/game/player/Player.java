@@ -64,12 +64,10 @@ public class Player extends Interactable {
     }
 
     public Player(SocialGame game, int id) {
-        this(game, game.customisation);
-        this.id = id;
-        GameObject.objects.put(getId(), this);
+        this(game, id, game.customisation);
     }
 
-    public Player(SocialGame game, PlayerCustomisation customisation) {
+    public Player(SocialGame game, int id, PlayerCustomisation customisation) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
@@ -89,6 +87,9 @@ public class Player extends Interactable {
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
         this.customisation = customisation;
+
+        // Give unique player id
+        setID(id);
     }
 
     @Override
@@ -245,12 +246,22 @@ public class Player extends Interactable {
     }
 
     @Override
+    public void delete() {
+        // Drop all items when deleted
+        for (int i = 0; i < inventory.length; i++) {
+            setInvSlot(i);
+            dropItem();
+        }
+        super.delete();
+    }
+
+    @Override
     public void interact(GameObject caller) {
         if (caller instanceof Player) {
             Player player = ((Player) caller);
             if (player == this) return;
             if (player.isSaboteur || player.hasWeapon()) {
-                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getId(), getHealth()));
+                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getID(), getHealth()));
                 this.takeDamage(getHealth());
             }
         }

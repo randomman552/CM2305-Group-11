@@ -166,7 +166,7 @@ public class Customise extends MenuScreen {
         // endregion
 
         // Preview of players current equipment
-        Player playerPreview = new Player(game, customisation);
+        Player playerPreview = new Player(game, -1, customisation);
 
         // Combines the player display and info a single table
         playerInfoContainer.add(playerInfo).height(Gdx.graphics.getHeight()/14f*3);
