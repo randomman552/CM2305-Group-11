@@ -27,9 +27,15 @@ public class GameServer extends Server {
             System.out.println("Server Receives: " + object);
             if (object instanceof Networking.JoinRequest) {
                 Networking.JoinRequest update = ((Networking.JoinRequest) object);
+                // Check password
+                if (!update.password.equals(server.password)) {
+                    return;
+                }
+
+                // Attempt to add player
                 int playerID = server.addPlayer(connection.getID(), update.getCustomisation());
 
-                // Return appropriate response to join request
+                // Refuse if server full
                 if (playerID == -1) {
                     connection.sendTCP(Networking.joinRefused("Server is full"));
                     return;
@@ -54,12 +60,15 @@ public class GameServer extends Server {
         }
     }
 
-    public GameServer() throws IOException {
-        this(Networking.TCP_PORT, Networking.UDP_PORT);
+    private final String password;
+
+    public GameServer(String password) throws IOException {
+        this(password, Networking.TCP_PORT, Networking.UDP_PORT);
     }
 
-    public GameServer(int TCPPort, int UDPPort) throws IOException {
+    public GameServer(String password, int TCPPort, int UDPPort) throws IOException {
         super();
+        this.password = password;
 
         // Register networking classes
         Networking.register(this);

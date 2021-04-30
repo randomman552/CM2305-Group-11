@@ -72,7 +72,7 @@ public class Main extends MenuScreen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 try {
-                    game.setScreen(new GameScreen(game));
+                    game.setScreen(new GameScreen(game, ""));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

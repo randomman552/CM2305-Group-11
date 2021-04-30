@@ -35,8 +35,8 @@ public class CreateGame extends MenuScreen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 try {
-                    game.setServer(new GameServer());
-                    game.setScreen(new GameScreen(game, "localhost"));
+                    game.setServer(new GameServer(passwordText.getText()));
+                    game.setScreen(new GameScreen(game, passwordText.getText(), "localhost"));
                 } catch (IOException e) {
                     String message = "Server failed to start.\nIs another server already running?";
                     e.printStackTrace();

@@ -43,7 +43,7 @@ public class JoinGame extends MenuScreen {
                     ip = "localhost";
 
                 try {
-                    game.setScreen(new GameScreen(game, ip));
+                    game.setScreen(new GameScreen(game, passwordText.getText(), ip));
                 } catch (IOException e) {
                     game.setScreen(new Error(game, "Connection failed!"));
                     e.printStackTrace();

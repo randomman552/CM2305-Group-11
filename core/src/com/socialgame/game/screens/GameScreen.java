@@ -57,11 +57,11 @@ public class GameScreen implements Screen {
     int[] taskLayer = { 2 };
     int[] foregroundLayers = { 3 };     //Drawn in-front the player
 
-    public GameScreen(SocialGame game) throws IOException {
-        this(game, "localhost");
+    public GameScreen(SocialGame game, String password) throws IOException {
+        this(game, password, "localhost");
     }
 
-    public GameScreen(SocialGame game, String host) throws IOException {
+    public GameScreen(SocialGame game, String password, String host) throws IOException {
         this.game = game;
 
         // Clear GameObject table to prevent mismatching id's between servers and clients.
@@ -99,7 +99,7 @@ public class GameScreen implements Screen {
         inputProcessor.addProcessor(stage);
 
         // Connect to server
-        client = new GameClient(game, host);
+        client = new GameClient(game, password, host);
         game.setClient(client);
 
         // Create tasks (stored for later initialisation)
