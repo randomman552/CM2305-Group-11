@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
@@ -62,6 +63,9 @@ public class GameScreen implements Screen {
 
     public GameScreen(SocialGame game, String host) throws IOException {
         this.game = game;
+
+        // Clear GameObject table to prevent mismatching id's between servers and clients.
+        GameObject.deleteAll();
 
         // Use StretchViewport so that users with bigger screens cannot see more
         StretchViewport vp = new StretchViewport(16, 9);

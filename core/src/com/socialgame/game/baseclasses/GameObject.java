@@ -34,6 +34,12 @@ public abstract class GameObject extends Actor implements Disposable {
         return -1;
     }
 
+    public static void deleteAll() {
+        for (GameObject object: objects.values()) {
+            object.delete();
+        }
+    }
+
     protected SocialGame game;
     protected int id;
 
