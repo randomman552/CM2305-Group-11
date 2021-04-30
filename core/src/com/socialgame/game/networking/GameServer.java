@@ -36,6 +36,13 @@ public class GameServer extends Server {
                 }
                 server.sendToAllTCP(Networking.joinAccepted(server.connectedPlayers, playerID));
             }
+            else if (object instanceof Networking.PositionUpdate) {
+                Networking.PositionUpdate update = ((Networking.PositionUpdate) object);
+                Networking.PlayerInfo info = server.connectedPlayers[server.getPlayerID(connection.getID())];
+                info.x = update.x;
+                info.y = update.y;
+                server.sendToAllExceptTCP(connection.getID(), object);
+            }
             else {
                 server.sendToAllExceptTCP(connection.getID(), object);
             }

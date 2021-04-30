@@ -69,6 +69,7 @@ public class GameClient extends Client {
                         if (i != update.playerID && update.playerInfos[i] != null) {
                             Networking.PlayerInfo info = update.playerInfos[i];
                             Player newPlayer = new Player(game, i, info.getCustomisation());
+                            newPlayer.setPositionAboutOrigin(info.x, info.y);
 
                             // Inventory sync
                             for (int j: info.inventory) {
@@ -82,7 +83,10 @@ public class GameClient extends Client {
                         }
                     }
                 } else {
-                    game.getMainStage().addActor(new Player(game, update.playerID, update.playerInfos[update.playerID].getCustomisation()));
+                    Networking.PlayerInfo info = update.playerInfos[update.playerID];
+                    Player newPlayer = new Player(game, update.playerID, update.playerInfos[update.playerID].getCustomisation());
+                    newPlayer.setPositionAboutOrigin(info.x, info.y);
+                    game.getMainStage().addActor(newPlayer);
                 }
             }
             else if (object instanceof Networking.PlayerTakeDamageUpdate) {
