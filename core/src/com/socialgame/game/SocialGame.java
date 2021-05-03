@@ -36,7 +36,7 @@ public class SocialGame extends Game {
 	/**
 	 * Skin used for styling in the game
 	 */
-	static public Skin gameSkin;
+	public Skin gameSkin;
 
 	/**
 	 * Primary sprite sheet.
@@ -64,13 +64,6 @@ public class SocialGame extends Game {
 
 	public PlayerCustomisation customisation;
 
-	/**
-	 * Variable to store an error message in.
-	 * Used to communicate between networking threads and main render thread.
-	 * When not null, an error screen will be displayed with the given message on, and it will then be returned to it's null state.
-	 */
-	volatile private String errorMessage;
-
 	/*
 	 * TODO: Customisation rewards
 	 * Stores this client's current XP, used to unlock rewards.
@@ -83,7 +76,7 @@ public class SocialGame extends Game {
 	 */
     public GameObject mainPlayer;
 
-    protected World physWorld;
+    // region Stage methods
 
 	/**
 	 * Method to get the primary stage of the current screen.
@@ -120,6 +113,12 @@ public class SocialGame extends Game {
 		return null;
 	}
 
+	// endregion
+
+	// region Physics world elements
+
+	private World physWorld;
+
     public World getPhysWorld() {
         return physWorld;
     }
@@ -129,6 +128,9 @@ public class SocialGame extends Game {
         physWorld = world;
     }
 
+    // endregion
+
+    // region Networking elements
 
     private GameServer server;
     private GameClient client;
@@ -169,6 +171,39 @@ public class SocialGame extends Game {
 		}
 	}
 
+	//endregion
+
+	// region Error message handling
+
+	volatile private String errorMessage;
+	volatile private Screen errorNextScreen;
+
+	/**
+	 * Display an error message to the user, then return them to the given screen.
+	 * @param message The message to display.
+	 * @param nextScreen The screen to return to after display
+	 */
+	synchronized public void showErrorMessage(String message, Screen nextScreen) {
+		this.errorMessage = message;
+		this.errorNextScreen = nextScreen;
+	}
+
+	/**
+	 * Display an error message to the user, then return them to the main menu.
+	 * @param message The message to display.
+	 */
+	synchronized public void showErrorMessage(String message) {
+		this.errorMessage = message;
+	}
+
+	/**
+	 * Display an error message to the user, then return them to the main menu.
+	 */
+	synchronized public void showErrorMessage() {
+		showErrorMessage("An error has occurred");
+	}
+
+	// endregion
 
 	/**
 	 * Method to get the current list of tasks from the game screen.
@@ -211,19 +246,6 @@ public class SocialGame extends Game {
 	}
 
 
-	/**
-	 * Method to change screens to an error screen on the next frame.
-	 * @param message The message to display on the error screen.
-	 */
-	synchronized public void setErrorMessage(String message) {
-		this.errorMessage = message;
-	}
-
-	synchronized public void setErrorMessage() {
-		setErrorMessage("An error has occurred");
-	}
-
-
     @Override
 	public void create () {
 		// Locates skin
@@ -251,8 +273,12 @@ public class SocialGame extends Game {
 
 		// Check if we need to display an error message.
 		if (errorMessage != null) {
-			setScreen(new Error(this, errorMessage));
+			if (errorNextScreen != null)
+				setScreen(new Error(this, errorMessage, errorNextScreen));
+			else
+				setScreen(new Error(this, errorMessage, new Main(this)));
 			errorMessage = null;
+			errorNextScreen = null;
 		}
 
 		super.render();

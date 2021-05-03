@@ -56,7 +56,7 @@ public class GameClient extends Client {
                 player.setInvSlot(update.newSlot);
             }
             else if (object instanceof Networking.JoinRefused) {
-                game.setErrorMessage(((Networking.JoinRefused) object).reason);
+                game.showErrorMessage(((Networking.JoinRefused) object).reason);
             }
             else if (object instanceof Networking.JoinAccepted) {
                 Networking.JoinAccepted update = ((Networking.JoinAccepted) object);
@@ -114,6 +114,11 @@ public class GameClient extends Client {
         @Override
         public void connected(Connection connection) {
             connection.sendTCP(Networking.joinRequest(game.customisation, password));
+        }
+
+        @Override
+        public void disconnected(Connection connection) {
+            game.showErrorMessage("Disconnected");
         }
     }
 
