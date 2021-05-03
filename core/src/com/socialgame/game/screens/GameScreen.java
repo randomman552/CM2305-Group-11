@@ -71,9 +71,8 @@ public class GameScreen implements Screen {
         game.mainPlayer = null;
 
         // Use StretchViewport so that users with bigger screens cannot see more
-        StretchViewport vp = new StretchViewport(16, 9);
-        this.stage = new Stage(vp);
-        this.uiStage = new Stage();
+        this.stage = new Stage(new StretchViewport(16, 9));
+        this.uiStage = new Stage(new StretchViewport(1280, 720));
 
         // Set debug
         this.stage.setDebugAll(game.settings.getDebug());
