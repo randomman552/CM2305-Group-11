@@ -19,7 +19,8 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
-import com.socialgame.game.player.PlayerController;
+import com.socialgame.game.player.Player;
+import com.socialgame.game.player.PlayerInputProcessor;
 import com.socialgame.game.tasks.Task;
 import com.socialgame.game.tasks.async.SimonSaysTask;
 
@@ -39,6 +40,7 @@ public class GameScreen implements Screen {
     public final Stage uiStage;
 
     private final InputMultiplexer inputProcessor;
+    private final PlayerInputProcessor playerInputProcessor;
 
     public GameClient client;
 
@@ -94,9 +96,13 @@ public class GameScreen implements Screen {
         hud = new HUD(game);
         uiStage.addActor(hud);
 
-        // Multiplex stage and uiStage input handlers (so both can be interacted with)
+        // Create player controller input processor
+        playerInputProcessor = new PlayerInputProcessor(game);
+
+        // Multiplex all input processors
         inputProcessor = new InputMultiplexer();
         inputProcessor.addProcessor(uiStage);
+        inputProcessor.addProcessor(playerInputProcessor);
         inputProcessor.addProcessor(stage);
 
         // Connect to server
@@ -117,7 +123,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        stage.addListener(new PlayerController(game));
         stage.getCamera().position.set(new float[] {0, 0, 0});
 
         stage.addActor(new Wrench(game, -4, 2));
@@ -150,6 +155,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Handle player velocity changes
+        playerInputProcessor.updateVelocity((Player) game.mainPlayer, delta);
 
         // Move camera to follow main player
         if (game.mainPlayer != null) {
