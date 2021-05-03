@@ -149,6 +149,26 @@ public class SocialGame extends Game {
 		this.server = server;
 	}
 
+	/**
+	 * Stop server if it is running
+	 */
+	synchronized public void closeServer() {
+		if (getServer() != null) {
+			getServer().stop();
+			setServer(null);
+		}
+	}
+
+	/**
+	 * Stop client if it is running
+	 */
+	synchronized public void closeClient() {
+		if (getClient() != null) {
+			getClient().stop();
+			setClient(null);
+		}
+	}
+
 
 	/**
 	 * Method to get the current list of tasks from the game screen.

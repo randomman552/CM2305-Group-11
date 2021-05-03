@@ -16,7 +16,6 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
-import com.socialgame.game.screens.GameScreen;
 
 /**
  * Class from which all tasks are derived.
@@ -171,6 +170,6 @@ public abstract class Task extends Interactable {
     @Override
     public void dispose() {
         super.dispose();
-        ((GameScreen) game.getScreen()).uiStage.getActors().removeValue(group, true);
+        game.getUIStage().getActors().removeValue(group, true);
     }
 }

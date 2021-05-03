@@ -9,7 +9,6 @@ import java.util.Arrays;
 public class Networking {
     public static final int TCP_PORT = 54555;
     public static final int UDP_PORT = 54556;
-    public static final int TICK_RATE = 32;
 
     // Setup initial pools on class init
     static {

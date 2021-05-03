@@ -53,8 +53,11 @@ public class PlayerController extends InputListener {
             }
         }
         player.body.setLinearVelocity(vel);
-        game.getClient().sendTCP(Networking.velocityUpdate(player.getID(), vel.x, vel.y));
-        game.getClient().sendTCP(Networking.positionUpdate(player.getID(), player.getX(), player.getY()));
+
+        if (game.getClient() != null) {
+            game.getClient().sendTCP(Networking.velocityUpdate(player.getID(), vel.x, vel.y));
+            game.getClient().sendTCP(Networking.positionUpdate(player.getID(), player.getX(), player.getY()));
+        }
     }
 
     @Override
@@ -76,11 +79,7 @@ public class PlayerController extends InputListener {
                 break;
             case Input.Keys.ESCAPE:
                 game.setScreen(new Main(game));
-                // Close server if it is running
-                if (game.getServer() != null) {
-                    game.getServer().close();
-                    game.setServer(null);
-                }
+                game.closeServer();
                 break;
         }
 

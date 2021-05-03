@@ -64,9 +64,6 @@ public class GameScreen implements Screen {
     public GameScreen(SocialGame game, String password, String host) throws IOException {
         this.game = game;
 
-        // Clear GameObject table to prevent mismatching id's between servers and clients.
-        GameObject.deleteAll();
-
         // Use StretchViewport so that users with bigger screens cannot see more
         StretchViewport vp = new StretchViewport(16, 9);
         this.stage = new Stage(vp);
@@ -196,7 +193,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        // Clear GameObject table to prevent mismatching id's between servers and clients.
+        GameObject.deleteAll();
+
         stage.dispose();
-        game.setClient(null);
+        game.closeClient();
     }
 }

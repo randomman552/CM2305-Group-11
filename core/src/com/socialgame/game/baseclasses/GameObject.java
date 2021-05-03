@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.networking.GameServer;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,9 +36,10 @@ public abstract class GameObject extends Actor implements Disposable {
     }
 
     public static void deleteAll() {
-        for (GameObject object: objects.values()) {
-            object.delete();
+        for (GameObject object : objects.values()) {
+            object.delete(false);
         }
+        GameObject.objects.clear();
     }
 
     protected SocialGame game;
@@ -67,14 +69,31 @@ public abstract class GameObject extends Actor implements Disposable {
         this(game, 0, 0, 0, 0);
     }
 
+
     /**
      * Delete this game object from the stage and objects map.
      */
     public void delete() {
-        dispose();
-        getStage().getActors().removeValue(this, true);
-        objects.remove(getID());
+        delete(true);
     }
+
+    /**
+     * Delete this game object from the stage and objects map.
+     * @param removeFromMap Whether to remove from the objects map.
+     */
+    public void delete(boolean removeFromMap) {
+        dispose();
+        try {
+            getStage().getActors().removeValue(this, true);
+        } catch (NullPointerException ignored) {}
+
+        if (removeFromMap) {
+            try {
+                objects.remove(getID());
+            } catch (ConcurrentModificationException ignored) {}
+        }
+    }
+
 
     public int getID() {
         return id;
@@ -87,6 +106,7 @@ public abstract class GameObject extends Actor implements Disposable {
             objects.put(id, this);
         }
     }
+
 
     public TextureRegion getKeyFrame(float time) {
         return texture;

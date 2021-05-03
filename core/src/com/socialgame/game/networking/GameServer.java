@@ -97,8 +97,12 @@ public class GameServer extends Server {
      */
     public void removePlayer(int connectionID) {
         int i = getPlayerID(connectionID);
-        sendToAllTCP(Networking.leaveNotification(i));
-        connectedPlayers[i] = null;
+
+        // Remove player if present
+        if (i != -1) {
+            connectedPlayers[i] = null;
+            sendToAllTCP(Networking.leaveNotification(i));
+        }
     }
 
     /**
@@ -115,5 +119,14 @@ public class GameServer extends Server {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void close() {
+        // On close, remove all players from the game
+        for (Connection conn: getConnections()) {
+            removePlayer(conn.getID());
+        }
+        super.close();
     }
 }
