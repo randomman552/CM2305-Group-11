@@ -23,6 +23,8 @@ public class Player extends Interactable {
      * Width of all players in units
      */
     public static float WIDTH = 1f;
+
+    // region Velocity variables
     /**
      * Move speed of all players in units per second
      */
@@ -31,7 +33,19 @@ public class Player extends Interactable {
      * Spectator velocity modifier
      * For example, 2 gives spectators 2 times speed of players.
      */
-    public static float SPEC_VEL_MOD = 1f;
+    public static float SPEC_VEL_MOD = 1.5f;
+    /**
+     * Time required until player reaches MAX_VEL.
+     * Used in calculation of ACCELERATION.
+     */
+    public static float ACCELERATION_TIME = 0.1f;
+    /**
+     * Rate at which the player accelerations (in units per second per second).
+     */
+    public static float ACCELERATION = (MAX_VEL * 10) / ACCELERATION_TIME;
+    // endregion
+
+    // region Drawing variables
     /**
      * Spectator alpha modifier
      * When in spectator mode the player is drawn with this alpha value
@@ -45,6 +59,8 @@ public class Player extends Interactable {
      * Position of player hat
      */
     private static final Vector2 HAT_POS = new Vector2(0.05f, 0.8f);
+    // endregion
+
     /**
      * Box2D category mask for all players to prevent them from colliding.
      */
@@ -103,6 +119,7 @@ public class Player extends Interactable {
         // Create body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.linearDamping = 1/ACCELERATION_TIME;
         body = game.getPhysWorld().createBody(bodyDef);
         body.setUserData(this);
 
