@@ -12,8 +12,8 @@ import com.socialgame.game.screens.GameScreen;
 
 import java.io.IOException;
 
-public class Main extends MenuScreen {
-    public Main(final SocialGame game) {
+public class MainMenuScreen extends MenuScreen {
+    public MainMenuScreen(final SocialGame game) {
         super(game);
 
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));
@@ -25,7 +25,7 @@ public class Main extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new JoinGame(game));
+                game.setScreen(new JoinGameScreen(game));
                 return true;
             }
         });
@@ -34,7 +34,7 @@ public class Main extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new CreateGame(game));
+                game.setScreen(new CreateGameScreen(game));
                 return true;
             }
         });
@@ -43,7 +43,7 @@ public class Main extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new Customise(game));
+                game.setScreen(new CustomiseScreen(game));
                 return true;
             }
         });
@@ -52,7 +52,7 @@ public class Main extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new Options(game));
+                game.setScreen(new OptionsScreen(game));
                 return true;
             }
         });

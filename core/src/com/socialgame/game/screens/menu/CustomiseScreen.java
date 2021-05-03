@@ -14,7 +14,7 @@ import com.socialgame.game.player.clothing.Hat;
 
 import java.util.ArrayList;
 
-public class Customise extends MenuScreen {
+public class CustomiseScreen extends MenuScreen {
     /**
      * Input listener to be placed on all color selection buttons
      * This is defined as it's own class to avoid repeating code with anonymous classes.
@@ -63,7 +63,7 @@ public class Customise extends MenuScreen {
     protected final PlayerCustomisation customisation;
     private final Hat hatPreview;
 
-    public Customise(final SocialGame game) {
+    public CustomiseScreen(final SocialGame game) {
         super(game);
         this.customisation = this.game.customisation;
 
@@ -222,7 +222,7 @@ public class Customise extends MenuScreen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 customisation.save();
-                game.setScreen(new Main(game));
+                game.setScreen(new MainMenuScreen(game));
                 return true;
             }
         });

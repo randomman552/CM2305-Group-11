@@ -20,8 +20,8 @@ import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.menu.Error;
-import com.socialgame.game.screens.menu.Main;
+import com.socialgame.game.screens.menu.ErrorScreen;
+import com.socialgame.game.screens.menu.MainMenuScreen;
 import com.socialgame.game.screens.menu.MenuScreen;
 import com.socialgame.game.tasks.Task;
 
@@ -264,7 +264,7 @@ public class SocialGame extends Game {
 		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
 		elapsedTime = 0;
 
-		this.setScreen(new Main(this));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
@@ -274,9 +274,9 @@ public class SocialGame extends Game {
 		// Check if we need to display an error message.
 		if (errorMessage != null) {
 			if (errorNextScreen != null)
-				setScreen(new Error(this, errorMessage, errorNextScreen));
+				setScreen(new ErrorScreen(this, errorMessage, errorNextScreen));
 			else
-				setScreen(new Error(this, errorMessage, new Main(this)));
+				setScreen(new ErrorScreen(this, errorMessage, new MainMenuScreen(this)));
 			errorMessage = null;
 			errorNextScreen = null;
 		}

@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.networking.Networking;
-import com.socialgame.game.screens.menu.Main;
+import com.socialgame.game.screens.menu.MainMenuScreen;
 
 import java.util.ArrayList;
 
@@ -78,7 +78,7 @@ public class PlayerController extends InputListener {
                 game.getClient().sendTCP(Networking.switchItemUpdate(player.getID(), player.getInvSlot()));
                 break;
             case Input.Keys.ESCAPE:
-                game.setScreen(new Main(game));
+                game.setScreen(new MainMenuScreen(game));
                 game.closeServer();
                 game.closeClient();
                 break;

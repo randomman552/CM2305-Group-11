@@ -9,8 +9,8 @@ import com.socialgame.game.screens.GameScreen;
 
 import java.io.IOException;
 
-public class JoinGame extends MenuScreen {
-    public JoinGame(final SocialGame game) {
+public class JoinGameScreen extends MenuScreen {
+    public JoinGameScreen(final SocialGame game) {
         super(game);
 
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));
@@ -26,7 +26,7 @@ public class JoinGame extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new Main(game));
+                game.setScreen(new MainMenuScreen(game));
                 return true;
             }
         });
@@ -45,7 +45,7 @@ public class JoinGame extends MenuScreen {
                 try {
                     game.setScreen(new GameScreen(game, passwordText.getText(), ip));
                 } catch (IOException e) {
-                    game.setScreen(new Error(game, "Connection failed!"));
+                    game.setScreen(new ErrorScreen(game, "Connection failed!"));
                     e.printStackTrace();
                 }
 

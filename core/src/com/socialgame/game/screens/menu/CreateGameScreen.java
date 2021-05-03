@@ -10,8 +10,8 @@ import com.socialgame.game.screens.GameScreen;
 
 import java.io.IOException;
 
-public class CreateGame extends MenuScreen {
-    public CreateGame(final SocialGame game) {
+public class CreateGameScreen extends MenuScreen {
+    public CreateGameScreen(final SocialGame game) {
         super(game);
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));
 
@@ -24,7 +24,7 @@ public class CreateGame extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new Main(game));
+                game.setScreen(new MainMenuScreen(game));
                 return true;
             }
         });
@@ -40,7 +40,7 @@ public class CreateGame extends MenuScreen {
                 } catch (IOException e) {
                     String message = "Server failed to start.\nIs another server already running?";
                     e.printStackTrace();
-                    game.setScreen(new Error(game, message));
+                    game.setScreen(new ErrorScreen(game, message));
                 }
                 return true;
             }

@@ -11,8 +11,8 @@ import com.socialgame.game.SocialGame;
  * Used to communicate to user when a connection has failed etc.
  *
  */
-public class Error extends MenuScreen{
-    public Error(final SocialGame game, String message, final Screen returnScreen) {
+public class ErrorScreen extends MenuScreen{
+    public ErrorScreen(final SocialGame game, String message, final Screen returnScreen) {
         super(game);
 
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));
@@ -39,11 +39,11 @@ public class Error extends MenuScreen{
         stage.addActor(table);
     }
 
-    public Error(SocialGame game, String message) {
+    public ErrorScreen(SocialGame game, String message) {
         this(game, message, game.getScreen());
     }
 
-    public Error(SocialGame game) {
+    public ErrorScreen(SocialGame game) {
         this(game, "An error has occurred...");
     }
 }

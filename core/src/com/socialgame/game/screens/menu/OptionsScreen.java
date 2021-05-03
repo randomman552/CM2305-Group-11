@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 
-public class Options extends MenuScreen {
-    public Options(final SocialGame game) {
+public class OptionsScreen extends MenuScreen {
+    public OptionsScreen(final SocialGame game) {
         super(game);
         Image title = new Image(game.menuSpriteSheet.findRegion("title"));
 
@@ -20,7 +20,7 @@ public class Options extends MenuScreen {
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new Main(game));
+                game.setScreen(new MainMenuScreen(game));
                 return true;
             }
         });
