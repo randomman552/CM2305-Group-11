@@ -197,7 +197,7 @@ public class SimonSaysTask extends Task {
         // Check if we have reached the end of the desired sequence.
         curSequenceIdx++;
         if (curSequenceIdx >= desiredSequence.size()) {
-            complete = true;
+            setComplete(true);
         }
     }
 

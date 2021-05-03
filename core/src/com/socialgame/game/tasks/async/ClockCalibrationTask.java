@@ -268,7 +268,7 @@ public class ClockCalibrationTask extends Task {
     public void act(float delta) {
         // Check if task is complete
         if (clockWidget.getHour() == tgtHour && clockWidget.getMinute() == tgtMinute)
-            complete = true;
+            setComplete(true);
         //NOTE: Currently has no failure condition
 
         super.act(delta);

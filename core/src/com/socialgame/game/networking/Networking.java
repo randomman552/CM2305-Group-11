@@ -23,10 +23,12 @@ public class Networking {
     static public void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
 
+        // Register helper classes
         kryo.register(PlayerInfo[].class);
         kryo.register(PlayerInfo.class);
         kryo.register(int[].class);
 
+        // Register update classes
         kryo.register(PositionUpdate.class);
         kryo.register(VelocityUpdate.class);
         kryo.register(PickupItemUpdate.class);
@@ -36,6 +38,7 @@ public class Networking {
         kryo.register(LeaveNotification.class);
         kryo.register(JoinRequest.class);
         kryo.register(JoinAccepted.class);
+        kryo.register(TaskFinished.class);
     }
 
     static public void resetPools() {
@@ -94,6 +97,8 @@ public class Networking {
 
     // region Network classes pool access methods
 
+    // region Player updates
+
     public static PositionUpdate positionUpdate(int id, float x, float y) {
         PositionUpdate obj = new PositionUpdate();
         obj.id = id;
@@ -137,6 +142,8 @@ public class Networking {
         return obj;
     }
 
+    // endregion
+
     // region Initial connection classes
 
     public static JoinRequest joinRequest(PlayerCustomisation customisation, String password) {
@@ -169,9 +176,26 @@ public class Networking {
 
     // endregion
 
+    // region Task sync updates
+
+    public static TaskFinished taskFinished(int taskID, boolean failed) {
+        TaskFinished obj = new TaskFinished();
+        obj.taskID = taskID;
+        obj.failed = failed;
+        return obj;
+    }
+
+    public static TaskFinished taskFinished(int taskID) {
+        return taskFinished(taskID, false);
+    }
+
+    // endregion
+
     // endregion
 
     // region Network classes
+
+    // region Player updates
 
     public static class PositionUpdate {
         public int id;
@@ -251,6 +275,8 @@ public class Networking {
         }
     }
 
+    // endregion
+
     // region Initial connection classes
 
     public static class JoinRequest {
@@ -314,6 +340,23 @@ public class Networking {
     }
 
     //endregion
+
+    // region Task sync updates
+
+    public static class TaskFinished {
+        public int taskID;
+        public boolean failed;
+
+        @Override
+        public String toString() {
+            return "TaskFinished{" +
+                    "taskID=" + taskID +
+                    ", failed=" + failed +
+                    '}';
+        }
+    }
+
+    // endregion
 
     // endregion
 }

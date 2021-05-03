@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
+import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.screens.GameScreen;
 
@@ -34,8 +35,8 @@ public abstract class Task extends Interactable {
      */
     protected final Table table;
 
-    protected boolean complete = false;
-    protected boolean failed = false;
+    private boolean complete = false;
+    private boolean failed = false;
     /**
      * Variable storing whether onComplete and onFail have been called once before.
      */
@@ -137,7 +138,15 @@ public abstract class Task extends Interactable {
 
     public boolean isComplete() { return complete; }
 
+    public void setComplete(boolean val) {
+        complete = val;
+    }
+
     public boolean isFailed() { return failed; }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
 
     @Override
     public void interact(GameObject caller) {
@@ -153,6 +162,7 @@ public abstract class Task extends Interactable {
         if (isComplete() && !eventsFired) {
             onComplete();
             if (isFailed()) onFail();
+            game.getClient().sendTCP(Networking.taskFinished(getID(), isFailed()));
             // Prevent events from firing again
             eventsFired = true;
         }

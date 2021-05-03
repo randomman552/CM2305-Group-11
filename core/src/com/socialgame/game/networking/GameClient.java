@@ -7,6 +7,7 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.player.Player;
+import com.socialgame.game.tasks.Task;
 
 import java.io.IOException;
 
@@ -21,7 +22,7 @@ public class GameClient extends Client {
         }
 
         @Override
-        public void received(Connection connection, Object object) {
+        synchronized public void received(Connection connection, Object object) {
             System.out.println("Client Receives: " + object);
             if (object instanceof Networking.VelocityUpdate) {
                 Networking.VelocityUpdate update = ((Networking.VelocityUpdate) object);
@@ -98,6 +99,15 @@ public class GameClient extends Client {
                 Networking.LeaveNotification update = ((Networking.LeaveNotification) object);
                 GameObject player = GameObject.objects.get(update.playerID);
                 player.delete();
+            }
+            else if (object instanceof Networking.TaskFinished) {
+                Networking.TaskFinished update = ((Networking.TaskFinished) object);
+                try {
+                    Task task = ((Task) GameObject.objects.get(update.taskID));
+                    task.setComplete(true);
+                    task.setFailed(update.failed);
+                }
+                catch (NullPointerException | ClassCastException ignored) {}
             }
         }
 
