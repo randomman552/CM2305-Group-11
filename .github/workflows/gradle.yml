@@ -30,7 +30,7 @@ jobs:
 
     - name: Packr build
       working-directory: ./packr
-      run: /windows_build.sh
+      run: windows_build.sh
 
     - name: Automatic Releases
       uses: marvinpinto/action-automatic-releases@v1.1.2
