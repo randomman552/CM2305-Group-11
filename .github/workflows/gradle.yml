@@ -28,6 +28,10 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew desktop:dist
 
+    - name: Packr build
+      working-directory: ./packr
+      run: /windows_build.sh
+
     - name: Automatic Releases
       uses: marvinpinto/action-automatic-releases@v1.1.2
       with:
@@ -35,5 +39,7 @@ jobs:
         prerelease: true
         automatic_release_tag: "latest"
         title: "Development Build"
-        files: "desktop/build/libs/desktop-1.0.jar"
+        files:
+          "desktop/build/libs/desktop-1.0.jar"
+          "packr/out/windows.zip"
 
