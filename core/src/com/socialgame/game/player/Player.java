@@ -165,14 +165,16 @@ public class Player extends Interactable {
      * @return The current frame as a {@link TextureRegion}
      */
     public TextureRegion getKeyFrame(float time) {
+        Vector2 vel = body.getLinearVelocity();
+        boolean isMoving = Math.abs(vel.x) >= MOVE_ANIM_THRESHOLD || Math.abs(vel.y) >= MOVE_ANIM_THRESHOLD;
+
         if (inventory[invSlot] != null) {
-            if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+            if (isMoving)
                 return walkAnimHold.getKeyFrame(time);
             return idleAnimHold.getKeyFrame(time);
         }
 
-        Vector2 vel = body.getLinearVelocity();
-        if (Math.abs(vel.x) >= MOVE_ANIM_THRESHOLD || Math.abs(vel.y) >= MOVE_ANIM_THRESHOLD)
+        if (isMoving)
             return walkAnim.getKeyFrame(time);
         return idleAnim.getKeyFrame(time);
     }
