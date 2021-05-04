@@ -22,13 +22,14 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-
     - name: Build with Gradle
       run: ./gradlew desktop:dist
 
     - name: Grant execute permission for packr
+      working-directory: ./packr
       run: chmod +x windows_build.sh
     - name: Packr build
       working-directory: ./packr
