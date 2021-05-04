@@ -39,7 +39,7 @@ jobs:
         prerelease: true
         automatic_release_tag: "latest"
         title: "Development Build"
-        files:
-          "desktop/build/libs/desktop-1.0.jar"
-          "packr/out/windows.zip"
+        files: |
+          desktop/build/libs/desktop-1.0.jar
+          packr/out/windows.zip
 
