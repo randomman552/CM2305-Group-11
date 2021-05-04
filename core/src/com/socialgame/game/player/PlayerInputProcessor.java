@@ -100,6 +100,9 @@ public class PlayerInputProcessor implements InputProcessor {
                 game.closeServer();
                 game.closeClient();
                 return true;
+            case Input.Keys.TAB:
+                game.getHud().showMap();
+                return true;
         }
 
         pressedKeys.add(keycode);
@@ -108,6 +111,12 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        switch(keycode) {
+            case Input.Keys.TAB:
+                game.getHud().hideMap();
+                return true;
+        }
+
         pressedKeys.remove(Integer.valueOf(keycode));
         return false;
     }

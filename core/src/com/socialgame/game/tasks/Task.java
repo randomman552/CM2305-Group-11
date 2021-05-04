@@ -1,6 +1,5 @@
 package com.socialgame.game.tasks;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -69,8 +68,8 @@ public abstract class Task extends Interactable {
         closeBtn.setSize(50, 50);
 
         // Define base table size
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        float width = 1280;
+        float height = 720;
         float marginX = width / 20;
         float marginY = height / 20;
         baseTable.setBounds(marginX, marginY, width - (marginX * 2), height - (marginY * 2));

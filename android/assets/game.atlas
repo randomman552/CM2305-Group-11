@@ -4,13 +4,6 @@ size: 2048, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-MapOverlay
-  rotate: false
-  xy: 2, 964
-  size: 951, 205
-  orig: 951, 205
-  offset: 0, 0
-  index: -1
 axe
   rotate: false
   xy: 330, 87
@@ -30,6 +23,13 @@ lightsword
   xy: 1961, 1449
   size: 50, 588
   orig: 50, 588
+  offset: 0, 0
+  index: -1
+map
+  rotate: false
+  xy: 2, 964
+  size: 951, 205
+  orig: 951, 205
   offset: 0, 0
   index: -1
 placeholder

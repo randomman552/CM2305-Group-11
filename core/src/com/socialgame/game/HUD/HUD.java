@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
@@ -28,10 +30,13 @@ public class HUD extends Group {
     private final ProgressBar hazardBar;
     private final ImageButton interactButton;
     private final ImageButton mapButton;
+    private final Table mapTable;
     private final ImageButton dropButton;
 
     public HUD(final SocialGame game) {
         this.game = game;
+
+        // region Progress bars
 
         // Create Pixmap objects to define colours for progress and hazard bar
         Pixmap progressBackgroundPixmap = new Pixmap(1, 30, Pixmap.Format.RGBA8888);
@@ -55,8 +60,7 @@ public class HUD extends Group {
                 new Texture(hazardForegroundPixmap)));
 
         // Set up progress bar
-        com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle progressBarStyle =
-                new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
+        ProgressBar.ProgressBarStyle progressBarStyle =new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
         progressBarStyle.background = background;
         progressBarStyle.knob = progressForeground;
         progressBarStyle.knobBefore = progressForeground;
@@ -68,8 +72,7 @@ public class HUD extends Group {
         progressBar.setBounds(10, 10, 100, 30);
 
         // Set up hazard bar
-        com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle hazardBarStyle =
-                new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
+        ProgressBar.ProgressBarStyle hazardBarStyle = new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
         hazardBarStyle.knob = hazardForeground;
         hazardBarStyle.knobBefore = hazardForeground;
 
@@ -79,11 +82,11 @@ public class HUD extends Group {
         hazardBar.setAnimateDuration(0.25f);
         hazardBar.setBounds(10, 10, 100, 10);
 
+        // endregion
 
-
+        // region Interact button
 
         TextureRegionDrawable interactButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
-
         interactButton = new ImageButton(interactButtonDrawable);
 
         interactButton.setPosition(2f + 1100f, 10f);
@@ -128,20 +131,70 @@ public class HUD extends Group {
             }
         });
 
+        // endregion
+
+        // region Map button
+
         TextureRegionDrawable mapButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
-
         mapButton = new ImageButton(mapButtonDrawable);
-
         mapButton.setPosition(2f + 1100f, 600f);
         mapButton.setSize(100f, 100f);
         mapButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                //TODO Implement map
+                toggleMap();
                 return true;
             }
         });
 
+        // region Map Table
+
+        // Create close button
+        // TODO Add icon to close buttons
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        ImageButton mapCloseButton = new ImageButton(style);
+        mapCloseButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                hideMap();
+                return true;
+            }
+        });
+
+        mapTable = new Table();
+        hideMap();
+
+        // Define table size
+        float width = 1280;
+        float height = 720;
+        float marginX = width / 20;
+        float marginY = height / 20;
+        mapTable.setBounds(marginX, marginY, width - (marginX * 2), height - (marginY * 2));
+
+        // Get image to display
+        Image mapImage = new Image(game.spriteSheet.findRegion("map"));
+
+        // Define base table layout
+        mapTable.row().height(50);
+        mapTable.add().width(50);
+        mapTable.add().expandX();
+        mapTable.add(mapCloseButton).width(50);
+
+        mapTable.row().expandY();
+        mapTable.add().width(50);
+        mapTable.add(mapImage);
+        mapTable.add().width(50);
+
+        mapTable.row().height(50);
+        mapTable.add().width(50);
+        mapTable.add().expandX();
+        mapTable.add().width(50);
+
+        // endregion
+
+        // endregion
+
+        // region Drop button
         TextureRegionDrawable dropButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
 
         dropButton = new ImageButton(dropButtonDrawable);
@@ -156,12 +209,18 @@ public class HUD extends Group {
             }
         });
 
-        //Add actors to this HUD group
+        // endregion
+
+        // region Add actors to group
+
         addActor(progressBar);
         addActor(hazardBar);
         addActor(interactButton);
         addActor(mapButton);
         addActor(dropButton);
+        addActor(mapTable);
+
+        // endregion
     }
 
     public void incrementProgress() {
@@ -174,5 +233,17 @@ public class HUD extends Group {
         float step = 1f / game.getTasks().size();
         float curStep = progressBar.getValue() * game.getTasks().size();
         hazardBar.setValue(curStep + step);
+    }
+
+    public void toggleMap() {
+        mapTable.setVisible(!mapTable.isVisible());
+    }
+
+    public void showMap() {
+        mapTable.setVisible(true);
+    }
+
+    public void hideMap() {
+        mapTable.setVisible(false);
     }
 }
