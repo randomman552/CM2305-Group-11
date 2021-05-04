@@ -43,6 +43,10 @@ public class Player extends Interactable {
      * Rate at which the player accelerations (in units per second per second).
      */
     public static float ACCELERATION = (MAX_VEL * 10) / ACCELERATION_TIME;
+    /**
+     * Threshold for the velocity at which the player moves into their move animation state.
+     */
+    public final static float MOVE_ANIM_THRESHOLD = 0.1f;
     // endregion
 
     // region Drawing variables
@@ -166,7 +170,9 @@ public class Player extends Interactable {
                 return walkAnimHold.getKeyFrame(time);
             return idleAnimHold.getKeyFrame(time);
         }
-        if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+
+        Vector2 vel = body.getLinearVelocity();
+        if (Math.abs(vel.x) >= MOVE_ANIM_THRESHOLD || Math.abs(vel.y) >= MOVE_ANIM_THRESHOLD)
             return walkAnim.getKeyFrame(time);
         return idleAnim.getKeyFrame(time);
     }
@@ -296,10 +302,10 @@ public class Player extends Interactable {
         super.act(delta);
 
         // Change flip state based on movement
-        if (body.getLinearVelocity().x < 0) {
+        if (body.getLinearVelocity().x < -MOVE_ANIM_THRESHOLD) {
             setFlip(true);
             hat.setFlip(true);
-        } else if (body.getLinearVelocity().x > 0) {
+        } else if (body.getLinearVelocity().x > MOVE_ANIM_THRESHOLD) {
             setFlip(false);
             hat.setFlip(false);
         }
