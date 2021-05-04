@@ -4,13 +4,22 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.baseclasses.GameObject;
+import com.socialgame.game.baseclasses.Interactable;
+import com.socialgame.game.baseclasses.Item;
+import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.networking.Networking;
+import com.socialgame.game.player.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HUD extends Group {
     protected final SocialGame game;
@@ -21,7 +30,7 @@ public class HUD extends Group {
     private final ImageButton mapButton;
     private final ImageButton dropButton;
 
-    public HUD(SocialGame game) {
+    public HUD(final SocialGame game) {
         this.game = game;
 
         // Create Pixmap objects to define colours for progress and hazard bar
@@ -79,10 +88,43 @@ public class HUD extends Group {
 
         interactButton.setPosition(2f + 1100f, 10f);
         interactButton.setSize(100f, 100f);
-        interactButton.addListener(new ChangeListener() {
+        interactButton.addListener(new InputListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // FIXME: 04/05/2021 Horribly inefficient
+                Player player = ((Player) game.mainPlayer);
+                ArrayList<GameObject> toIgnore = new ArrayList<>();
+                toIgnore.add(player);
 
+                // Add all players and their items to ignored list
+                for (int i = 0; i < GameServer.MAX_PLAYERS; i++) {
+                    Player ignoredPlayer = ((Player) GameObject.objects.get(i));
+                    if (ignoredPlayer != null) {
+                        toIgnore.addAll(Arrays.asList(ignoredPlayer.inventory));
+                    }
+                }
+                
+                // Iterate over all objects, and find the closest one
+                Interactable closest = null;
+                float closestDist = Float.MAX_VALUE;
+                for (GameObject object: GameObject.objects.values()) {
+                    if (object instanceof Interactable && !toIgnore.contains(object)) {
+                        float dist = (float) Math.sqrt(Math.pow(object.getX() - player.getX(), 2) + Math.pow(object.getY() - player.getY(), 2));
+                        if (dist < closestDist) {
+                            closest = ((Interactable) object);
+                            closestDist = dist;
+                        }
+                    }
+                }
+
+                assert closest != null;
+                closest.interact(player);
+
+                // Update on serverside if required
+                if (closest instanceof Item) {
+                    game.getClient().sendTCP(Networking.pickupItemUpdate(game.mainPlayer.getID(), closest.getID()));
+                }
+                return true;
             }
         });
 
@@ -92,10 +134,11 @@ public class HUD extends Group {
 
         mapButton.setPosition(2f + 1100f, 600f);
         mapButton.setSize(100f, 100f);
-        mapButton.addListener(new ChangeListener() {
+        mapButton.addListener(new InputListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //TODO Implement map
+                return true;
             }
         });
 
@@ -105,10 +148,11 @@ public class HUD extends Group {
 
         dropButton.setPosition(2f + 900f, 10f);
         dropButton.setSize(100f, 100f);
-        dropButton.addListener(new ChangeListener() {
+        dropButton.addListener(new InputListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                ((Player) game.mainPlayer).dropItem();
+                return true;
             }
         });
 

@@ -35,6 +35,7 @@ public abstract class Interactable extends GameObject {
             if (keycode == Input.Keys.E) {
                 parent.interact(game.mainPlayer);
                 game.getMainStage().setKeyboardFocus(null);
+                // FIXME: 04/05/2021 might be better placed elsewhere
                 if (parent instanceof Item) {
                     game.getClient().sendTCP(Networking.pickupItemUpdate(game.mainPlayer.getID(), parent.getID()));
                 }
@@ -45,6 +46,9 @@ public abstract class Interactable extends GameObject {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             parent.interact(game.mainPlayer);
+            if (parent instanceof Item) {
+                game.getClient().sendTCP(Networking.pickupItemUpdate(game.mainPlayer.getID(), parent.getID()));
+            }
             game.getMainStage().setKeyboardFocus(null);
             return false;
         }
