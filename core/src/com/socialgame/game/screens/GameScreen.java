@@ -59,6 +59,11 @@ public class GameScreen implements Screen {
     int[] taskLayer = { 2 };
     int[] foregroundLayers = { 3 };     //Drawn in-front the player
 
+
+    public GameScreen(SocialGame game) throws IOException {
+        this(game, "");
+    }
+
     public GameScreen(SocialGame game, String password) throws IOException {
         this(game, password, "localhost");
     }

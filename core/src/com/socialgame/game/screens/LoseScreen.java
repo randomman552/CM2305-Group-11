@@ -3,7 +3,6 @@ package com.socialgame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.player.PlayerCustomisation;
+import com.socialgame.game.screens.menu.MainMenuScreen;
+
+import java.io.IOException;
 
 public class LoseScreen implements Screen{
     protected final SocialGame game;
@@ -33,7 +34,10 @@ public class LoseScreen implements Screen{
 
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
-                game.setScreen(new GameScreen(game));
+                // TODO: Add game rejoining capability.
+                try {
+                    game.setScreen(new GameScreen(game));
+                } catch (IOException ignored) {}
                 return true;
             }
         });

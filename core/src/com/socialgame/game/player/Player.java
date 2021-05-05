@@ -211,7 +211,8 @@ public class Player extends Interactable {
             drawItem(batch, curCol.a);
             return;
         }
-        if(!isAlive() && game.mainPlayer.isAlive()){
+
+        if(!(!isAlive() && game.mainPlayer.isAlive())){
             super.draw(batch, parentAlpha);
             drawClothing(batch, curCol.a);
             drawItem(batch, curCol.a);
