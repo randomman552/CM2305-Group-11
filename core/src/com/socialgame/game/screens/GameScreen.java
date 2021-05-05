@@ -58,40 +58,39 @@ public class GameScreen implements Screen {
      * TODO: Think about how we want to do the map
      * libGDX has a Map and TiledMap class we could use instead of creating our own
      */
-    private TiledMap tiledMap;
+    private final TiledMap tiledMap;
     OrthogonalTiledMapRenderer renderer;
     Box2DDebugRenderer box2DDebugRenderer;
 
-    String floorLayer = "Floor";
-    String wallLayer = "Walls";
-    String simonTaskLayer = "Task Simon";
-    String clockTaskLayer = "Task Clock";
-    String walkInLayer = "WalkIn Textures";
+    private static final String floorLayer = "Floor";
+    private static final String wallLayer = "Walls";
+    private static final String simonTaskLayer = "Task Simon";
+    private static final String clockTaskLayer = "Task Clock";
+    private static final String walkInLayer = "WalkIn Textures";
+    private static final String spawnLayer = "Player Spawns";
 
-    float unitScale = 1/64f; // 1 unit = 32 pixels
-    int[] backgroundLayers;  //Drawn behind the player
-    int[] taskLayer;
-    int[] foregroundLayers;     //Drawn in-front the player
-
+    private static final float unitScale = 1/64f; // 1 unit = 32 pixels
+    private static int[] backgroundLayers;  //Drawn behind the player
+    private static int[] taskLayer;
+    private static int[] foregroundLayers;     //Drawn in-front the player
 
 
     public int getLayerIndex(String layer) {
         return tiledMap.getLayers().getIndex(layer);
     }
 
-    public MapObjects getLayerObjects(int layerIndex) {
-        return tiledMap.getLayers().get(layerIndex).getObjects();
+    public MapObjects getLayerObjects(String index) {
+        return getLayer(index).getObjects();
     }
 
+    public MapLayer getLayer(String index) {
+        return tiledMap.getLayers().get(index);
+    }
+
+
     public boolean taskSpawnChance() {
-        double p  = Math.random();
-
-        if (p <= 0.5) {
-            return true;
-        } else {
-            return false;
-        }
-
+        double p = game.getRandom().nextDouble();
+        return p <= 0.5;
     }
 
     public GameScreen(SocialGame game, String password) throws IOException {
@@ -130,7 +129,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
 
-        MapBodyBuilder.buildShapes(tiledMap, 64, game.getPhysWorld());
+        MapBodyBuilder.buildShapes(tiledMap, 1/unitScale, game.getPhysWorld());
 
         // endregion
         
@@ -181,7 +180,7 @@ public class GameScreen implements Screen {
         int spawnCount = 0;
 
         // Spawns the Clock Calibration Tasks
-        for (MapObject mapObject : tiledMap.getLayers().get(clockTaskLayer).getObjects()) {
+        for (MapObject mapObject : getLayerObjects(clockTaskLayer)) {
             if (spawnCount >= capClockTask) {
                 spawnCount = 0;
                 break;
@@ -200,7 +199,7 @@ public class GameScreen implements Screen {
         }
 
         // Spawns the Simon says tasks Tasks
-        for (MapObject mapObject : tiledMap.getLayers().get(simonTaskLayer).getObjects()) {
+        for (MapObject mapObject : getLayerObjects(simonTaskLayer)) {
             if (spawnCount >= capSimonTask) {
                 spawnCount = 0;
                 break;

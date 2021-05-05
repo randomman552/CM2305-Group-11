@@ -6,98 +6,112 @@ filter: Linear, Linear
 repeat: none
 axe
   rotate: false
-  xy: 330, 87
+  xy: 1773, 1626
   size: 248, 393
   orig: 248, 393
   offset: 0, 0
   index: -1
+clockTask
+  rotate: false
+  xy: 1773, 1592
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 killButton
   rotate: false
-  xy: 580, 118
+  xy: 2, 2
   size: 229, 221
   orig: 229, 221
   offset: 0, 0
   index: -1
 lightsword
   rotate: false
-  xy: 1961, 1449
+  xy: 517, 260
   size: 50, 588
   orig: 50, 588
   offset: 0, 0
   index: -1
 map
   rotate: false
-  xy: 2, 964
+  xy: 2, 1814
   size: 951, 205
   orig: 951, 205
   offset: 0, 0
   index: -1
 placeholder
   rotate: false
-  xy: 2, 1171
-  size: 980, 866
-  orig: 980, 866
+  xy: 233, 191
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 1564, 1414
+  xy: 2, 225
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 2
 player
   rotate: false
-  xy: 984, 934
+  xy: 979, 1398
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 582, 341
+  xy: 582, 1191
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 979, 311
+  xy: 1376, 1398
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
 scythe
   rotate: false
-  xy: 2, 2
+  xy: 582, 711
   size: 326, 478
   orig: 326, 478
   offset: 0, 0
   index: -1
+simonSaysTask
+  rotate: false
+  xy: 399, 258
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 sword
   rotate: false
-  xy: 1381, 999
+  xy: 399, 292
   size: 116, 556
   orig: 116, 556
   offset: 0, 0
   index: -1
 triangleDown
   rotate: false
-  xy: 2, 482
+  xy: 2, 850
   size: 578, 480
   orig: 578, 480
   offset: 0, 0
   index: -1
 triangleUp
   rotate: false
-  xy: 984, 1557
+  xy: 2, 1332
   size: 578, 480
   orig: 578, 480
   offset: 0, 0
   index: -1
 wrench
   rotate: false
-  xy: 1499, 1092
+  xy: 910, 869
   size: 80, 320
   orig: 80, 320
   offset: 0, 0
