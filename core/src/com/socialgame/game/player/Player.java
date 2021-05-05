@@ -23,6 +23,8 @@ public class Player extends Interactable {
      * Width of all players in units
      */
     public static float WIDTH = 1f;
+
+    // region Velocity variables
     /**
      * Move speed of all players in units per second
      */
@@ -31,7 +33,23 @@ public class Player extends Interactable {
      * Spectator velocity modifier
      * For example, 2 gives spectators 2 times speed of players.
      */
-    public static float SPEC_VEL_MOD = 1f;
+    public static float SPEC_VEL_MOD = 1.5f;
+    /**
+     * Time required until player reaches MAX_VEL.
+     * Used in calculation of ACCELERATION.
+     */
+    public static float ACCELERATION_TIME = 0.1f;
+    /**
+     * Rate at which the player accelerations (in units per second per second).
+     */
+    public static float ACCELERATION = (MAX_VEL * 10) / ACCELERATION_TIME;
+    /**
+     * Threshold for the velocity at which the player moves into their move animation state.
+     */
+    public final static float MOVE_ANIM_THRESHOLD = 0.1f;
+    // endregion
+
+    // region Drawing variables
     /**
      * Spectator alpha modifier
      * When in spectator mode the player is drawn with this alpha value
@@ -41,8 +59,16 @@ public class Player extends Interactable {
      * Position of player hand for holding items
      */
     public static final Vector2 HAND_POS = new Vector2(0.35f, 0f);
-
+    /**
+     * Position of player hat
+     */
     private static final Vector2 HAT_POS = new Vector2(0.05f, 0.8f);
+    // endregion
+
+    /**
+     * Box2D category mask for all players to prevent them from colliding.
+     */
+    private static final int CATEGORY_MASK = -1;
 
     public Item[] inventory;
 
@@ -64,12 +90,10 @@ public class Player extends Interactable {
     }
 
     public Player(SocialGame game, int id) {
-        this(game, game.customisation);
-        this.id = id;
-        GameObject.objects.put(getId(), this);
+        this(game, id, game.customisation);
     }
 
-    public Player(SocialGame game, PlayerCustomisation customisation) {
+    public Player(SocialGame game, int id, PlayerCustomisation customisation) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];
@@ -89,6 +113,9 @@ public class Player extends Interactable {
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
         this.customisation = customisation;
+
+        // Give unique player id
+        setID(id);
     }
 
     @Override
@@ -96,10 +123,12 @@ public class Player extends Interactable {
         // Create body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.linearDamping = 1/ACCELERATION_TIME;
         body = game.getPhysWorld().createBody(bodyDef);
         body.setUserData(this);
 
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.filter.groupIndex = CATEGORY_MASK;
 
 
         // Central rectangle
@@ -136,12 +165,16 @@ public class Player extends Interactable {
      * @return The current frame as a {@link TextureRegion}
      */
     public TextureRegion getKeyFrame(float time) {
+        Vector2 vel = body.getLinearVelocity();
+        boolean isMoving = Math.abs(vel.x) >= MOVE_ANIM_THRESHOLD || Math.abs(vel.y) >= MOVE_ANIM_THRESHOLD;
+
         if (inventory[invSlot] != null) {
-            if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+            if (isMoving)
                 return walkAnimHold.getKeyFrame(time);
             return idleAnimHold.getKeyFrame(time);
         }
-        if (body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0)
+
+        if (isMoving)
             return walkAnim.getKeyFrame(time);
         return idleAnim.getKeyFrame(time);
     }
@@ -245,12 +278,22 @@ public class Player extends Interactable {
     }
 
     @Override
+    public void delete() {
+        // Drop all items when deleted
+        for (int i = 0; i < inventory.length; i++) {
+            setInvSlot(i);
+            dropItem();
+        }
+        super.delete();
+    }
+
+    @Override
     public void interact(GameObject caller) {
         if (caller instanceof Player) {
             Player player = ((Player) caller);
             if (player == this) return;
             if (player.isSaboteur || player.hasWeapon()) {
-                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getId(), getHealth()));
+                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getID(), getHealth()));
                 this.takeDamage(getHealth());
             }
         }
@@ -261,10 +304,10 @@ public class Player extends Interactable {
         super.act(delta);
 
         // Change flip state based on movement
-        if (body.getLinearVelocity().x < 0) {
+        if (body.getLinearVelocity().x < -MOVE_ANIM_THRESHOLD) {
             setFlip(true);
             hat.setFlip(true);
-        } else if (body.getLinearVelocity().x > 0) {
+        } else if (body.getLinearVelocity().x > MOVE_ANIM_THRESHOLD) {
             setFlip(false);
             hat.setFlip(false);
         }

@@ -14,18 +14,17 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.esotericsoftware.kryonet.Connection;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.player.PlayerCustomisation;
-import com.socialgame.game.screens.CustomiseScreen;
 import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.MainMenuScreen;
+import com.socialgame.game.screens.menu.ErrorScreen;
+import com.socialgame.game.screens.menu.MainMenuScreen;
+import com.socialgame.game.screens.menu.MenuScreen;
 import com.socialgame.game.tasks.Task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SocialGame extends Game {
@@ -37,7 +36,7 @@ public class SocialGame extends Game {
 	/**
 	 * Skin used for styling in the game
 	 */
-	static public Skin gameSkin;
+	public Skin gameSkin;
 
 	/**
 	 * Primary sprite sheet.
@@ -77,7 +76,7 @@ public class SocialGame extends Game {
 	 */
     public GameObject mainPlayer;
 
-    protected World physWorld;
+    // region Stage methods
 
 	/**
 	 * Method to get the primary stage of the current screen.
@@ -90,10 +89,11 @@ public class SocialGame extends Game {
 
         if (curScreen instanceof GameScreen) {
             return ((GameScreen) curScreen).stage;
-        } else if (curScreen instanceof CustomiseScreen) {
-            return ((CustomiseScreen) curScreen).stage;
         }
-        return new Stage();
+        else if (curScreen instanceof MenuScreen) {
+            return ((MenuScreen) curScreen).stage;
+        }
+        return null;
     }
 
 	/**
@@ -107,8 +107,17 @@ public class SocialGame extends Game {
 		if (curScreen instanceof GameScreen) {
 			return ((GameScreen) curScreen).uiStage;
 		}
-		return new Stage();
+		else if (curScreen instanceof MenuScreen) {
+			return ((MenuScreen) curScreen).stage;
+		}
+		return null;
 	}
+
+	// endregion
+
+	// region Physics world elements
+
+	private World physWorld;
 
     public World getPhysWorld() {
         return physWorld;
@@ -119,16 +128,82 @@ public class SocialGame extends Game {
         physWorld = world;
     }
 
-    public GameServer server;
-    public GameClient client;
+    // endregion
 
-	public Connection getClient() {
+    // region Networking elements
+
+    private GameServer server;
+    private GameClient client;
+
+	public GameClient getClient() {
 		return client;
 	}
 
 	public void setClient(GameClient client) {
 		this.client = client;
 	}
+
+	public GameServer getServer() {
+		return server;
+	}
+
+	public void setServer(GameServer server) {
+		this.server = server;
+	}
+
+	/**
+	 * Stop server if it is running
+	 */
+	synchronized public void closeServer() {
+		if (getServer() != null) {
+			getServer().stop();
+			setServer(null);
+		}
+	}
+
+	/**
+	 * Stop client if it is running
+	 */
+	synchronized public void closeClient() {
+		if (getClient() != null) {
+			getClient().stop();
+			setClient(null);
+		}
+	}
+
+	//endregion
+
+	// region Error message handling
+
+	volatile private String errorMessage;
+	volatile private Screen errorNextScreen;
+
+	/**
+	 * Display an error message to the user, then return them to the given screen.
+	 * @param message The message to display.
+	 * @param nextScreen The screen to return to after display
+	 */
+	synchronized public void showErrorMessage(String message, Screen nextScreen) {
+		this.errorMessage = message;
+		this.errorNextScreen = nextScreen;
+	}
+
+	/**
+	 * Display an error message to the user, then return them to the main menu.
+	 * @param message The message to display.
+	 */
+	synchronized public void showErrorMessage(String message) {
+		this.errorMessage = message;
+	}
+
+	/**
+	 * Display an error message to the user, then return them to the main menu.
+	 */
+	synchronized public void showErrorMessage() {
+		showErrorMessage("An error has occurred");
+	}
+
+	// endregion
 
 	/**
 	 * Method to get the current list of tasks from the game screen.
@@ -170,20 +245,13 @@ public class SocialGame extends Game {
 		return font;
 	}
 
+
     @Override
 	public void create () {
 		// Locates skin
 		gameSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 		// Initialise Box2D engine
 		Box2D.init();
-
-		// region Server setup
-		try {
-			server = new GameServer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 
 		physWorld = new World(new Vector2(0, 0), true);
 
@@ -202,6 +270,17 @@ public class SocialGame extends Game {
 	@Override
 	public void render () {
 		elapsedTime += Gdx.graphics.getDeltaTime();
+
+		// Check if we need to display an error message.
+		if (errorMessage != null) {
+			if (errorNextScreen != null)
+				setScreen(new ErrorScreen(this, errorMessage, errorNextScreen));
+			else
+				setScreen(new ErrorScreen(this, errorMessage, new MainMenuScreen(this)));
+			errorMessage = null;
+			errorNextScreen = null;
+		}
+
 		super.render();
 	}
 	
@@ -209,6 +288,8 @@ public class SocialGame extends Game {
 	public void dispose () {
 		batch.dispose();
 		spriteSheet.dispose();
+		menuSpriteSheet.dispose();
+		wearablesSpriteSheet.dispose();
 		gameSkin.dispose();
 	}
 }

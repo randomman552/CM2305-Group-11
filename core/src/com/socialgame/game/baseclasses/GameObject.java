@@ -8,7 +8,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.networking.GameServer;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,14 +18,29 @@ import java.util.Map;
  * Base class from which all in game objects are derived.
  */
 public abstract class GameObject extends Actor implements Disposable {
-    //public static final ArrayList<GameObject> objects = new ArrayList<>();
-    public static final Map<Integer, GameObject> objects = new HashMap<>();
     /**
-     * Global counter for storage of game objects.
-     * Is automatically incremented.
-     * Starts at 16 to allow for 16 players below this number.
+     * Map of all GameObjects
      */
-    public static int nextID = 16;
+    public static final Map<Integer, GameObject> objects = new HashMap<>();
+
+    private static final int firstID = GameServer.MAX_PLAYERS;
+    private static final int lastID = Integer.MAX_VALUE;
+
+    protected static int getFirstFreeID() {
+        for (int i = firstID; i < lastID; i++) {
+            if (objects.get(i) == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static void deleteAll() {
+        for (GameObject object : objects.values()) {
+            object.delete(false);
+        }
+        GameObject.objects.clear();
+    }
 
     protected SocialGame game;
     protected int id;
@@ -40,7 +57,7 @@ public abstract class GameObject extends Actor implements Disposable {
         setupRigidBody();
         setPositionAboutOrigin(x, y);
 
-        id = nextID++;
+        id = getFirstFreeID();
         objects.put(id, this);
     }
 
@@ -52,18 +69,44 @@ public abstract class GameObject extends Actor implements Disposable {
         this(game, 0, 0, 0, 0);
     }
 
+
     /**
      * Delete this game object from the stage and objects map.
      */
     public void delete() {
-        dispose();
-        getStage().getActors().removeValue(this, true);
-        objects.remove(getId());
+        delete(true);
     }
 
-    public int getId() {
+    /**
+     * Delete this game object from the stage and objects map.
+     * @param removeFromMap Whether to remove from the objects map.
+     */
+    public void delete(boolean removeFromMap) {
+        dispose();
+        try {
+            getStage().getActors().removeValue(this, true);
+        } catch (NullPointerException ignored) {}
+
+        if (removeFromMap) {
+            try {
+                objects.remove(getID());
+            } catch (ConcurrentModificationException ignored) {}
+        }
+    }
+
+
+    public int getID() {
         return id;
     }
+
+    public void setID(int val) {
+        if (objects.get(val) == null) {
+            objects.remove(id);
+            id = val;
+            objects.put(id, this);
+        }
+    }
+
 
     public TextureRegion getKeyFrame(float time) {
         return texture;
@@ -71,7 +114,6 @@ public abstract class GameObject extends Actor implements Disposable {
 
     /**
      * Method used to initialise the rigidbody for this object.
-     * TODO: Currently this method only sets up a body for velocity, not collisions.
      */
     protected void setupRigidBody() {
         // Define body

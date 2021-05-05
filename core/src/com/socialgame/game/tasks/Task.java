@@ -1,6 +1,5 @@
 package com.socialgame.game.tasks;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
+import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
-import com.socialgame.game.screens.GameScreen;
 
 /**
  * Class from which all tasks are derived.
@@ -34,8 +33,8 @@ public abstract class Task extends Interactable {
      */
     protected final Table table;
 
-    protected boolean complete = false;
-    protected boolean failed = false;
+    private boolean complete = false;
+    private boolean failed = false;
     /**
      * Variable storing whether onComplete and onFail have been called once before.
      */
@@ -69,8 +68,8 @@ public abstract class Task extends Interactable {
         closeBtn.setSize(50, 50);
 
         // Define base table size
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        float width = 1280;
+        float height = 720;
         float marginX = width / 20;
         float marginY = height / 20;
         baseTable.setBounds(marginX, marginY, width - (marginX * 2), height - (marginY * 2));
@@ -137,7 +136,15 @@ public abstract class Task extends Interactable {
 
     public boolean isComplete() { return complete; }
 
+    public void setComplete(boolean val) {
+        complete = val;
+    }
+
     public boolean isFailed() { return failed; }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
 
     @Override
     public void interact(GameObject caller) {
@@ -153,6 +160,7 @@ public abstract class Task extends Interactable {
         if (isComplete() && !eventsFired) {
             onComplete();
             if (isFailed()) onFail();
+            game.getClient().sendTCP(Networking.taskFinished(getID(), isFailed()));
             // Prevent events from firing again
             eventsFired = true;
         }
@@ -161,6 +169,6 @@ public abstract class Task extends Interactable {
     @Override
     public void dispose() {
         super.dispose();
-        ((GameScreen) game.getScreen()).uiStage.getActors().removeValue(group, true);
+        game.getUIStage().getActors().removeValue(group, true);
     }
 }

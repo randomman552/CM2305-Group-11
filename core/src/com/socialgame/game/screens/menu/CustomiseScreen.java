@@ -1,17 +1,12 @@
-package com.socialgame.game.screens;
+package com.socialgame.game.screens.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerCustomisation;
@@ -19,7 +14,7 @@ import com.socialgame.game.player.clothing.Hat;
 
 import java.util.ArrayList;
 
-public class CustomiseScreen implements Screen {
+public class CustomiseScreen extends MenuScreen {
     /**
      * Input listener to be placed on all color selection buttons
      * This is defined as it's own class to avoid repeating code with anonymous classes.
@@ -58,10 +53,6 @@ public class CustomiseScreen implements Screen {
             this.hatIdx = hatIdx;
         }
 
-        public int getHatIdx() {
-            return hatIdx;
-        }
-
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             customisation.setHatSelection(hatIdx);
@@ -69,21 +60,12 @@ public class CustomiseScreen implements Screen {
         }
     }
 
-    protected final SocialGame game;
     protected final PlayerCustomisation customisation;
-    public Stage stage;
     private final Hat hatPreview;
 
     public CustomiseScreen(final SocialGame game) {
-        this.game = game;
-        this.stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        stage.setDebugAll(true);
+        super(game);
         this.customisation = this.game.customisation;
-
-        Gdx.input.setInputProcessor(stage);
-        Skin mySkin;
-        mySkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
-        addBackground();
 
         // Array list of all HUD elements to change the color of when selecting a new color
         // All items of clothing should be added to this array
@@ -123,8 +105,8 @@ public class CustomiseScreen implements Screen {
 
         // region Color buttons
 
-        final Texture clrBtnTextureBase = new Texture("Base.png");      // Base.png
-        final Texture clrBtnTextureTick = new Texture("tick.png");      // Tick.png
+        final TextureAtlas.AtlasRegion clrBtnTextureBase = game.menuSpriteSheet.findRegion("checkbox_base");
+        final TextureAtlas.AtlasRegion clrBtnTextureTick = game.menuSpriteSheet.findRegion("checkbox_tick");
         final TextureRegionDrawable clrBtnDrawBase = new TextureRegionDrawable(clrBtnTextureBase);
         final TextureRegionDrawable clrBtnDrawTick = new TextureRegionDrawable(clrBtnTextureTick);
 
@@ -161,11 +143,11 @@ public class CustomiseScreen implements Screen {
         Table playerInfoContainer = new Table();
 
         //TEMP: Labels for the playerInfo
-        Label playerName = new Label("NAMEEEEEEEEEEE",mySkin, "big");
-        Label playerLvl = new Label("Lv.8",mySkin,"big");
-        Label playerLvlCurrentBar = new Label("8",mySkin,"big");
-        Label playerLvlBar = new Label("##############----",mySkin,"big");
-        Label playerLvlNextBar = new Label("9",mySkin,"big");
+        Label playerName = new Label("NAMEEEEEEEEEEE",skin, "big");
+        Label playerLvl = new Label("Lv.8",skin,"big");
+        Label playerLvlCurrentBar = new Label("8",skin,"big");
+        Label playerLvlBar = new Label("##############----",skin,"big");
+        Label playerLvlNextBar = new Label("9",skin,"big");
 
         //Creates a table that covers the entire screen, and allows nested tables
         Table container = new Table();
@@ -184,7 +166,7 @@ public class CustomiseScreen implements Screen {
         // endregion
 
         // Preview of players current equipment
-        Player playerPreview = new Player(game, customisation);
+        Player playerPreview = new Player(game, -1, customisation);
 
         // Combines the player display and info a single table
         playerInfoContainer.add(playerInfo).height(Gdx.graphics.getHeight()/14f*3);
@@ -193,8 +175,9 @@ public class CustomiseScreen implements Screen {
 
         // Create hat preview (free floating from table)
         hatPreview = new Hat(game);
-        hatPreview.setPosition(Gdx.graphics.getWidth()/28*5,Gdx.graphics.getHeight()/18*11);
-        hatPreview.setSize(Gdx.graphics.getWidth()/6,Gdx.graphics.getWidth()/6);
+        hatPreview.setPosition(Gdx.graphics.getWidth()/28f*5,Gdx.graphics.getHeight()/18f*11);
+        hatPreview.setSize(Gdx.graphics.getWidth()/6f,Gdx.graphics.getWidth()/6f);
+        toChangeColor.add(hatPreview);
 
         // Creates the table to house the item menu side
         Table playerItemMenuContainer = new Table();
@@ -203,8 +186,8 @@ public class CustomiseScreen implements Screen {
 
         // region Mode switch creation
 
-        Button hatButton = new TextButton("HAT",mySkin,"default");
-        Button topButton = new TextButton("TOP",mySkin,"default");
+        Button hatButton = new TextButton("HAT",skin,"default");
+        Button topButton = new TextButton("TOP",skin,"default");
         hatButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
@@ -234,7 +217,7 @@ public class CustomiseScreen implements Screen {
         // region Navigation buttons
 
         // Exit button
-        Button exitButton = new TextButton("Exit",mySkin,"default");
+        Button exitButton = new TextButton("Exit",skin,"default");
         exitButton.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
@@ -270,56 +253,9 @@ public class CustomiseScreen implements Screen {
         // endregion
     }
 
-    public void addBackground() {
-        Texture texture = new Texture(Gdx.files.internal("background.png"));
-        TextureRegion textureRegion = new TextureRegion(texture);
-
-        textureRegion.setRegion(0, 0, texture.getWidth(), texture.getHeight());
-        Image background = new Image(textureRegion);
-        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
-        background.setPosition(0, Gdx.graphics.getHeight() - background.getHeight());
-        stage.addActor(background);
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-    }
-
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Update player preview
-        hatPreview.setCustomisation(customisation);
-
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-        Gdx.input.setInputProcessor(null);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
+        super.render(delta);
+        hatPreview.setHatType(customisation.getHatSelection());
     }
 }
