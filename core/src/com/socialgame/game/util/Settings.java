@@ -1,4 +1,4 @@
-package com.socialgame.game;
+package com.socialgame.game.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -60,6 +60,10 @@ public class Settings {
         return pref.getFloat(SFXVolKey, defaultSFXVol);
     }
 
+    public float getAdjustedSfxVol() {
+        return getSFXVol() * getMasterVol();
+    }
+
 
     public void setMusicVol(float vol) {
         pref.putFloat(musicVolKey, vol);
@@ -67,6 +71,10 @@ public class Settings {
 
     public float getMusicVol() {
         return pref.getFloat(musicVolKey, defaultMusicVol);
+    }
+
+    public float getAdjustedMusicVol() {
+        return getMusicVol() * getMasterVol();
     }
 
 

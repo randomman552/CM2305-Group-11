@@ -24,6 +24,8 @@ import com.socialgame.game.screens.menu.ErrorScreen;
 import com.socialgame.game.screens.menu.MainMenuScreen;
 import com.socialgame.game.screens.menu.MenuScreen;
 import com.socialgame.game.tasks.Task;
+import com.socialgame.game.util.Settings;
+import com.socialgame.game.util.SoundAtlas;
 
 import java.util.ArrayList;
 
@@ -37,6 +39,8 @@ public class SocialGame extends Game {
 	 * Skin used for styling in the game
 	 */
 	public Skin gameSkin;
+
+	// region Game resources (sprite sheets and sound atlas)
 
 	/**
 	 * Primary sprite sheet.
@@ -53,6 +57,10 @@ public class SocialGame extends Game {
 	 * Sprite sheet used for menus
 	 */
 	public TextureAtlas wearablesSpriteSheet;
+
+	public SoundAtlas soundAtlas;
+
+	// endregion
 
 	/**
 	 * Elapsed time since program start.
@@ -262,9 +270,11 @@ public class SocialGame extends Game {
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));
 		menuSpriteSheet = new TextureAtlas(Gdx.files.internal("menu.atlas"));
 		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
+		soundAtlas = new SoundAtlas();
 		elapsedTime = 0;
 
 		this.setScreen(new MainMenuScreen(this));
+		soundAtlas.getSound("death").play(settings.getAdjustedSfxVol());
 	}
 
 	@Override
@@ -290,6 +300,7 @@ public class SocialGame extends Game {
 		spriteSheet.dispose();
 		menuSpriteSheet.dispose();
 		wearablesSpriteSheet.dispose();
+		soundAtlas.dispose();
 		gameSkin.dispose();
 	}
 }
