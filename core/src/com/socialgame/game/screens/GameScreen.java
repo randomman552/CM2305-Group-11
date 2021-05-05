@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -162,6 +163,19 @@ public class GameScreen implements Screen {
         return hud;
     }
 
+    public void spawnPlayer(Player player) {
+        MapObjects spawns = getLayerObjects(spawnLayer);
+        stage.addActor(player);
+        if (spawns.getCount() != 0) {
+            int randSpawnIdx = game.getRandom().nextInt(spawns.getCount());
+            MapObject mapObject = spawns.get(randSpawnIdx);
+            if (mapObject instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
+                player.setPositionAboutOrigin(rect.getX() * unitScale, rect.getY() * unitScale);
+            }
+        }
+    }
+
     @Override
     public void show() {
         stage.getCamera().position.set(new float[] {0, 0, 0});
@@ -190,7 +204,7 @@ public class GameScreen implements Screen {
                 if (mapObject instanceof EllipseMapObject) {
                     float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
                     float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                    tasks.add(new ClockCalibrationTask(game, x, y));
+                    tasks.add(new ClockCalibrationTask(game, x + 0.5f, y + 0.5f));
 
                 }
                 spawnCount += 1;
@@ -209,7 +223,7 @@ public class GameScreen implements Screen {
                 if (mapObject instanceof EllipseMapObject) {
                     float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
                     float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                    tasks.add(new SimonSaysTask(game, x, y));
+                    tasks.add(new SimonSaysTask(game, x + 0.5f, y + 0.5f));
 
                 }
                 spawnCount += 1;

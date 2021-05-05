@@ -18,6 +18,7 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.menu.ErrorScreen;
@@ -26,6 +27,7 @@ import com.socialgame.game.screens.menu.MenuScreen;
 import com.socialgame.game.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SocialGame extends Game {
 	/**
@@ -63,6 +65,8 @@ public class SocialGame extends Game {
 	public Settings settings;
 
 	public PlayerCustomisation customisation;
+
+	private Random random;
 
 	/*
 	 * TODO: Customisation rewards
@@ -218,6 +222,22 @@ public class SocialGame extends Game {
 		return new ArrayList<>();
 	}
 
+	public void setMainPlayer(Player player) {
+		if (getScreen() instanceof GameScreen) {
+			mainPlayer = player;
+			GameScreen screen = ((GameScreen) getScreen());
+			screen.spawnPlayer(player);
+		}
+	}
+
+	public Player getMainPlayer() {
+		return ((Player) mainPlayer);
+	}
+
+	public Random getRandom() {
+		return random;
+	}
+
 	/**
 	 * Method to get the HUD of the game screen.
 	 * If the current screen is not a game screen, a new HUD instance will be returned.
@@ -263,6 +283,8 @@ public class SocialGame extends Game {
 		menuSpriteSheet = new TextureAtlas(Gdx.files.internal("menu.atlas"));
 		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
 		elapsedTime = 0;
+
+		random = new Random();
 
 		this.setScreen(new MainMenuScreen(this));
 	}
