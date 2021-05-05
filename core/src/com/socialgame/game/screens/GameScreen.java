@@ -169,11 +169,12 @@ public class GameScreen implements Screen {
 
         // region Task generation
 
+        // Set the max amount of tasks to spawn.
         int capSimonTask = 3;
         final int capClockTask = 3;
         int spawnCount = 0;
 
-
+        // Spawns the Clock Calibration Tasks
         for (MapObject mapObject : tiledMap.getLayers().get(clockTaskLayer).getObjects()) {
             if (spawnCount >= capClockTask) {
                 spawnCount = 0;
@@ -192,6 +193,7 @@ public class GameScreen implements Screen {
             }
         }
 
+        // Spawns the Simon says tasks Tasks
         for (MapObject mapObject : tiledMap.getLayers().get(simonTaskLayer).getObjects()) {
             if (spawnCount >= capSimonTask) {
                 spawnCount = 0;
@@ -210,11 +212,7 @@ public class GameScreen implements Screen {
             }
         }
 
-
-
-
-
-
+        // Adds the tasks to the stage
         for (Task task: tasks) {
             stage.addActor(task);
         }

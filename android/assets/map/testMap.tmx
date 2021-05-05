@@ -123,18 +123,6 @@
   <object id="14" name="Task1" x="528.078" y="964.096" width="32" height="32">
    <ellipse/>
   </object>
-  <object id="114" name="Task6" x="192" y="1027.72" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="115" name="Task5" x="288.223" y="1024.39" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="116" name="Task4" x="383.958" y="1024" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="117" name="Task5" x="480" y="1024" width="32" height="32">
-   <ellipse/>
-  </object>
  </objectgroup>
  <objectgroup id="8" name="Task Clock">
   <object id="71" x="480" y="672" width="32" height="32">
@@ -161,28 +149,10 @@
   <object id="78" x="544" y="608" width="32" height="32">
    <ellipse/>
   </object>
-  <object id="79" x="736" y="608" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="80" x="672" y="608" width="32" height="32">
-   <ellipse/>
-  </object>
   <object id="81" x="608" y="608" width="32" height="32">
    <ellipse/>
   </object>
-  <object id="82" x="800" y="608" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="83" x="736" y="672" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="84" x="672" y="672" width="32" height="32">
-   <ellipse/>
-  </object>
   <object id="85" x="608" y="672" width="32" height="32">
-   <ellipse/>
-  </object>
-  <object id="86" x="800" y="672" width="32" height="32">
    <ellipse/>
   </object>
  </objectgroup>
