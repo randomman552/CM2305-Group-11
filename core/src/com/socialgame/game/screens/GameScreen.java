@@ -118,7 +118,7 @@ public class GameScreen implements Screen {
 
         // region Initialise map
 
-        tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/testMap.tmx").toString());
+        tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/gameMap.tmx").toString());
 
         backgroundLayers = new int[]{getLayerIndex(floorLayer), getLayerIndex(wallLayer)};  //Drawn behind the player
         taskLayer = new int[]{getLayerIndex(simonTaskLayer), getLayerIndex(clockTaskLayer) };

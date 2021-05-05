@@ -1,117 +1,124 @@
 
 game.png
-size: 2048, 2048
+size: 4096, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 axe
   rotate: false
-  xy: 1773, 1626
+  xy: 2687, 1595
   size: 248, 393
   orig: 248, 393
   offset: 0, 0
   index: -1
 clockTask
   rotate: false
-  xy: 1773, 1592
+  xy: 2687, 1561
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 killButton
   rotate: false
-  xy: 2, 2
+  xy: 2, 36
   size: 229, 221
   orig: 229, 221
   offset: 0, 0
   index: -1
 lightsword
   rotate: false
-  xy: 517, 260
+  xy: 2294, 918
   size: 50, 588
   orig: 50, 588
   offset: 0, 0
   index: -1
 map
   rotate: false
-  xy: 2, 1814
-  size: 951, 205
-  orig: 951, 205
+  xy: 2, 741
+  size: 1775, 1247
+  orig: 1775, 1247
   offset: 0, 0
   index: -1
 placeholder
   rotate: false
-  xy: 233, 191
+  xy: 2, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 2, 225
+  xy: 1779, 883
   size: 395, 623
   orig: 395, 623
   offset: 0, 0
   index: 2
 player
   rotate: false
-  xy: 979, 1398
+  xy: 979, 118
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 582, 1191
+  xy: 582, 118
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 1
 playerHold
   rotate: false
-  xy: 1376, 1398
+  xy: 1376, 118
   size: 395, 621
   orig: 395, 621
   offset: 0, 0
   index: 2
 scythe
   rotate: false
-  xy: 582, 711
+  xy: 2359, 1510
   size: 326, 478
   orig: 326, 478
   offset: 0, 0
   index: -1
 simonSaysTask
   rotate: false
-  xy: 399, 258
+  xy: 2176, 916
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+start
+  rotate: false
+  xy: 1779, 849
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sword
   rotate: false
-  xy: 399, 292
+  xy: 2176, 950
   size: 116, 556
   orig: 116, 556
   offset: 0, 0
   index: -1
 triangleDown
   rotate: false
-  xy: 2, 850
+  xy: 1779, 1508
   size: 578, 480
   orig: 578, 480
   offset: 0, 0
   index: -1
 triangleUp
   rotate: false
-  xy: 2, 1332
+  xy: 2, 259
   size: 578, 480
   orig: 578, 480
   offset: 0, 0
   index: -1
 wrench
   rotate: false
-  xy: 910, 869
+  xy: 2937, 1668
   size: 80, 320
   orig: 80, 320
   offset: 0, 0

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="left-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="129">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="left-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="130">
  <tileset firstgid="1" source="base.tsx"/>
  <layer id="3" name="Floor" width="40" height="40" locked="1">
   <properties>
@@ -95,7 +95,7 @@
 0,0,0,0,0,5,5,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup color="#ffffff" id="5" name="Task Simon" visible="0">
+ <objectgroup color="#ffffff" id="5" name="Task Simon">
   <object id="5" name="Task9" x="336.897" y="868.053" width="32" height="32">
    <ellipse/>
   </object>
@@ -124,7 +124,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Task Clock" visible="0">
+ <objectgroup id="8" name="Task Clock">
   <object id="71" x="256" y="736" width="64" height="64">
    <ellipse/>
   </object>
