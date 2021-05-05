@@ -11,6 +11,13 @@ axe
   orig: 248, 393
   offset: 0, 0
   index: -1
+close button
+  rotate: false
+  xy: 1499, 1187
+  size: 225, 225
+  orig: 225, 225
+  offset: 0, 0
+  index: -1
 killButton
   rotate: false
   xy: 580, 118
@@ -97,7 +104,7 @@ triangleUp
   index: -1
 wrench
   rotate: false
-  xy: 1499, 1092
+  xy: 1376, 612
   size: 80, 320
   orig: 80, 320
   offset: 0, 0
