@@ -271,10 +271,13 @@ public class SocialGame extends Game {
 		menuSpriteSheet = new TextureAtlas(Gdx.files.internal("menu.atlas"));
 		wearablesSpriteSheet = new TextureAtlas(Gdx.files.internal("wearables.atlas"));
 		soundAtlas = new SoundAtlas();
+		soundAtlas.setMusicVolumes(settings.getAdjustedMusicVol());
 		elapsedTime = 0;
 
 		this.setScreen(new MainMenuScreen(this));
 		soundAtlas.getSound("death").play(settings.getAdjustedSfxVol());
+		soundAtlas.getMusic("ambiance").setLooping(true);
+		soundAtlas.getMusic("ambiance").play();
 	}
 
 	@Override

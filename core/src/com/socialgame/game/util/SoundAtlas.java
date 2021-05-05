@@ -59,6 +59,12 @@ public class SoundAtlas implements Disposable {
         musicMap.put(key, music);
     }
 
+    public void setMusicVolumes(float vol) {
+        for (Music music: musicMap.values()) {
+            music.setVolume(vol);
+        }
+    }
+
     @Override
     public void dispose() {
         for (Iterator<Sound> i = soundMap.values().iterator(); i.hasNext();) {

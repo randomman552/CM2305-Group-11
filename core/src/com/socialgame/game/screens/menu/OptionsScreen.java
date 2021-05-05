@@ -25,6 +25,8 @@ public class OptionsScreen extends MenuScreen {
             }
         });
 
+        // region Label creation
+
         Label optionsLabel = new Label("Options", skin, "big");
         Label setting1 = new Label("this is the VIDEO tab", skin, "default");
         Label setting2 = new Label("this is the AUDIO tab", skin, "default");
@@ -37,6 +39,10 @@ public class OptionsScreen extends MenuScreen {
         Label resLabel = new Label("Resolution:", skin, "default");
         Button videoButton = new TextButton("Video", skin, "default");
         Button audioButton = new TextButton("Audio", skin, "default");
+
+        // endregion
+
+        // region Sound inputs
 
         final Slider masVol = new Slider(0,1, 0.05f, false, skin);
         masVol.setValue(game.settings.getMasterVol());
@@ -58,6 +64,8 @@ public class OptionsScreen extends MenuScreen {
         micSettings.setItems("Press to Talk", "On", "Off");
         micSettings.setSelected(game.settings.getMic());
 
+        // endregion
+
         // region Debug mode checkbox
 
         Label debugLabel = new Label("Draw debug: ", skin, "default");
@@ -66,18 +74,20 @@ public class OptionsScreen extends MenuScreen {
         final ImageButton debugCheckBox = new ImageButton(unchecked, checked, checked);
         debugCheckBox.setChecked(game.settings.getDebug());
 
-        // endregion
-
         Table debugGroup = new Table();
         debugGroup.add(debugLabel);
         debugGroup.add(debugCheckBox).size(20);
 
+        // endregion
 
-        // Global container
+        // region Global container
+
         Table globalTable = new Table();
         stage.addActor(globalTable);
         globalTable.setFillParent(true);
         globalTable.add().width(Gdx.graphics.getWidth()/4f);
+
+        // endregion
 
         //region Navigation container
 
@@ -138,13 +148,17 @@ public class OptionsScreen extends MenuScreen {
 
         // endregion
 
-        // Settings widget group for RHS of global table
+        // region Settings widget group for RHS of global table
+
         WidgetGroup settingsGroup = new WidgetGroup();
         settingsGroup.addActor(videoOptions);
         settingsGroup.addActor(audioOptions);
         globalTable.add(settingsGroup).expand();
 
-        // Save button for settings.
+        // endregion
+
+        // region Save button
+
         Button saveButton = new TextButton("Save", skin, "default");
         saveButton.addListener(new InputListener(){
 
@@ -159,6 +173,8 @@ public class OptionsScreen extends MenuScreen {
                 game.settings.setMicVol(micVol.getValue());
                 game.settings.save();
 
+                game.soundAtlas.setMusicVolumes(game.settings.getAdjustedMusicVol());
+
                 stage.setDebugAll(game.settings.getDebug());
                 return true;
             }
@@ -166,6 +182,8 @@ public class OptionsScreen extends MenuScreen {
         globalTable.add().width(Gdx.graphics.getWidth()/4f);
         globalTable.row();
         globalTable.add(saveButton).colspan(4).padBottom(150f);
+
+        // endregion
 
         // Set default state
         videoOptions.setVisible(true);
