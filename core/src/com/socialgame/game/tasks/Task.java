@@ -1,10 +1,8 @@
 package com.socialgame.game.tasks;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -12,19 +10,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
+import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
-import com.socialgame.game.screens.GameScreen;
 
 /**
  * Class from which all tasks are derived.
  * Task can be customised by editing the Task.table attribute after instanciating
  * Extension of Interactable class
  */
-public abstract class Task extends Interactable implements Disposable {
+public abstract class Task extends Interactable {
     /**
      * Group which is added to the uiStage.
      * If you want to add elements outside of the primary table, add them here.
@@ -36,8 +33,12 @@ public abstract class Task extends Interactable implements Disposable {
      */
     protected final Table table;
 
-    protected boolean complete = false;
-    protected boolean failed = false;
+    private boolean complete = false;
+    private boolean failed = false;
+    /**
+     * Variable storing whether onComplete and onFail have been called once before.
+     */
+    private boolean eventsFired = false;
 
     public Task(SocialGame game, float x, float y) {
         super(game, x, y, 1, 1);
@@ -67,8 +68,8 @@ public abstract class Task extends Interactable implements Disposable {
         closeBtn.setSize(50, 50);
 
         // Define base table size
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        float width = 1280;
+        float height = 720;
         float marginX = width / 20;
         float marginY = height / 20;
         baseTable.setBounds(marginX, marginY, width - (marginX * 2), height - (marginY * 2));
@@ -94,8 +95,8 @@ public abstract class Task extends Interactable implements Disposable {
 
         group.addActor(baseTable);
 
-        // Add group to UI Stage, TODO: Add method to game that does this to reduce the cross dependencies
-        ((GameScreen) game.getScreen()).uiStage.addActor(group);
+        // Add group to UI Stage
+        game.getUIStage().addActor(group);
     }
 
     public Task(SocialGame game) {
@@ -107,6 +108,7 @@ public abstract class Task extends Interactable implements Disposable {
      */
     public void onComplete() {
         complete = true;
+        game.getHud().incrementProgress();
         close();
     }
 
@@ -116,6 +118,7 @@ public abstract class Task extends Interactable implements Disposable {
     public void onFail() {
         complete = true;
         failed = true;
+        game.getHud().incrementHazard();
         close();
     }
 
@@ -133,7 +136,15 @@ public abstract class Task extends Interactable implements Disposable {
 
     public boolean isComplete() { return complete; }
 
+    public void setComplete(boolean val) {
+        complete = val;
+    }
+
     public boolean isFailed() { return failed; }
+
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
 
     @Override
     public void interact(GameObject caller) {
@@ -145,19 +156,19 @@ public abstract class Task extends Interactable implements Disposable {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (isFailed())
-            onFail();
-        else if (isComplete())
+        // Call on complete and on fail events ONCE after completion
+        if (isComplete() && !eventsFired) {
             onComplete();
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+            if (isFailed()) onFail();
+            game.getClient().sendTCP(Networking.taskFinished(getID(), isFailed()));
+            // Prevent events from firing again
+            eventsFired = true;
+        }
     }
 
     @Override
     public void dispose() {
-        ((GameScreen) game.getScreen()).uiStage.getActors().removeValue(group, true);
+        super.dispose();
+        game.getUIStage().getActors().removeValue(group, true);
     }
 }

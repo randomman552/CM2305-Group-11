@@ -1,0 +1,51 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew desktop:dist
+
+    - name: Grant execute permission for packr
+      working-directory: ./packr
+      run: chmod +x windows_build.sh
+    - name: Packr build
+      working-directory: ./packr
+      run: ./windows_build.sh
+
+    - name: Automatic Releases
+      uses: marvinpinto/action-automatic-releases@v1.1.2
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: true
+        automatic_release_tag: "latest"
+        title: "Development Build"
+        files: |
+          desktop/build/libs/desktop-1.0.jar
+          packr/out/windows.zip
+

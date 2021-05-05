@@ -6,19 +6,49 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Disposable;
 import com.socialgame.game.SocialGame;
-import com.socialgame.game.screens.CustomiseScreen;
-import com.socialgame.game.screens.GameScreen;
-import com.socialgame.game.screens.MainMenuScreen;
+import com.socialgame.game.networking.GameServer;
+
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class from which all in game objects are derived.
  */
-public abstract class GameObject extends Actor {
+public abstract class GameObject extends Actor implements Disposable {
+    /**
+     * Map of all GameObjects
+     */
+    public static final Map<Integer, GameObject> objects = new HashMap<>();
+
+    private static final int firstID = GameServer.MAX_PLAYERS;
+    private static final int lastID = Integer.MAX_VALUE;
+
+    protected static int getFirstFreeID() {
+        for (int i = firstID; i < lastID; i++) {
+            if (objects.get(i) == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static void deleteAll() {
+        for (GameObject object : objects.values()) {
+            object.delete(false);
+        }
+        GameObject.objects.clear();
+    }
+
     protected SocialGame game;
+    protected int id;
 
     public Body body;
     public TextureRegion texture;
+
+    private boolean flip = false;
 
     public GameObject(SocialGame game, float width, float height, float x, float y) {
         this.game = game;
@@ -26,6 +56,9 @@ public abstract class GameObject extends Actor {
         setSize(width, height);
         setupRigidBody();
         setPositionAboutOrigin(x, y);
+
+        id = getFirstFreeID();
+        objects.put(id, this);
     }
 
     public GameObject(SocialGame game, float width, float height) {
@@ -36,13 +69,51 @@ public abstract class GameObject extends Actor {
         this(game, 0, 0, 0, 0);
     }
 
+
+    /**
+     * Delete this game object from the stage and objects map.
+     */
+    public void delete() {
+        delete(true);
+    }
+
+    /**
+     * Delete this game object from the stage and objects map.
+     * @param removeFromMap Whether to remove from the objects map.
+     */
+    public void delete(boolean removeFromMap) {
+        dispose();
+        try {
+            getStage().getActors().removeValue(this, true);
+        } catch (NullPointerException ignored) {}
+
+        if (removeFromMap) {
+            try {
+                objects.remove(getID());
+            } catch (ConcurrentModificationException ignored) {}
+        }
+    }
+
+
+    public int getID() {
+        return id;
+    }
+
+    public void setID(int val) {
+        if (objects.get(val) == null) {
+            objects.remove(id);
+            id = val;
+            objects.put(id, this);
+        }
+    }
+
+
     public TextureRegion getKeyFrame(float time) {
         return texture;
     }
 
     /**
      * Method used to initialise the rigidbody for this object.
-     * TODO: Currently this method only sets up a body for velocity, not collisions.
      */
     protected void setupRigidBody() {
         // Define body
@@ -63,7 +134,7 @@ public abstract class GameObject extends Actor {
      * @param y Desired y coordinate
      */
     public void setPositionAboutOrigin(float x, float y) {
-        super.setPosition(x - getOriginX(), y - getOriginY());
+        setPosition(x - getOriginX(), y - getOriginY());
     }
 
     /**
@@ -80,6 +151,30 @@ public abstract class GameObject extends Actor {
      */
     public void setYAboutOrigin(float y) {
         setPositionAboutOrigin(getX(), y);
+    }
+
+    public float getXAboutOrigin() {
+        return getX() + getOriginX();
+    }
+
+    public float getYAboutOrigin() {
+        return getY() + getOriginY();
+    }
+
+    public void setFlip(boolean flip) {
+        this.flip = flip;
+    }
+
+    public boolean getFlip() {
+        return flip;
+    }
+
+    public float getBottomLeftX() {
+        return super.getX();
+    }
+
+    public float getBottomLeftY() {
+        return super.getY();
     }
 
     @Override
@@ -111,8 +206,8 @@ public abstract class GameObject extends Actor {
     public void act(float delta) {
         // Update position based on movement of the rigid body
         // Need to scale up the body's position by scale so that all movements are translated in the correct way
-        super.setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
-        super.setRotation((float) Math.toDegrees(body.getAngle()));
+        setPosition((body.getPosition().x - getOriginX()) * getScaleX(), (body.getPosition().y - getOriginY()) * getScaleY());
+        setRotation((float) Math.toDegrees(body.getAngle()));
         super.act(delta);
     }
 
@@ -121,9 +216,14 @@ public abstract class GameObject extends Actor {
         Color oldCol = batch.getColor();
         batch.setColor(this.getColor());
 
+        // Flip texture if moving left and it is not already flipped
+        // Or flip it back to default if we are not moving left and it is already flipped
+        if (getFlip() && !texture.isFlipX() || !getFlip() && texture.isFlipX())
+            texture.flip(true, false);
+
         // Use super getX and getY to get screen space coordinates rather than game space ones
         batch.draw(getKeyFrame(game.elapsedTime),
-                super.getX(), super.getY(),
+                getBottomLeftX(), getBottomLeftY(),
                 getOriginX(), getOriginY(),
                 getWidth(), getHeight(),
                 getScaleX(), getScaleY(),
@@ -134,5 +234,11 @@ public abstract class GameObject extends Actor {
 
     public boolean isAlive() {
         return isAlive();
+    }
+    
+    @Override
+    public void dispose() {
+        // Ensure to delete rigid body when deleting a GameObject
+        body.getWorld().destroyBody(body);
     }
 }
