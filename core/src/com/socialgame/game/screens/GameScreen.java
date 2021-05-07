@@ -70,6 +70,8 @@ public class GameScreen implements Screen {
     Box2DDebugRenderer box2DDebugRenderer;
 
     private final ArrayList<Array<Body>> builtBodies;
+    private final ImageButton startButton;
+
 
     private static final String floorLayer = "Floor";
     private static final String wallLayer = "Walls";
@@ -154,7 +156,10 @@ public class GameScreen implements Screen {
         System.out.println(builtBodies.get(1));
 
         // endregion
-        
+
+        Drawable texture = new TextureRegionDrawable(game.spriteSheet.findRegion("start"));
+        startButton = new ImageButton(texture);
+
         // Hud creation
         hud = new HUD(game);
         uiStage.addActor(hud);
@@ -214,8 +219,6 @@ public class GameScreen implements Screen {
             if (mapObject instanceof EllipseMapObject) {
                 float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
                 float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                Drawable texture = new TextureRegionDrawable(game.spriteSheet.findRegion("start"));
-                final ImageButton startButton = new ImageButton(texture);
                 startButton.setPosition(x, y);
                 startButton.setSize(1f,1f);
                 startButton.addListener(new InputListener() {
