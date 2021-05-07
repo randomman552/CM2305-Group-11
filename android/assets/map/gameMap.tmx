@@ -265,10 +265,10 @@
   <object id="64" x="1600" y="896" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="66" x="896" y="960" width="96" height="128"/>
-  <object id="67" x="1920" y="768" width="128" height="96"/>
-  <object id="68" x="2176" y="960" width="96" height="128"/>
-  <object id="69" x="1056" y="1216" width="128" height="96"/>
+  <object id="66" x="896" y="864" width="96.5" height="416"/>
+  <object id="67" x="992" y="768" width="1184" height="96.3478"/>
+  <object id="68" x="2175.59" y="864" width="96.4063" height="352"/>
+  <object id="69" x="992" y="1214.91" width="1184" height="97.0909"/>
  </objectgroup>
  <objectgroup id="9" name="Task Clock" locked="1">
   <object id="42" x="544" y="832" width="64" height="64">
