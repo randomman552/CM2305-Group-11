@@ -20,7 +20,6 @@ import java.util.Random;
 /**
  * Simon says task based on the task with the same name from the game "Keep Talking and Nobody Explodes"
  * https://ktane.fandom.com/wiki/Simon_Says
- * TODO Add sound effects
  */
 public class SimonSaysTask extends Task {
     private static class ButtonInputListener extends InputListener {
@@ -34,6 +33,7 @@ public class SimonSaysTask extends Task {
 
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            task.playBeep(btnNum);
             return true;
         }
 
@@ -166,8 +166,10 @@ public class SimonSaysTask extends Task {
 
     private void handlePlaySequence() {
         if (lastPlayedTime + timePerTile <= game.elapsedTime) {
-            Button curButton = buttons.get(desiredSequence.get(Math.min(curPlayedIdx, desiredSequence.size() - 1)));
-            Button prevButton = buttons.get(desiredSequence.get(Math.max(curPlayedIdx - 1, 0)));
+            int curButtonIdx = desiredSequence.get(Math.min(curPlayedIdx, desiredSequence.size() - 1));
+            int prevButtonIdx = desiredSequence.get(Math.max(curPlayedIdx - 1, 0));
+            Button curButton = buttons.get(curButtonIdx);
+            Button prevButton = buttons.get(prevButtonIdx);
 
             prevButton.setChecked(false);
             curButton.setChecked(true);
@@ -182,6 +184,8 @@ public class SimonSaysTask extends Task {
                     button.setTouchable(Touchable.enabled);
                     button.setChecked(false);
                 }
+            } else if (isOpen()) {
+                playBeep(curButtonIdx);
             }
 
         }
@@ -199,6 +203,12 @@ public class SimonSaysTask extends Task {
         if (curSequenceIdx >= desiredSequence.size()) {
             setComplete(true);
         }
+    }
+
+    private void playBeep(int btnNum) {
+        float volume = game.settings.getAdjustedSfxVol();
+        float pitch = (btnNum + 1) / 2f;
+        game.soundAtlas.getSound("beep").play(volume, pitch, 0);
     }
 
     @Override

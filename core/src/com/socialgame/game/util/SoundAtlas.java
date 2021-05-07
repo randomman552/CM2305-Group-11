@@ -21,7 +21,8 @@ public class SoundAtlas implements Disposable {
             "death.ogg",
             "fail.ogg",
             "footsteps.ogg",
-            "success.ogg"
+            "success.ogg",
+            "beep.ogg"
     };
     private static final String[] musicFiles = {
             "ambiance.ogg"

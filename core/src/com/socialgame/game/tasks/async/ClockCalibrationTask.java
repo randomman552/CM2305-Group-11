@@ -149,7 +149,7 @@ public class ClockCalibrationTask extends Task {
     private final int tgtHour;
     private final int tgtMinute;
 
-    public ClockCalibrationTask(SocialGame game, float x, float y) {
+    public ClockCalibrationTask(final SocialGame game, float x, float y) {
         super(game, x, y);
 
         // Create font parameters for title and time fonts
@@ -212,6 +212,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setHour(clockWidget.getHour() + 1);
+                game.soundAtlas.getSound("beep").play();
                 return true;
             }
         });
@@ -221,6 +222,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setHour(clockWidget.getHour() - 1);
+                game.soundAtlas.getSound("beep").play();
                 return true;
             }
         });
@@ -230,6 +232,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setMinute(clockWidget.getMinute() + 1);
+                game.soundAtlas.getSound("beep").play();
                 return true;
             }
         });
@@ -239,6 +242,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setMinute(clockWidget.getMinute() - 1);
+                game.soundAtlas.getSound("beep").play();
                 return true;
             }
         });
