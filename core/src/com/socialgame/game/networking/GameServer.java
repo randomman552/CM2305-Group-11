@@ -32,11 +32,13 @@ public class GameServer extends Server {
                 // Check password
                 if (!update.password.equals(server.password)) {
                     connection.sendTCP(Networking.joinRefused("Incorrect password"));
+                    return;
                 }
 
                 // Check if game has already started
                 if (server.coordinator.isStarted()) {
                     connection.sendTCP(Networking.joinRefused("Game has already started"));
+                    return;
                 }
 
                 // Attempt to add player
@@ -48,7 +50,6 @@ public class GameServer extends Server {
                     return;
                 }
                 server.sendToAllTCP(Networking.joinAccepted(server.connectedPlayers, playerID));
-                server.coordinator.setStarted(true);
             }
             else if (object instanceof Networking.PositionUpdate) {
                 Networking.PositionUpdate update = ((Networking.PositionUpdate) object);
@@ -64,6 +65,7 @@ public class GameServer extends Server {
                         server.setSaboteur(i);
                     }
                     server.sendToAllTCP(Networking.startGame(server.connectedPlayers, server.getSeed()));
+                    server.coordinator.setStarted(true);
                 }
             }
             else {
