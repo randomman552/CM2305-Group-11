@@ -5,11 +5,16 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -23,10 +28,13 @@ import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerInputProcessor;
 import com.socialgame.game.tasks.Task;
+import com.socialgame.game.tasks.async.ClockCalibrationTask;
 import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -52,13 +60,40 @@ public class GameScreen implements Screen {
      * TODO: Think about how we want to do the map
      * libGDX has a Map and TiledMap class we could use instead of creating our own
      */
-    private TiledMap tiledMap;
+    private final TiledMap tiledMap;
     OrthogonalTiledMapRenderer renderer;
     Box2DDebugRenderer box2DDebugRenderer;
-    float unitScale = 1/64f; // 1 unit = 32 pixels
-    int[] backgroundLayers = { 0, 1 };  //Drawn behind the player
-    int[] taskLayer = { 2 };
-    int[] foregroundLayers = { 3 };     //Drawn in-front the player
+
+    private static final String floorLayer = "Floor";
+    private static final String wallLayer = "Walls";
+    private static final String simonTaskLayer = "Task Simon";
+    private static final String clockTaskLayer = "Task Clock";
+    private static final String walkInLayer = "WalkIn Textures";
+    private static final String spawnLayer = "Player Spawns";
+
+    private static final float unitScale = 1/64f; // 1 unit = 32 pixels
+    private static int[] backgroundLayers;  //Drawn behind the player
+    private static int[] taskLayer;
+    private static int[] foregroundLayers;     //Drawn in-front the player
+
+
+    public int getLayerIndex(String layer) {
+        return tiledMap.getLayers().getIndex(layer);
+    }
+
+    public MapObjects getLayerObjects(String index) {
+        return getLayer(index).getObjects();
+    }
+
+    public MapLayer getLayer(String index) {
+        return tiledMap.getLayers().get(index);
+    }
+
+
+    public boolean taskSpawnChance() {
+        double p = game.getRandom().nextDouble();
+        return p <= 0.5;
+    }
 
 
     public GameScreen(SocialGame game) throws IOException {
@@ -89,11 +124,19 @@ public class GameScreen implements Screen {
 
         // region Initialise map
 
-        tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/testMap.tmx").toString());
+        tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/gameMap.tmx").toString());
+
+        backgroundLayers = new int[]{getLayerIndex(floorLayer), getLayerIndex(wallLayer)};  //Drawn behind the player
+        taskLayer = new int[]{getLayerIndex(simonTaskLayer), getLayerIndex(clockTaskLayer) };
+        foregroundLayers = new int[]{getLayerIndex(walkInLayer)};
+
+        TiledMapTileLayer x;
+        MapLayer y;
+
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
 
-        MapBodyBuilder.buildShapes(tiledMap, 64, game.getPhysWorld());
+        MapBodyBuilder.buildShapes(tiledMap, 1/unitScale, game.getPhysWorld());
 
         // endregion
         
@@ -127,6 +170,19 @@ public class GameScreen implements Screen {
         return hud;
     }
 
+    public void spawnPlayer(Player player) {
+        MapObjects spawns = getLayerObjects(spawnLayer);
+        stage.addActor(player);
+        if (spawns.getCount() != 0) {
+            int randSpawnIdx = game.getRandom().nextInt(spawns.getCount());
+            MapObject mapObject = spawns.get(randSpawnIdx);
+            if (mapObject instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
+                player.setPositionAboutOrigin(rect.getX() * unitScale, rect.getY() * unitScale);
+            }
+        }
+    }
+
     @Override
     public void show() {
         stage.getCamera().position.set(new float[] {0, 0, 0});
@@ -139,15 +195,50 @@ public class GameScreen implements Screen {
 
         // region Task generation
 
-        for (MapObject mapObject: tiledMap.getLayers().get(taskLayer[0]).getObjects()) {
-            if (mapObject instanceof EllipseMapObject) {
-                float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
-                float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                // TODO Random task generation
-                tasks.add(new SimonSaysTask(game, x, y));
+        // Set the max amount of tasks to spawn.
+        int capSimonTask = 3;
+        final int capClockTask = 3;
+        int spawnCount = 0;
+
+        // Spawns the Clock Calibration Tasks
+        for (MapObject mapObject : getLayerObjects(clockTaskLayer)) {
+            if (spawnCount >= capClockTask) {
+                spawnCount = 0;
+                break;
+            }
+
+            if (taskSpawnChance()) {
+                if (mapObject instanceof EllipseMapObject) {
+                    float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
+                    float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
+                    tasks.add(new ClockCalibrationTask(game, x + 0.5f, y + 0.5f));
+
+                }
+                spawnCount += 1;
+
             }
         }
 
+        // Spawns the Simon says tasks Tasks
+        for (MapObject mapObject : getLayerObjects(simonTaskLayer)) {
+            if (spawnCount >= capSimonTask) {
+                spawnCount = 0;
+                break;
+            }
+
+            if (taskSpawnChance()) {
+                if (mapObject instanceof EllipseMapObject) {
+                    float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
+                    float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
+                    tasks.add(new SimonSaysTask(game, x + 0.5f, y + 0.5f));
+
+                }
+                spawnCount += 1;
+
+            }
+        }
+
+        // Adds the tasks to the stage
         for (Task task: tasks) {
             stage.addActor(task);
         }

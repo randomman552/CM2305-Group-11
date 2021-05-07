@@ -63,8 +63,7 @@ public class GameClient extends Client {
 
                 // If our mainPlayer has not been set, initial sync is required
                 if (game.mainPlayer == null) {
-                    game.mainPlayer = new Player(game, update.playerID);
-                    game.getMainStage().addActor(game.mainPlayer);
+                    game.setMainPlayer(new Player(game, update.playerID));
 
                     for (int i = 0; i < GameServer.MAX_PLAYERS; i++) {
                         if (i != update.playerID && update.playerInfos[i] != null) {

@@ -173,6 +173,8 @@ public class HUD extends Group {
 
         // Get image to display
         Image mapImage = new Image(game.spriteSheet.findRegion("map"));
+        //Turns map slightly transparent
+        mapImage.setColor(1,1,1,.75f);
 
         // Define base table layout
         mapTable.row().height(50);

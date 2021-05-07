@@ -135,7 +135,7 @@ public class Player extends Interactable {
         // Central rectangle
         PolygonShape rectShape = new PolygonShape();
         float rectX = getHeight()/6 - (getWidth()/24);
-        float rectY = getHeight()/6;
+        float rectY = getHeight()/6.25f;
         rectShape.setAsBox(rectX, rectY, new Vector2(0, -getHeight()/3), 0);
         fixtureDef.shape = rectShape;
         body.createFixture(fixtureDef);
