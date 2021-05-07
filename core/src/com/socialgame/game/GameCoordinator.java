@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class GameCoordinator {
     Random random = new Random();
+    private boolean started = false;
 
     private static final float SABOTEUR_RATIO = 0.25f;
 
@@ -28,5 +29,13 @@ public class GameCoordinator {
         if(!game.mainPlayer.getIsSaboteur() && numSum - numSaboteurs == 0 || game.mainPlayer.getIsSaboteur() && numSaboteurs == 0){
             game.setScreen(new LoseScreen(game));
         }*/
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean val) {
+        started = val;
     }
 }

@@ -37,6 +37,7 @@ public class Networking {
         kryo.register(LeaveNotification.class);
         kryo.register(JoinRequest.class);
         kryo.register(JoinAccepted.class);
+        kryo.register(JoinRefused.class);
         kryo.register(TaskFinished.class);
         kryo.register(InitialiseGame.class);
         kryo.register(StartGame.class);
