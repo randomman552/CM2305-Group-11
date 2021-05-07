@@ -7,7 +7,7 @@
   ],
   "mainclass": "com.socialgame.game.desktop.DesktopLauncher",
   "vmargs": [
-    "Xmx1G"
+    "Xmx4G"
   ],
   "resources": [
 
