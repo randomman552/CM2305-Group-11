@@ -20,9 +20,9 @@ public class MapBodyBuilder {
     // The pixels per tile. If your tiles are 16x16, this is set to 16f
     private static float ppt = 64;
 
-    public static Array<Body> buildShapes(Map map, float pixels, World world) {
+    public static Array<Body> buildShapes(Map map, int layerIndex, float pixels, World world) {
         ppt = pixels;
-        MapObjects objects = map.getLayers().get("Static Body").getObjects();
+        MapObjects objects = map.getLayers().get(layerIndex).getObjects();
 
         Array<Body> bodies = new Array<>();
 

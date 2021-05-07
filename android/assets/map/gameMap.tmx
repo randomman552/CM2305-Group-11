@@ -262,7 +262,7 @@
   </object>
  </objectgroup>
  <objectgroup id="10" name="Start">
-  <object id="64" x="1600" y="864" width="64" height="64">
+  <object id="64" x="1600" y="896" width="64" height="64">
    <ellipse/>
   </object>
   <object id="66" x="896" y="960" width="96" height="128"/>

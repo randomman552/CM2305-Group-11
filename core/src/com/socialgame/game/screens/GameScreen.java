@@ -15,8 +15,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
@@ -32,8 +39,6 @@ import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -63,17 +68,21 @@ public class GameScreen implements Screen {
     OrthogonalTiledMapRenderer renderer;
     Box2DDebugRenderer box2DDebugRenderer;
 
+    private final ArrayList<Array<Body>> builtBodies;
+
     private static final String floorLayer = "Floor";
     private static final String wallLayer = "Walls";
     private static final String simonTaskLayer = "Task Simon";
     private static final String clockTaskLayer = "Task Clock";
     private static final String walkInLayer = "WalkIn Textures";
     private static final String spawnLayer = "Player Spawns";
+    private static final String startLayer = "Start";
 
     private static final float unitScale = 1/64f; // 1 unit = 32 pixels
     private static int[] backgroundLayers;  //Drawn behind the player
     private static int[] taskLayer;
     private static int[] foregroundLayers;     //Drawn in-front the player
+    private static int[] startLayers;
 
 
     public int getLayerIndex(String layer) {
@@ -123,6 +132,7 @@ public class GameScreen implements Screen {
         backgroundLayers = new int[]{getLayerIndex(floorLayer), getLayerIndex(wallLayer)};  //Drawn behind the player
         taskLayer = new int[]{getLayerIndex(simonTaskLayer), getLayerIndex(clockTaskLayer) };
         foregroundLayers = new int[]{getLayerIndex(walkInLayer)};
+        startLayers = new int[]{getLayerIndex(startLayer)};
 
         TiledMapTileLayer x;
         MapLayer y;
@@ -130,7 +140,12 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
 
-        MapBodyBuilder.buildShapes(tiledMap, 1/unitScale, game.getPhysWorld());
+        builtBodies = new ArrayList<>();
+
+
+        builtBodies.add(MapBodyBuilder.buildShapes(tiledMap, getLayerIndex("Static Body"),1/unitScale, game.getPhysWorld()));
+        builtBodies.add(MapBodyBuilder.buildShapes(tiledMap, getLayerIndex(startLayer),1/unitScale, game.getPhysWorld()));
+        System.out.println(builtBodies.get(1));
 
         // endregion
         
@@ -185,6 +200,35 @@ public class GameScreen implements Screen {
         stage.addActor(new Sword(game, 0, 2));
         stage.addActor(new Scythe(game, 2, 2));
         stage.addActor(new Lightsword(game, 4, 2));
+
+        // region Start game button
+
+        for (final MapObject mapObject : getLayerObjects(startLayer)) {
+            if (mapObject instanceof EllipseMapObject) {
+                float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
+                float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
+                Drawable texture = new TextureRegionDrawable(game.spriteSheet.findRegion("start"));
+                final ImageButton startButton = new ImageButton(texture);
+                startButton.setPosition(x, y);
+                startButton.setSize(1f,1f);
+                startButton.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        if (game.getServer() != null) {
+                            for (Body body: builtBodies.get(1)) {
+                                body.setActive(false);
+                            }
+                            startButton.setVisible(false);
+                        }
+
+                        return true;
+                    }
+                });
+                stage.addActor(startButton);
+            }
+        }
+
+        // endregion
 
         // region Task generation
 
@@ -266,6 +310,7 @@ public class GameScreen implements Screen {
         // Draw changes on screen
         stage.draw();
         renderer.render(foregroundLayers);
+        renderer.render(startLayers);
         uiStage.draw();
 
         // Draw debug if required
