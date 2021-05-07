@@ -176,7 +176,6 @@ public class GameScreen implements Screen {
         // Connect to server
         client = new GameClient(game, password, host);
         game.setClient(client);
-        client.sendTCP(Networking.initialiseGame());
 
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();
@@ -203,6 +202,13 @@ public class GameScreen implements Screen {
         }
     }
 
+    public void releasePlayers() {
+        for (Body body: builtBodies.get(1)) {
+            body.setActive(false);
+        }
+        startButton.setVisible(false);
+    }
+
     @Override
     public void show() {
         stage.getCamera().position.set(new float[] {0, 0, 0});
@@ -225,12 +231,8 @@ public class GameScreen implements Screen {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                         if (game.getServer() != null) {
-                            for (Body body: builtBodies.get(1)) {
-                                body.setActive(false);
-                            }
-                            startButton.setVisible(false);
+                            game.getClient().sendTCP(Networking.initialiseGame());
                         }
-
                         return true;
                     }
                 });

@@ -7,6 +7,7 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.player.Player;
+import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.tasks.Task;
 
 import java.io.IOException;
@@ -117,6 +118,9 @@ public class GameClient extends Client {
                     }
                 }
                 game.getRandom().setSeed(update.seed);
+                if (game.getScreen() instanceof GameScreen) {
+                    ((GameScreen) game.getScreen()).releasePlayers();
+                }
             }
         }
 
