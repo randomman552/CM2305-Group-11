@@ -52,11 +52,13 @@ public class GameServer extends Server {
                 server.sendToAllExceptTCP(connection.getID(), object);
             }
             else if (object instanceof Networking.InitialiseGame) {
-                int[] saboteurIDs = server.coordinator.pickSaboteurs(server.getNumPlayers());
-                for (int i: saboteurIDs) {
-                    server.setSaboteur(i);
+                if (connection.getRemoteAddressTCP().toString().split(":")[0].equals("/127.0.0.1")) {
+                    int[] saboteurIDs = server.coordinator.pickSaboteurs(server.getNumPlayers());
+                    for (int i : saboteurIDs) {
+                        server.setSaboteur(i);
+                    }
+                    server.sendToAllTCP(Networking.startGame(server.connectedPlayers, server.getSeed()));
                 }
-                server.sendToAllTCP(Networking.startGame(server.connectedPlayers));
             }
             else {
                 server.sendToAllExceptTCP(connection.getID(), object);
@@ -146,6 +148,14 @@ public class GameServer extends Server {
         if (connectedPlayers[playerID] != null) {
             connectedPlayers[playerID].isSaboteur = true;
         }
+    }
+
+    /**
+     * Get the seed to communicate to clients to use as the map seed.
+     * @return random seed for map generation.
+     */
+    public long getSeed() {
+        return coordinator.getSeed();
     }
 
     @Override

@@ -185,9 +185,10 @@ public class Networking {
         return new InitialiseGame();
     }
 
-    public static StartGame startGame(PlayerInfo[] playerInfos) {
+    public static StartGame startGame(PlayerInfo[] playerInfos, long mapSeed) {
         StartGame obj = new StartGame();
         obj.playerInfos = playerInfos;
+        obj.seed = mapSeed;
         return obj;
     }
 
@@ -294,29 +295,6 @@ public class Networking {
 
     // endregion
 
-    // region GameCoordinator updates
-
-    /**
-     * Class sent by clients to instruct server to start the game.
-     */
-    public static class InitialiseGame {}
-
-    /**
-     * Class sent by server to synchronise clients on game start.
-     */
-    public static class StartGame {
-        PlayerInfo[] playerInfos = new PlayerInfo[GameServer.MAX_PLAYERS];
-
-        @Override
-        public String toString() {
-            return "StartGame{" +
-                    "playerInfos=" + Arrays.toString(playerInfos) +
-                    '}';
-        }
-    }
-
-    // endregion
-
     // region Initial connection classes
 
     public static class JoinRequest {
@@ -380,6 +358,35 @@ public class Networking {
     }
 
     //endregion
+
+    // region GameCoordinator updates
+
+    /**
+     * Class sent by clients to instruct server to start the game.
+     */
+    public static class InitialiseGame {
+        @Override
+        public String toString() {
+            return "InitialiseGame{}";
+        }
+    }
+
+    /**
+     * Class sent by server to synchronise clients on game start.
+     */
+    public static class StartGame {
+        PlayerInfo[] playerInfos = new PlayerInfo[GameServer.MAX_PLAYERS];
+        long seed;
+
+        @Override
+        public String toString() {
+            return "StartGame{" +
+                    "playerInfos=" + Arrays.toString(playerInfos) +
+                    '}';
+        }
+    }
+
+    // endregion
 
     // region Task sync updates
 

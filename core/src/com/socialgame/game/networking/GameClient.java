@@ -116,6 +116,7 @@ public class GameClient extends Client {
                         player.setIsSaboteur(update.playerInfos[i].isSaboteur);
                     }
                 }
+                game.getRandom().setSeed(update.seed);
             }
         }
 
@@ -130,7 +131,7 @@ public class GameClient extends Client {
         }
     }
 
-    public SocialGame game;
+    private SocialGame game;
 
     public GameClient(SocialGame game, String password) throws IOException {
         this(game, password, "localhost");
