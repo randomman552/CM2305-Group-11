@@ -3,6 +3,7 @@ package com.socialgame.game.networking;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.socialgame.game.GameCoordinator;
 import com.socialgame.game.player.PlayerCustomisation;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class GameServer extends Server {
      * Array of information about players.
      */
     private final Networking.PlayerInfo[] connectedPlayers = new Networking.PlayerInfo[MAX_PLAYERS];
+    private final GameCoordinator coordinator = new GameCoordinator();
 
     private static class GameServerListener extends Listener {
         private final GameServer server;
@@ -49,6 +51,13 @@ public class GameServer extends Server {
                 info.y = update.y;
                 server.sendToAllExceptTCP(connection.getID(), object);
             }
+            else if (object instanceof Networking.InitialiseGame) {
+                int[] saboteurIDs = server.coordinator.pickSaboteurs(server.getNumPlayers());
+                for (int i: saboteurIDs) {
+                    server.setSaboteur(i);
+                }
+                server.sendToAllTCP(Networking.startGame(server.connectedPlayers));
+            }
             else {
                 server.sendToAllExceptTCP(connection.getID(), object);
             }
@@ -77,6 +86,14 @@ public class GameServer extends Server {
 
         start();
         bind(TCPPort, UDPPort);
+    }
+
+    public int getNumPlayers() {
+        int count = 0;
+        for (Networking.PlayerInfo connectedPlayer : connectedPlayers) {
+            if (connectedPlayer != null) count++;
+        }
+        return count;
     }
 
     /**
@@ -119,6 +136,16 @@ public class GameServer extends Server {
             }
         }
         return -1;
+    }
+
+    /**
+     * Set the player with the given ID as a saboteur, if they are connected.
+     * @param playerID The ID of the player.
+     */
+    public void setSaboteur(int playerID) {
+        if (connectedPlayers[playerID] != null) {
+            connectedPlayers[playerID].isSaboteur = true;
+        }
     }
 
     @Override

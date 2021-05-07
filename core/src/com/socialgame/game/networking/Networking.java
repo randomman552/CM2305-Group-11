@@ -38,6 +38,8 @@ public class Networking {
         kryo.register(JoinRequest.class);
         kryo.register(JoinAccepted.class);
         kryo.register(TaskFinished.class);
+        kryo.register(InitialiseGame.class);
+        kryo.register(StartGame.class);
     }
 
     static public void resetPools() {
@@ -53,6 +55,7 @@ public class Networking {
         public int topSelection;
         public int colorSelection;
         public int[] inventory = new int[2];
+        public boolean isSaboteur;
         public float x, y;
 
         public PlayerInfo() {
@@ -68,6 +71,7 @@ public class Networking {
             this.hatSelection = customisation.getHatSelection();
             this.topSelection = customisation.getTopSelection();
             this.colorSelection = customisation.getColorSelection();
+            this.isSaboteur = false;
             this.x = x;
             this.y = y;
         }
@@ -175,6 +179,20 @@ public class Networking {
 
     // endregion
 
+    // region GameCoordinator updates
+
+    public static InitialiseGame initialiseGame() {
+        return new InitialiseGame();
+    }
+
+    public static StartGame startGame(PlayerInfo[] playerInfos) {
+        StartGame obj = new StartGame();
+        obj.playerInfos = playerInfos;
+        return obj;
+    }
+
+    // endregion
+
     // region Task sync updates
 
     public static TaskFinished taskFinished(int taskID, boolean failed) {
@@ -270,6 +288,29 @@ public class Networking {
             return "PlayerTakeDamageUpdate{" +
                     "playerID=" + playerID +
                     ", damage=" + damage +
+                    '}';
+        }
+    }
+
+    // endregion
+
+    // region GameCoordinator updates
+
+    /**
+     * Class sent by clients to instruct server to start the game.
+     */
+    public static class InitialiseGame {}
+
+    /**
+     * Class sent by server to synchronise clients on game start.
+     */
+    public static class StartGame {
+        PlayerInfo[] playerInfos = new PlayerInfo[GameServer.MAX_PLAYERS];
+
+        @Override
+        public String toString() {
+            return "StartGame{" +
+                    "playerInfos=" + Arrays.toString(playerInfos) +
                     '}';
         }
     }

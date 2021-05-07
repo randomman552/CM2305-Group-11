@@ -109,6 +109,15 @@ public class GameClient extends Client {
                 }
                 catch (NullPointerException | ClassCastException ignored) {}
             }
+            else if (object instanceof Networking.StartGame) {
+                Networking.StartGame update = ((Networking.StartGame) object);
+                for (int i = 0; i < update.playerInfos.length; i++) {
+                    if (GameObject.objects.get(i) instanceof Player) {
+                        Player player = ((Player) GameObject.objects.get(i));
+                        player.setIsSaboteur(update.playerInfos[i].isSaboteur);
+                    }
+                }
+            }
         }
 
         @Override

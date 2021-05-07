@@ -19,6 +19,7 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
+import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerInputProcessor;
 import com.socialgame.game.tasks.Task;
@@ -112,6 +113,7 @@ public class GameScreen implements Screen {
         // Connect to server
         client = new GameClient(game, password, host);
         game.setClient(client);
+        client.sendTCP(Networking.initialiseGame());
 
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();

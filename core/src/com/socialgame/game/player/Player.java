@@ -14,6 +14,7 @@ import com.socialgame.game.baseclasses.Weapon;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.clothing.Hat;
 
+
 public class Player extends Interactable {
     /**
      * Height of all players in units
@@ -79,7 +80,7 @@ public class Player extends Interactable {
     private final Animation<TextureRegion> idleAnim;
     private final Animation<TextureRegion> idleAnimHold;
 
-    private boolean isSaboteur;
+    private boolean isSaboteur = false;
     private PlayerCustomisation customisation;
     private int invSlot;
 
@@ -181,6 +182,15 @@ public class Player extends Interactable {
 
     public boolean isAlive() {
         return health > 0;
+    }
+
+
+    public boolean getIsSaboteur(){
+        return isSaboteur;
+    }
+
+    public void setIsSaboteur(boolean bool) {
+        isSaboteur = bool;
     }
 
     public void setHealth(float val) {
