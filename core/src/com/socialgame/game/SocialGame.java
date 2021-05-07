@@ -18,6 +18,7 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.menu.ErrorScreen;
@@ -251,6 +252,25 @@ public class SocialGame extends Game {
 		generator.dispose();
 
 		return font;
+	}
+
+	/**
+	 * Utility function to get scalar for sound volume based on distance from game.mainPlayer;
+	 * @param soundSource The source the sound is coming from
+	 * @return Float sound scalar
+	 */
+	public float getDistanceVolumeScalar(GameObject soundSource) {
+		float dist = mainPlayer.calcDistance(soundSource);
+		float falloffStart = Player.HEARING_FALLOFF_START;
+		float falloffEnd = Player.HEARING_FALLOFF_END;
+
+		if (dist <= falloffStart) {
+			return 1;
+		} else if (dist <= falloffEnd) {
+			return 1 -((dist - falloffStart) / (falloffEnd - falloffStart));
+		} else {
+			return 0;
+		}
 	}
 
 

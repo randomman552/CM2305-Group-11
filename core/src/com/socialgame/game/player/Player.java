@@ -1,11 +1,15 @@
 package com.socialgame.game.player;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
@@ -23,6 +27,19 @@ public class Player extends Interactable {
      * Width of all players in units
      */
     public static float WIDTH = 1f;
+
+    // region Listen radius variables
+
+    /**
+     * Distance at which sound volume begins to drop off.
+     */
+    public static float HEARING_FALLOFF_START = 3f;
+    /**
+     * Distance at which sound volume falls to 0;
+     */
+    public static float HEARING_FALLOFF_END = 10f;
+
+    // endregion
 
     // region Velocity variables
     /**
@@ -44,9 +61,9 @@ public class Player extends Interactable {
      */
     public static float ACCELERATION = (MAX_VEL * 10) / ACCELERATION_TIME;
     /**
-     * Threshold for the velocity at which the player moves into their move animation state.
+     * Threshold for the velocity at which the player is considered to be moving
      */
-    public final static float MOVE_ANIM_THRESHOLD = 0.1f;
+    public final static float MOVE_THRESHOLD = 0.1f;
     // endregion
 
     // region Drawing variables
@@ -79,8 +96,11 @@ public class Player extends Interactable {
     private final Animation<TextureRegion> idleAnim;
     private final Animation<TextureRegion> idleAnimHold;
 
+    private final Sound walkSound;
+    private long walkSoundID;
+
     private boolean isSaboteur;
-    private PlayerCustomisation customisation;
+    private final PlayerCustomisation customisation;
     private int invSlot;
 
     private final Hat hat;
@@ -113,6 +133,10 @@ public class Player extends Interactable {
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
         this.customisation = customisation;
+
+        // Walking sound setup
+        walkSound = game.soundAtlas.getSound("footsteps");
+        walkSoundID = -1;
 
         // Give unique player id
         setID(id);
@@ -166,7 +190,7 @@ public class Player extends Interactable {
      */
     public TextureRegion getKeyFrame(float time) {
         Vector2 vel = body.getLinearVelocity();
-        boolean isMoving = Math.abs(vel.x) >= MOVE_ANIM_THRESHOLD || Math.abs(vel.y) >= MOVE_ANIM_THRESHOLD;
+        boolean isMoving = Math.abs(vel.x) >= MOVE_THRESHOLD || Math.abs(vel.y) >= MOVE_THRESHOLD;
 
         if (inventory[invSlot] != null) {
             if (isMoving)
@@ -284,6 +308,7 @@ public class Player extends Interactable {
             setInvSlot(i);
             dropItem();
         }
+        walkSound.stop(walkSoundID);
         super.delete();
     }
 
@@ -304,10 +329,10 @@ public class Player extends Interactable {
         super.act(delta);
 
         // Change flip state based on movement
-        if (body.getLinearVelocity().x < -MOVE_ANIM_THRESHOLD) {
+        if (body.getLinearVelocity().x < -MOVE_THRESHOLD) {
             setFlip(true);
             hat.setFlip(true);
-        } else if (body.getLinearVelocity().x > MOVE_ANIM_THRESHOLD) {
+        } else if (body.getLinearVelocity().x > MOVE_THRESHOLD) {
             setFlip(false);
             hat.setFlip(false);
         }
@@ -315,9 +340,22 @@ public class Player extends Interactable {
         // Update clothing positions
         float rootHatX = getX() + ((hat.getFlip()) ? -HAT_POS.x: HAT_POS.x);
         float hatX = rootHatX + ((hat.getFlip()) ? -hat.getOffset().x: hat.getOffset().x);
-
         float hatY = getY() + HAT_POS.y + hat.getOffset().y;
-
         hat.setPositionAboutOrigin(hatX, hatY);
+
+        // Play footstep sound if moving
+        Vector2 vel = body.getLinearVelocity();
+        if (Math.abs(vel.x) + Math.abs(vel.y) > MOVE_THRESHOLD) {
+            float volScalar = game.settings.getAdjustedSfxVol() * game.getDistanceVolumeScalar(this);
+            if (walkSoundID == -1) {
+                walkSoundID = walkSound.play(volScalar);
+                walkSound.setLooping(walkSoundID, true);
+            } else {
+                walkSound.setVolume(walkSoundID, volScalar);
+            }
+        } else {
+            walkSound.stop(walkSoundID);
+            walkSoundID = -1;
+        }
     }
 }

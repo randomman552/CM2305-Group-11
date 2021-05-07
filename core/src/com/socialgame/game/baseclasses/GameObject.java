@@ -177,6 +177,17 @@ public abstract class GameObject extends Actor implements Disposable {
         return super.getY();
     }
 
+    /**
+     * Calculate distance between current game object and the given game object.
+     * @param object The object to calculate distance too.
+     * @return Euclidean distance between objects.
+     */
+    public float calcDistance(GameObject object) {
+        float xDiff = this.getX() - object.getX();
+        float yDiff = this.getY() - object.getY();
+        return (float) Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+    }
+
     @Override
     protected void positionChanged() {
         body.setTransform(getX(), getY(), body.getAngle());

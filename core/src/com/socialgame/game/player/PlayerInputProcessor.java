@@ -31,6 +31,10 @@ public class PlayerInputProcessor implements InputProcessor {
      * @param delta The time elapsed between this frame and the last.
      */
     public void updateVelocity(Player player, float delta) {
+        if (player == null){
+            return;
+        }
+
         Vector2 vel = player.body.getLinearVelocity();
         float maxVel = (player.isAlive())? Player.MAX_VEL : Player.MAX_VEL * Player.SPEC_VEL_MOD;
         float rawAcceleration = Player.ACCELERATION;
