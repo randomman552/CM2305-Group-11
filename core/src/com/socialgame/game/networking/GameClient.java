@@ -1,5 +1,7 @@
 package com.socialgame.game.networking;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.maps.MapObject;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -118,9 +120,11 @@ public class GameClient extends Client {
                     }
                 }
                 game.getRandom().setSeed(update.seed);
+
                 if (game.getScreen() instanceof GameScreen) {
                     ((GameScreen) game.getScreen()).releasePlayers();
                 }
+
             }
         }
 

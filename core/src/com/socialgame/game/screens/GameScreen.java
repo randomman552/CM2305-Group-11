@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
+import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
@@ -40,6 +41,8 @@ import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -59,6 +62,7 @@ public class GameScreen implements Screen {
     public GameClient client;
 
     private final ArrayList<Task> tasks;
+    private final ArrayList<Item> items;
     private final HUD hud;
 
     /**
@@ -70,23 +74,25 @@ public class GameScreen implements Screen {
     Box2DDebugRenderer box2DDebugRenderer;
 
     private final ArrayList<Array<Body>> builtBodies;
+    private final ArrayList<MapObject> taskObjects;
+    private final ArrayList<MapObject> weaponObjects;
     private final ImageButton startButton;
 
 
     private static final String floorLayer = "Floor";
     private static final String wallLayer = "Walls";
-    private static final String simonTaskLayer = "Task Simon";
-    private static final String clockTaskLayer = "Task Clock";
+    private static final String tasksLayer = "Tasks";
+    private static final String weaponLayer = "Weapons";
     private static final String walkInLayer = "WalkIn Textures";
     private static final String spawnLayer = "Player Spawns";
     private static final String startLayer = "Start";
 
     private static final float unitScale = 1/64f; // 1 unit = 32 pixels
     private static int[] backgroundLayers;  //Drawn behind the player
-    private static int[] taskLayer;
     private static int[] foregroundLayers;     //Drawn in-front the player
     private static int[] startLayers;
 
+    private boolean startGameFlag = false;
 
     public int getLayerIndex(String layer) {
         return tiledMap.getLayers().getIndex(layer);
@@ -99,13 +105,6 @@ public class GameScreen implements Screen {
     public MapLayer getLayer(String index) {
         return tiledMap.getLayers().get(index);
     }
-
-
-    public boolean taskSpawnChance() {
-        double p = game.getRandom().nextDouble();
-        return p <= 0.5;
-    }
-
 
     public GameScreen(SocialGame game) throws IOException {
         this(game, "");
@@ -138,12 +137,9 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load(Gdx.files.internal("map/gameMap.tmx").toString());
 
         backgroundLayers = new int[]{getLayerIndex(floorLayer), getLayerIndex(wallLayer)};  //Drawn behind the player
-        taskLayer = new int[]{getLayerIndex(simonTaskLayer), getLayerIndex(clockTaskLayer) };
         foregroundLayers = new int[]{getLayerIndex(walkInLayer)};
         startLayers = new int[]{getLayerIndex(startLayer)};
 
-        TiledMapTileLayer x;
-        MapLayer y;
 
         renderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
         renderer.setView((OrthographicCamera) stage.getCamera());
@@ -154,6 +150,21 @@ public class GameScreen implements Screen {
 
         // endregion
 
+        //initialise ArrayList for accessing objects in task, and weapon generation later on
+
+        taskObjects = new ArrayList<>();
+        for (MapObject mapObject: getLayerObjects(tasksLayer)) {
+            taskObjects.add(mapObject);
+        }
+
+        weaponObjects = new ArrayList<>();
+        for (MapObject mapObject: getLayerObjects(weaponLayer)) {
+            weaponObjects.add(mapObject);
+        }
+
+        System.out.println(taskObjects);
+
+        //Start button for lobby
         Drawable texture = new TextureRegionDrawable(game.spriteSheet.findRegion("start"));
         startButton = new ImageButton(texture);
 
@@ -176,6 +187,7 @@ public class GameScreen implements Screen {
 
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();
+        items = new ArrayList<>();
     }
 
     public ArrayList<Task> getTasks() {
@@ -199,6 +211,59 @@ public class GameScreen implements Screen {
         }
     }
 
+    synchronized public void setStartGameFlag(boolean flag) {
+        startGameFlag = flag;
+    }
+
+    private void spawnTasks(int taskCap) {
+        // Shuffles the MapObjects array
+        for (int i = 0; i < taskObjects.size(); i++) {
+            int randomIndexToSwap = game.getRandom().nextInt(taskObjects.size());
+            MapObject temp = taskObjects.get(randomIndexToSwap);
+            taskObjects.set(randomIndexToSwap, taskObjects.get(i));
+            taskObjects.set(i, temp);
+        }
+
+        // Picks a random MapObject from the array to use for a task location
+        for (int i = 0; i < taskCap; i++) {
+            MapObject mapObject = taskObjects.get(i);
+            if (mapObject instanceof EllipseMapObject) {
+                float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
+                float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
+                tasks.add(Task.create(i, game, x + 0.5f, y + 0.5f));
+            }
+        }
+
+        // Adds the tasks to the stage
+        for (Task task: tasks) {
+            stage.addActor(task);
+        }
+
+    }
+
+    public void spawnWeapons(int weaponCap) {
+        for (int i = 0; i < weaponObjects.size(); i++) {
+            int randomIndexToSwap = game.getRandom().nextInt(weaponObjects.size());
+            MapObject temp = weaponObjects.get(randomIndexToSwap);
+            weaponObjects.set(randomIndexToSwap, weaponObjects.get(i));
+            weaponObjects.set(i, temp);
+        }
+
+        // Picks a random MapObject from the array to use for a task location
+        for (int i = 0; i < weaponCap; i++) {
+            MapObject mapObject = weaponObjects.get(i);
+            if (mapObject instanceof RectangleMapObject) {
+                float x = ((RectangleMapObject) mapObject).getRectangle().x * unitScale;
+                float y = ((RectangleMapObject) mapObject).getRectangle().y * unitScale;
+                items.add(Item.create(i, game, x + 0.5f, y + 0.5f));
+            }
+        }
+
+        for (Item item: items) {
+            stage.addActor(item);
+        }
+    }
+
     public void releasePlayers() {
         for (Body body: builtBodies.get(1)) {
             body.setActive(false);
@@ -206,15 +271,17 @@ public class GameScreen implements Screen {
         startButton.setVisible(false);
     }
 
+    private void startGame() {
+        spawnTasks(6);
+        spawnWeapons(6);
+        releasePlayers();
+
+        setStartGameFlag(false);
+    }
+
     @Override
     public void show() {
         stage.getCamera().position.set(new float[] {0, 0, 0});
-
-        stage.addActor(new Wrench(game, -4, 2));
-        stage.addActor(new Axe(game, -2, 2));
-        stage.addActor(new Sword(game, 0, 2));
-        stage.addActor(new Scythe(game, 2, 2));
-        stage.addActor(new Lightsword(game, 4, 2));
 
         // region Start game button
 
@@ -235,59 +302,6 @@ public class GameScreen implements Screen {
                 });
                 stage.addActor(startButton);
             }
-        }
-
-        // endregion
-
-        // region Task generation
-
-        // Set the max amount of tasks to spawn.
-        int capSimonTask = 3;
-        final int capClockTask = 3;
-        int spawnCount = 0;
-
-        // Spawns the Clock Calibration Tasks
-        for (MapObject mapObject : getLayerObjects(clockTaskLayer)) {
-
-            if (spawnCount >= capClockTask) {
-                spawnCount = 0;
-                break;
-            }
-
-            if (taskSpawnChance()) {
-                if (mapObject instanceof EllipseMapObject) {
-                    float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
-                    float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                    tasks.add(new ClockCalibrationTask(game, x + 0.5f, y + 0.5f));
-
-                }
-                spawnCount += 1;
-
-            }
-        }
-
-        // Spawns the Simon says tasks Tasks
-        for (MapObject mapObject : getLayerObjects(simonTaskLayer)) {
-            if (spawnCount >= capSimonTask) {
-                spawnCount = 0;
-                break;
-            }
-
-            if (taskSpawnChance()) {
-                if (mapObject instanceof EllipseMapObject) {
-                    float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
-                    float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                    tasks.add(new SimonSaysTask(game, x + 0.5f, y + 0.5f));
-
-                }
-                spawnCount += 1;
-
-            }
-        }
-
-        // Adds the tasks to the stage
-        for (Task task: tasks) {
-            stage.addActor(task);
         }
 
         // endregion

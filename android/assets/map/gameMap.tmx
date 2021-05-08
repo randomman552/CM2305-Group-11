@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="100" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="70">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="100" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="93">
  <tileset firstgid="1" source="base.tsx"/>
  <layer id="1" name="Floor" width="100" height="60" locked="1">
   <data encoding="csv">
@@ -229,7 +229,16 @@
   <object id="34" x="2176" y="704" width="160" height="256"/>
   <object id="35" x="2336" y="832" width="160" height="128"/>
  </objectgroup>
- <objectgroup id="8" name="Task Simon">
+ <objectgroup id="10" name="Start">
+  <object id="64" x="1600" y="896" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object id="66" x="896" y="864" width="96.5" height="416"/>
+  <object id="67" x="992" y="768" width="1184" height="96.3478"/>
+  <object id="68" x="2175.59" y="864" width="96.4063" height="352"/>
+  <object id="69" x="992" y="1214.91" width="1184" height="97.0909"/>
+ </objectgroup>
+ <objectgroup id="8" name="Tasks">
   <object id="54" x="800" y="832" width="64" height="64">
    <ellipse/>
   </object>
@@ -260,17 +269,6 @@
   <object id="63" x="1728" y="1568" width="64" height="64">
    <ellipse/>
   </object>
- </objectgroup>
- <objectgroup id="10" name="Start">
-  <object id="64" x="1600" y="896" width="64" height="64">
-   <ellipse/>
-  </object>
-  <object id="66" x="896" y="864" width="96.5" height="416"/>
-  <object id="67" x="992" y="768" width="1184" height="96.3478"/>
-  <object id="68" x="2175.59" y="864" width="96.4063" height="352"/>
-  <object id="69" x="992" y="1214.91" width="1184" height="97.0909"/>
- </objectgroup>
- <objectgroup id="9" name="Task Clock" locked="1">
   <object id="42" x="544" y="832" width="64" height="64">
    <ellipse/>
   </object>
@@ -306,6 +304,41 @@
   </object>
   <object id="53" x="2592" y="704" width="64" height="64">
    <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup id="11" name="Weapons">
+  <object id="82" x="586" y="1100">
+   <point/>
+  </object>
+  <object id="83" x="750" y="994">
+   <point/>
+  </object>
+  <object id="84" x="774" y="650">
+   <point/>
+  </object>
+  <object id="85" x="1136" y="1398">
+   <point/>
+  </object>
+  <object id="86" x="1650" y="1620">
+   <point/>
+  </object>
+  <object id="87" x="1880" y="1622">
+   <point/>
+  </object>
+  <object id="88" x="2334" y="1402">
+   <point/>
+  </object>
+  <object id="89" x="2562" y="992">
+   <point/>
+  </object>
+  <object id="90" x="2510" y="646">
+   <point/>
+  </object>
+  <object id="91" x="1308" y="540">
+   <point/>
+  </object>
+  <object id="92" x="1548" y="536">
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="7" name="Player Spawns" locked="1">

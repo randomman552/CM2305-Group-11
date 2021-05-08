@@ -2,7 +2,11 @@ package com.socialgame.game.baseclasses;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.socialgame.game.SocialGame;
+import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.player.Player;
+import com.socialgame.game.tasks.Task;
+import com.socialgame.game.tasks.async.ClockCalibrationTask;
+import com.socialgame.game.tasks.async.SimonSaysTask;
 
 /**
  * Base class from which all items are derived
@@ -10,6 +14,23 @@ import com.socialgame.game.player.Player;
  */
 public abstract class Item extends Interactable {
     private boolean flip = false;
+
+    public static Item create(int i, SocialGame game, float x, float y) {
+        i = i % 5;
+        switch (i) {
+            case 0:
+                return new Axe(game, x, y);
+            case 1:
+                return new Lightsword(game, x, y);
+            case 2:
+                return new Scythe(game, x, y);
+            case 3:
+                return new Sword(game, x, y);
+            case 4:
+                return new Wrench(game, x, y);
+        }
+        return null;
+    }
 
     public Item(SocialGame game, float x, float y, float width, float height) {
         super(game, x, y, width, height);
