@@ -108,7 +108,7 @@ public abstract class Task extends Interactable {
      */
     public void onComplete() {
         game.getHud().incrementProgress();
-        if (!isFailed()) game.soundAtlas.getSound("success").play(game.settings.getAdjustedSfxVol());
+        if (!isFailed()) game.playSound("success");
         close();
     }
 
@@ -117,7 +117,7 @@ public abstract class Task extends Interactable {
      */
     public void onFail() {
         game.getHud().incrementHazard();
-        game.soundAtlas.getSound("fail").play(game.settings.getAdjustedSfxVol());
+        game.playSound("fail");
         close();
     }
 

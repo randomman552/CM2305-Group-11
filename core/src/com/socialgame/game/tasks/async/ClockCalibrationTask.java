@@ -152,6 +152,8 @@ public class ClockCalibrationTask extends Task {
     public ClockCalibrationTask(final SocialGame game, float x, float y) {
         super(game, x, y);
 
+        // region Font creation
+
         // Create font parameters for title and time fonts
         FreeTypeFontParameter titleFontParam = new FreeTypeFontParameter();
         FreeTypeFontParameter timeFontParam = new FreeTypeFontParameter();
@@ -160,6 +162,8 @@ public class ClockCalibrationTask extends Task {
 
         titleFont = game.generateFont(Gdx.files.internal("fonts/dot-matrix.ttf"), titleFontParam);
         normalFont = game.generateFont(Gdx.files.internal("fonts/dot-matrix.ttf"), timeFontParam);
+
+        // endregion
 
         //Hashmap containing GMT offsets for the cities in use by this task
         Map<String, Integer> cityOffsets = new HashMap<String, Integer>();
@@ -212,7 +216,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setHour(clockWidget.getHour() + 1);
-                game.soundAtlas.getSound("beep").play();
+                game.playSound("beep");
                 return true;
             }
         });
@@ -222,7 +226,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setHour(clockWidget.getHour() - 1);
-                game.soundAtlas.getSound("beep").play();
+                game.playSound("beep");
                 return true;
             }
         });
@@ -232,7 +236,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setMinute(clockWidget.getMinute() + 1);
-                game.soundAtlas.getSound("beep").play();
+                game.playSound("beep");
                 return true;
             }
         });
@@ -242,7 +246,7 @@ public class ClockCalibrationTask extends Task {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clockWidget.setMinute(clockWidget.getMinute() - 1);
-                game.soundAtlas.getSound("beep").play();
+                game.playSound("beep");
                 return true;
             }
         });

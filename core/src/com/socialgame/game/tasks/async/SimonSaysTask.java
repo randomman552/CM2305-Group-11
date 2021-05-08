@@ -159,6 +159,7 @@ public class SimonSaysTask extends Task {
     private void playSequence() {
         playingSequence = true;
         lastPlayedTime = game.elapsedTime - timePerTile;
+        curSequenceIdx = 0;
         for (Button button: buttons) {
             button.setTouchable(Touchable.disabled);
         }
@@ -187,7 +188,6 @@ public class SimonSaysTask extends Task {
             } else if (isOpen()) {
                 playBeep(curButtonIdx);
             }
-
         }
     }
 
@@ -206,9 +206,8 @@ public class SimonSaysTask extends Task {
     }
 
     private void playBeep(int btnNum) {
-        float volume = game.settings.getAdjustedSfxVol();
         float pitch = (btnNum + 1) / 2f;
-        game.soundAtlas.getSound("beep").play(volume, pitch, 0);
+        game.playSound("beep", pitch, 0);
     }
 
     @Override

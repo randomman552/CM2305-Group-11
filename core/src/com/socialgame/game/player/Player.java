@@ -119,9 +119,9 @@ public class Player extends Interactable {
         inventory = new Item[2];
 
         // Walk animation setup
-        walkAnim = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("player"));
+        walkAnim = new Animation<TextureRegion>(0.25f, game.spriteSheet.findRegions("player"));
         walkAnim.setPlayMode(Animation.PlayMode.LOOP);
-        walkAnimHold = new Animation<TextureRegion>(0.5f, game.spriteSheet.findRegions("playerHold"));
+        walkAnimHold = new Animation<TextureRegion>(0.25f, game.spriteSheet.findRegions("playerHold"));
         walkAnimHold.setPlayMode(Animation.PlayMode.LOOP);
 
         // Idle animation setup (currently uses first from player walk animation)
@@ -346,12 +346,11 @@ public class Player extends Interactable {
         // Play footstep sound if moving
         Vector2 vel = body.getLinearVelocity();
         if (Math.abs(vel.x) + Math.abs(vel.y) > MOVE_THRESHOLD) {
-            float volScalar = game.settings.getAdjustedSfxVol() * game.getDistanceVolumeScalar(this);
             if (walkSoundID == -1) {
-                walkSoundID = walkSound.play(volScalar);
+                walkSoundID = game.playSound(walkSound, this);
                 walkSound.setLooping(walkSoundID, true);
             } else {
-                walkSound.setVolume(walkSoundID, volScalar);
+                walkSound.setVolume(walkSoundID, game.getSoundVolumeScalar(this));
             }
         } else {
             walkSound.stop(walkSoundID);

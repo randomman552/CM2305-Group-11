@@ -3,6 +3,7 @@ package com.socialgame.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -214,6 +215,132 @@ public class SocialGame extends Game {
 
 	// endregion
 
+	// region Sound playing functions
+
+	/**
+	 * Utility function to get scalar for sound volume based on distance from game.mainPlayer;
+	 * @param origin The source the sound is coming from
+	 * @return Float sound scalar
+	 */
+	private float getDistanceVolumeScalar(GameObject origin) {
+		if (mainPlayer == null)
+			return 1;
+
+		float dist = mainPlayer.calcDistance(origin);
+		float falloffStart = Player.HEARING_FALLOFF_START;
+		float falloffEnd = Player.HEARING_FALLOFF_END;
+
+		if (dist <= falloffStart) {
+			return 1;
+		} else if (dist <= falloffEnd) {
+			return 1 -((dist - falloffStart) / (falloffEnd - falloffStart));
+		} else {
+			return 0;
+		}
+	}
+
+	public float getSoundVolumeScalar(GameObject origin) {
+		return settings.getAdjustedSfxVol() * getDistanceVolumeScalar(origin);
+	}
+
+	public float getSoundVolumeScalar() {
+		return settings.getAdjustedSfxVol();
+	}
+
+	// region String based playSound methods
+
+	/**
+	 * Play the sound with the given key in {@link SoundAtlas game.soundAtlas}
+	 * @param soundKey The key to search for in the atlas.
+	 * @return The ID of the played sound.
+	 */
+	public long playSound(String soundKey) {
+		return playSound(soundAtlas.getSound(soundKey));
+	}
+
+	/**
+	 * Play the sound with the given key in {@link SoundAtlas game.soundAtlas}
+	 * @param soundKey The key to search for in the atlas.
+	 * @param pitch Desired pitch (0.5 to 2).
+	 * @param pan Desired pan (-1 to 1).
+	 * @return The ID of the played sound.
+	 */
+	public long playSound(String soundKey, float pitch, float pan) {
+		return playSound(soundAtlas.getSound(soundKey), pitch, pan);
+	}
+
+	/**
+	 * Play the sound with the given key in {@link SoundAtlas game.soundAtlas}
+	 * @param soundKey The key to search for in the atlas.
+	 * @param origin {@link GameObject Object} the sound originates from.
+	 * @return The ID of the played sound.
+	 */
+	public long playSound(String soundKey, GameObject origin) {
+		return playSound(soundAtlas.getSound(soundKey), origin);
+	}
+
+	/**
+	 * Play the sound with the given key in {@link SoundAtlas game.soundAtlas}
+	 * @param soundKey The key to search for in the atlas.
+	 * @param origin {@link GameObject Object} the sound originates from.
+	 * @param pitch Desired pitch (0.5 to 2).
+	 * @param pan Desired pan (-1 to 1).
+	 * @return The ID of the played sound.
+	 */
+	public long playSound(String soundKey, GameObject origin, float pitch, float pan) {
+		return playSound(soundAtlas.getSound(soundKey), origin, pitch, pan);
+	}
+
+	// endregion
+
+	// region Sound based playSound methods
+
+	/**
+	 * Helper function to play a sound with volume scaled by distance to game.mainPlayer
+	 * @param sound The sound to play
+	 * @param origin The origin of the sound (GameObject)
+	 * @return The id of the played sound
+	 */
+	public long playSound(Sound sound, GameObject origin) {
+		return sound.play(getSoundVolumeScalar(origin));
+	}
+
+	/**
+	 * Helper function to play a sound with volume scaled by distance to game.mainPlayer
+	 * @param sound The sound to play
+	 * @param origin The origin of the sound (GameObject)
+	 * @param pitch Pitch of the sound (between 0.5 and 2)
+	 * @param pan Pan of the sound (0 middle, -1 full left, 1 full right)
+	 * @return The id of the played sound
+	 */
+	public long playSound(Sound sound, GameObject origin, float pitch, float pan) {
+		return sound.play(getSoundVolumeScalar(origin), pitch, pan);
+	}
+
+	/**
+	 * Helper function to play a sound.
+	 * @param sound The sound to play.
+	 * @return ID of played sound.
+	 */
+	public long playSound(Sound sound) {
+		return sound.play(getSoundVolumeScalar());
+	}
+
+	/**
+	 * Helper function to play a sound.
+	 * @param sound The sound to play.
+	 * @param pitch The pitch to play at.
+	 * @param pan The pan of the sound.
+	 * @return ID of played sound.
+	 */
+	public long playSound(Sound sound, float pitch, float pan) {
+		return sound.play(getSoundVolumeScalar(), pitch, pan);
+	}
+
+	// endregion
+
+	// endregion
+
 	/**
 	 * Method to get the current list of tasks from the game screen.
 	 * If not present will return an empty ArrayList.
@@ -252,25 +379,6 @@ public class SocialGame extends Game {
 		generator.dispose();
 
 		return font;
-	}
-
-	/**
-	 * Utility function to get scalar for sound volume based on distance from game.mainPlayer;
-	 * @param soundSource The source the sound is coming from
-	 * @return Float sound scalar
-	 */
-	public float getDistanceVolumeScalar(GameObject soundSource) {
-		float dist = mainPlayer.calcDistance(soundSource);
-		float falloffStart = Player.HEARING_FALLOFF_START;
-		float falloffEnd = Player.HEARING_FALLOFF_END;
-
-		if (dist <= falloffStart) {
-			return 1;
-		} else if (dist <= falloffEnd) {
-			return 1 -((dist - falloffStart) / (falloffEnd - falloffStart));
-		} else {
-			return 0;
-		}
 	}
 
 
