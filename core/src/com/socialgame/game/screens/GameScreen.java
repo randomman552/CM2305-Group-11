@@ -149,11 +149,8 @@ public class GameScreen implements Screen {
         renderer.setView((OrthographicCamera) stage.getCamera());
 
         builtBodies = new ArrayList<>();
-
-
         builtBodies.add(MapBodyBuilder.buildShapes(tiledMap, getLayerIndex("Static Body"),1/unitScale, game.getPhysWorld()));
         builtBodies.add(MapBodyBuilder.buildShapes(tiledMap, getLayerIndex(startLayer),1/unitScale, game.getPhysWorld()));
-        System.out.println(builtBodies.get(1));
 
         // endregion
 
@@ -251,6 +248,7 @@ public class GameScreen implements Screen {
 
         // Spawns the Clock Calibration Tasks
         for (MapObject mapObject : getLayerObjects(clockTaskLayer)) {
+
             if (spawnCount >= capClockTask) {
                 spawnCount = 0;
                 break;
