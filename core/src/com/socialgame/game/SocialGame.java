@@ -20,7 +20,6 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.player.Player;
-import com.socialgame.game.player.PlayerCustomisation;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.menu.ErrorScreen;
 import com.socialgame.game.screens.menu.MainMenuScreen;
@@ -28,6 +27,7 @@ import com.socialgame.game.screens.menu.MenuScreen;
 import com.socialgame.game.tasks.Task;
 import com.socialgame.game.util.Settings;
 import com.socialgame.game.util.SoundAtlas;
+import com.socialgame.game.util.customisation.LinkedCustomisation;
 
 import java.util.ArrayList;
 
@@ -72,7 +72,7 @@ public class SocialGame extends Game {
 
 	public Settings settings;
 
-	public PlayerCustomisation customisation;
+	public LinkedCustomisation customisation;
 
 	/*
 	 * TODO: Customisation rewards
@@ -392,7 +392,7 @@ public class SocialGame extends Game {
 		physWorld = new World(new Vector2(0, 0), true);
 
 		settings = new Settings();
-		customisation = new PlayerCustomisation();
+		customisation = new LinkedCustomisation();
 
 		batch = new SpriteBatch();
 		spriteSheet = new TextureAtlas(Gdx.files.internal("game.atlas"));

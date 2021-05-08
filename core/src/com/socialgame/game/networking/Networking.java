@@ -2,7 +2,8 @@ package com.socialgame.game.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.socialgame.game.player.PlayerCustomisation;
+import com.socialgame.game.util.customisation.Customisation;
+import com.socialgame.game.util.customisation.UnlinkedCustomisation;
 
 import java.util.Arrays;
 
@@ -59,11 +60,11 @@ public class Networking {
 
         }
 
-        public PlayerInfo(int connectionID, PlayerCustomisation customisation) {
+        public PlayerInfo(int connectionID, Customisation customisation) {
             this(connectionID, customisation, 0, 0);
         }
 
-        public PlayerInfo(int connectionID, PlayerCustomisation customisation, float x, float y) {
+        public PlayerInfo(int connectionID, Customisation customisation, float x, float y) {
             this.connectionID = connectionID;
             this.hatSelection = customisation.getHatSelection();
             this.topSelection = customisation.getTopSelection();
@@ -72,12 +73,8 @@ public class Networking {
             this.y = y;
         }
 
-        public PlayerCustomisation getCustomisation() {
-            PlayerCustomisation customisation = new PlayerCustomisation();
-            customisation.setHatSelection(hatSelection);
-            customisation.setTopSelection(topSelection);
-            customisation.setColorSelection(colorSelection);
-            return customisation;
+        public Customisation getCustomisation() {
+            return new UnlinkedCustomisation(colorSelection, hatSelection, topSelection);
         }
 
         @Override
@@ -145,7 +142,7 @@ public class Networking {
 
     // region Initial connection classes
 
-    public static JoinRequest joinRequest(PlayerCustomisation customisation, String password) {
+    public static JoinRequest joinRequest(Customisation customisation, String password) {
         JoinRequest obj = new JoinRequest();
         obj.hatSelection = customisation.getHatSelection();
         obj.topSelection = customisation.getTopSelection();
@@ -284,12 +281,8 @@ public class Networking {
         public int colorSelection;
         public String password;
 
-        public PlayerCustomisation getCustomisation() {
-            PlayerCustomisation customisation = new PlayerCustomisation();
-            customisation.setHatSelection(hatSelection);
-            customisation.setTopSelection(topSelection);
-            customisation.setColorSelection(colorSelection);
-            return customisation;
+        public Customisation getCustomisation() {
+            return new UnlinkedCustomisation(colorSelection, hatSelection, topSelection);
         }
 
         @Override
