@@ -9,8 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.Player;
-import com.socialgame.game.player.PlayerCustomisation;
+import com.socialgame.game.util.customisation.Customisation;
 import com.socialgame.game.player.clothing.Hat;
+import com.socialgame.game.util.customisation.LinkedCustomisation;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,11 @@ public class CustomiseScreen extends MenuScreen {
      * This is defined as it's own class to avoid repeating code with anonymous classes.
      */
     private static class ColorButtonInputListener extends InputListener {
-        private final PlayerCustomisation customisation;
+        private final Customisation customisation;
         private final ArrayList<Actor> actors;
         private final int colorIdx;
 
-        public ColorButtonInputListener(PlayerCustomisation customisation, ArrayList<Actor> actors, int colorIdx) {
+        public ColorButtonInputListener(Customisation customisation, ArrayList<Actor> actors, int colorIdx) {
             this.customisation = customisation;
             this.actors = actors;
             this.colorIdx = colorIdx;
@@ -45,10 +46,10 @@ public class CustomiseScreen extends MenuScreen {
      * This is defined as it's own class to avoid repeating code with anonymous classes.
      */
     private static class HatButtonInputListener extends InputListener {
-        private final PlayerCustomisation customisation;
+        private final Customisation customisation;
         private final int hatIdx;
 
-        public HatButtonInputListener(PlayerCustomisation customisation, int hatIdx) {
+        public HatButtonInputListener(Customisation customisation, int hatIdx) {
             this.customisation = customisation;
             this.hatIdx = hatIdx;
         }
@@ -60,12 +61,12 @@ public class CustomiseScreen extends MenuScreen {
         }
     }
 
-    protected final PlayerCustomisation customisation;
+    protected final LinkedCustomisation customisation;
     private final Hat hatPreview;
 
     public CustomiseScreen(final SocialGame game) {
         super(game);
-        this.customisation = this.game.customisation;
+        this.customisation = (LinkedCustomisation) this.game.customisation;
 
         // Array list of all HUD elements to change the color of when selecting a new color
         // All items of clothing should be added to this array

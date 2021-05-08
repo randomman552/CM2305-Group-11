@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.player.MultiSprite;
-import com.socialgame.game.player.PlayerCustomisation;
+import com.socialgame.game.util.customisation.Customisation;
 
 // FIXME: 05/04/2021 Hats do not all align in the same way when drawn on the player.
 // This can be fixed with an individual offset for each hat type, or standardisation of sprites.
@@ -27,13 +27,13 @@ public class Hat extends MultiSprite {
     /*hat6*/ new Vector3(-0.16f,-0.02f,-17)
     };
 
-    private PlayerCustomisation customisation;
+    private Customisation customisation;
 
     public Hat(SocialGame game) {
         this(game, game.customisation);
     }
 
-    public Hat(SocialGame game, PlayerCustomisation customisation) {
+    public Hat(SocialGame game, Customisation customisation) {
         super(game, SIZE.x, SIZE.y);
         setCustomisation(customisation);
     }
@@ -53,7 +53,7 @@ public class Hat extends MultiSprite {
     /**
      * Update hat customisation based on passed customisation object
      */
-    public void setCustomisation(PlayerCustomisation customisation) {
+    public void setCustomisation(Customisation customisation) {
         this.customisation = customisation;
         setColor(customisation.getColor());
         setHatType(customisation.getHatSelection());

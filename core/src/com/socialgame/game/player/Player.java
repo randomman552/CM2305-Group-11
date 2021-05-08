@@ -17,6 +17,7 @@ import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.clothing.Hat;
+import com.socialgame.game.util.customisation.Customisation;
 
 public class Player extends Interactable {
     /**
@@ -100,7 +101,7 @@ public class Player extends Interactable {
     private long walkSoundID;
 
     private boolean isSaboteur;
-    private final PlayerCustomisation customisation;
+    private final Customisation customisation;
     private int invSlot;
 
     private final Hat hat;
@@ -113,7 +114,7 @@ public class Player extends Interactable {
         this(game, id, game.customisation);
     }
 
-    public Player(SocialGame game, int id, PlayerCustomisation customisation) {
+    public Player(SocialGame game, int id, Customisation customisation) {
         super(game, WIDTH, HEIGHT);
 
         inventory = new Item[2];

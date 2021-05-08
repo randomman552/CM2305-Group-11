@@ -3,7 +3,7 @@ package com.socialgame.game.networking;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.socialgame.game.player.PlayerCustomisation;
+import com.socialgame.game.util.customisation.Customisation;
 
 import java.io.IOException;
 
@@ -111,7 +111,7 @@ public class GameServer extends Server {
      * @param customisation The customisation object of the player
      * @return The new players id if added, -1 otherwise
      */
-    public int addPlayer(int connectionID, PlayerCustomisation customisation) {
+    public int addPlayer(int connectionID, Customisation customisation) {
         for (int i = 0; i < connectedPlayers.length; i++) {
             if (connectedPlayers[i] == null) {
                 connectedPlayers[i] = new Networking.PlayerInfo(connectionID, customisation);
