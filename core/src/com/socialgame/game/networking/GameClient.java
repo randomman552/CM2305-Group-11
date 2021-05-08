@@ -122,7 +122,7 @@ public class GameClient extends Client {
                 game.getRandom().setSeed(update.seed);
 
                 if (game.getScreen() instanceof GameScreen) {
-                    ((GameScreen) game.getScreen()).releasePlayers();
+                    ((GameScreen) game.getScreen()).setStartGameFlag(true);
                 }
 
             }

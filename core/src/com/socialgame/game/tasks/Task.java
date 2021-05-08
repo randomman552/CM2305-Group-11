@@ -15,6 +15,8 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
+import com.socialgame.game.tasks.async.ClockCalibrationTask;
+import com.socialgame.game.tasks.async.SimonSaysTask;
 
 /**
  * Class from which all tasks are derived.
@@ -39,6 +41,25 @@ public abstract class Task extends Interactable {
      * Variable storing whether onComplete and onFail have been called once before.
      */
     private boolean eventsFired = false;
+
+    /**
+     * Factory method to create a task.
+     * @param i The index of the task type
+     * @param game Game value to pass in
+     * @param x X value to spawn task at
+     * @param y Y value to spawn task at
+     * @return Task of desired type
+     */
+    public static Task create(int i, SocialGame game, float x, float y) {
+        i = i % 2;
+        switch (i) {
+            case 0:
+                return new ClockCalibrationTask(game, x, y);
+            case 1:
+                return new SimonSaysTask(game, x, y);
+        }
+        return null;
+    }
 
     public Task(SocialGame game, float x, float y) {
         super(game, x, y, 1, 1);
