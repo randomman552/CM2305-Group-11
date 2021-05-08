@@ -299,6 +299,7 @@ public class Player extends Interactable {
 
     public void takeDamage(float amount) {
         health -= amount;
+        game.playSound("death", this);
     }
 
     @Override
