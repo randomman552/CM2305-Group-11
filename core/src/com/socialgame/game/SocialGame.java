@@ -427,7 +427,7 @@ public class SocialGame extends Game {
 		if (screen instanceof GameScreen) {
 			return ((GameScreen) screen).getHud();
 		}
-		return new HUD(this);
+		return null;
 	}
 	
 	/**

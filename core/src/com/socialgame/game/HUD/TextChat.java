@@ -44,7 +44,7 @@ public class TextChat extends Table {
     }
 
     public void sendMessage(String message) {
-        String sender = Integer.toString(game.getClient().getID());
+        String sender = game.getMainPlayer().getName();
         game.getClient().sendTCP(Networking.textMessage(sender, message));
     }
 

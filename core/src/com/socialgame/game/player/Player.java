@@ -144,6 +144,7 @@ public class Player extends Interactable {
 
         // Give unique player id
         setID(id);
+        setName("Player " + (getID() + 1));
     }
 
     @Override
