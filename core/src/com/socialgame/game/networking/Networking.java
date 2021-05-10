@@ -26,6 +26,10 @@ public class Networking {
         // Register helper classes
         kryo.register(PlayerInfo[].class);
         kryo.register(PlayerInfo.class);
+        kryo.register(ItemInfo[].class);
+        kryo.register(ItemInfo.class);
+        kryo.register(TaskInfo[].class);
+        kryo.register(TaskInfo.class);
         kryo.register(int[].class);
 
         // Register update classes
@@ -42,6 +46,7 @@ public class Networking {
         kryo.register(TaskFinished.class);
         kryo.register(InitialiseGame.class);
         kryo.register(StartGame.class);
+        kryo.register(EndGame.class);
     }
 
     static public void resetPools() {
@@ -52,13 +57,13 @@ public class Networking {
      * Class used to convey player information between clients
      */
     public static class PlayerInfo {
-        public int connectionID;
-        public int hatSelection;
-        public int topSelection;
-        public int colorSelection;
-        public int[] inventory = new int[2];
-        public boolean isSaboteur;
-        public float x, y;
+        public int connectionID = 0;
+        public int hatSelection = 0;
+        public int topSelection = 0;
+        public int colorSelection = 0;
+        public ItemInfo[] inventory = new ItemInfo[2];
+        public boolean isSaboteur, isAlive = false;
+        public float x, y = 0;
 
         public PlayerInfo() {
 
@@ -96,7 +101,38 @@ public class Networking {
         }
     }
 
-    // region Network classes pool access methods
+    /**
+     * Class used to convey item information between clients.
+     */
+    public static class ItemInfo {
+        public int id, type = 0;
+
+        @Override
+        public String toString() {
+            return "ItemInfo{" +
+                    "id=" + id +
+                    ", type=" + type +
+                    '}';
+        }
+    }
+
+    /**
+     * Class used to convey task information between clients.
+     */
+    public static class TaskInfo {
+        public int id, type = 0;
+        public boolean completed, failed = false;
+
+        @Override
+        public String toString() {
+            return "TaskInfo{" +
+                    "id=" + id +
+                    ", type=" + type +
+                    '}';
+        }
+    }
+
+    // region Network classes access methods
 
     // region Player updates
 
@@ -183,10 +219,18 @@ public class Networking {
         return new InitialiseGame();
     }
 
-    public static StartGame startGame(PlayerInfo[] playerInfos, long mapSeed) {
+    public static StartGame startGame(PlayerInfo[] playerInfos, TaskInfo[] taskInfos, ItemInfo[] itemInfos, long mapSeed) {
         StartGame obj = new StartGame();
         obj.playerInfos = playerInfos;
+        obj.taskInfos = taskInfos;
+        obj.itemInfos = itemInfos;
         obj.seed = mapSeed;
+        return obj;
+    }
+
+    public static EndGame endGame(String winner) {
+        EndGame obj = new EndGame();
+        obj.winner = winner;
         return obj;
     }
 
@@ -369,13 +413,32 @@ public class Networking {
      * Class sent by server to synchronise clients on game start.
      */
     public static class StartGame {
-        PlayerInfo[] playerInfos = new PlayerInfo[GameServer.MAX_PLAYERS];
+        public TaskInfo[] taskInfos = new TaskInfo[0];
+        public ItemInfo[] itemInfos = new ItemInfo[0];
+        PlayerInfo[] playerInfos = new PlayerInfo[0];
         long seed;
 
         @Override
         public String toString() {
             return "StartGame{" +
-                    "playerInfos=" + Arrays.toString(playerInfos) +
+                    "taskInfos=" + Arrays.toString(taskInfos) +
+                    ", itemInfos=" + Arrays.toString(itemInfos) +
+                    ", playerInfos=" + Arrays.toString(playerInfos) +
+                    ", seed=" + seed +
+                    '}';
+        }
+    }
+
+    /**
+     * Class send by server to end a game.
+     */
+    public static class EndGame {
+        public String winner;
+
+        @Override
+        public String toString() {
+            return "EndGame{" +
+                    "winner='" + winner + '\'' +
                     '}';
         }
     }

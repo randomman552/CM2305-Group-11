@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -29,20 +28,16 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Item;
-import com.socialgame.game.items.weapons.*;
 import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerInputProcessor;
 import com.socialgame.game.tasks.Task;
-import com.socialgame.game.tasks.async.ClockCalibrationTask;
-import com.socialgame.game.tasks.async.SimonSaysTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.Collections;
 
 public class GameScreen implements Screen {
     protected final SocialGame game;
@@ -93,6 +88,8 @@ public class GameScreen implements Screen {
     private static int[] startLayers;
 
     private boolean startGameFlag = false;
+    private Networking.TaskInfo[] taskInfos = new Networking.TaskInfo[0];
+    private Networking.ItemInfo[] itemInfos = new Networking.ItemInfo[0];
 
     public int getLayerIndex(String layer) {
         return tiledMap.getLayers().getIndex(layer);
@@ -211,26 +208,25 @@ public class GameScreen implements Screen {
         }
     }
 
-    synchronized public void setStartGameFlag(boolean flag) {
-        startGameFlag = flag;
+    synchronized public void setStartGameFlag(boolean flag, Networking.PlayerInfo[] playerInfos, Networking.TaskInfo[] taskInfos, Networking.ItemInfo[] itemInfos) {
+        this.startGameFlag = flag;
+        this.taskInfos = taskInfos;
+        this.itemInfos = itemInfos;
     }
 
-    private void spawnTasks(int taskCap) {
-        // Shuffles the MapObjects array
-        for (int i = 0; i < taskObjects.size(); i++) {
-            int randomIndexToSwap = game.getRandom().nextInt(taskObjects.size());
-            MapObject temp = taskObjects.get(randomIndexToSwap);
-            taskObjects.set(randomIndexToSwap, taskObjects.get(i));
-            taskObjects.set(i, temp);
-        }
+    synchronized public void setStartGameFlag(boolean flag) {
+        this.startGameFlag = flag;
+    }
 
+    private void spawnTasks(Networking.TaskInfo[] taskInfos) {
+        Collections.shuffle(taskObjects, game.getRandom());
         // Picks a random MapObject from the array to use for a task location
-        for (int i = 0; i < taskCap; i++) {
+        for (int i = 0; i < taskInfos.length && i < taskObjects.size(); i++) {
             MapObject mapObject = taskObjects.get(i);
             if (mapObject instanceof EllipseMapObject) {
                 float x = ((EllipseMapObject) mapObject).getEllipse().x * unitScale;
                 float y = ((EllipseMapObject) mapObject).getEllipse().y * unitScale;
-                tasks.add(Task.create(i, game, x + 0.5f, y + 0.5f));
+                tasks.add(Task.create(taskInfos[i].type, game, x + 0.5f, y + 0.5f));
             }
         }
 
@@ -238,19 +234,12 @@ public class GameScreen implements Screen {
         for (Task task: tasks) {
             stage.addActor(task);
         }
-
     }
 
-    public void spawnWeapons(int weaponCap) {
-        for (int i = 0; i < weaponObjects.size(); i++) {
-            int randomIndexToSwap = game.getRandom().nextInt(weaponObjects.size());
-            MapObject temp = weaponObjects.get(randomIndexToSwap);
-            weaponObjects.set(randomIndexToSwap, weaponObjects.get(i));
-            weaponObjects.set(i, temp);
-        }
-
+    public void spawnWeapons(Networking.ItemInfo[] itemInfos) {
+        Collections.shuffle(weaponObjects, game.getRandom());
         // Picks a random MapObject from the array to use for a task location
-        for (int i = 0; i < weaponCap; i++) {
+        for (int i = 0; i < itemInfos.length && i < taskObjects.size(); i++) {
             MapObject mapObject = weaponObjects.get(i);
             if (mapObject instanceof RectangleMapObject) {
                 float x = ((RectangleMapObject) mapObject).getRectangle().x * unitScale;
@@ -272,8 +261,8 @@ public class GameScreen implements Screen {
     }
 
     private void startGame() {
-        spawnTasks(6);
-        spawnWeapons(6);
+        spawnTasks(taskInfos);
+        spawnWeapons(itemInfos);
         releasePlayers();
 
         setStartGameFlag(false);

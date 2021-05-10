@@ -135,6 +135,7 @@ public class Player extends Interactable {
         // Clothing items and other customisation settings
         hat = new Hat(game, customisation);
         this.customisation = customisation;
+        hat.setID(getLastFreeID());
 
         // Walking sound setup
         walkSound = game.soundAtlas.getSound("footsteps");

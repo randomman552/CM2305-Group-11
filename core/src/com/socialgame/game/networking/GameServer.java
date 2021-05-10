@@ -3,19 +3,14 @@ package com.socialgame.game.networking;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.socialgame.game.util.customisation.Customisation;
 import com.socialgame.game.GameCoordinator;
+import com.socialgame.game.util.customisation.Customisation;
 
 import java.io.IOException;
 
 public class GameServer extends Server {
     public static final int MAX_PLAYERS = 16;
-
-    /**
-     * Array of information about players.
-     */
-    private final Networking.PlayerInfo[] connectedPlayers = new Networking.PlayerInfo[MAX_PLAYERS];
-    private final GameCoordinator coordinator = new GameCoordinator();
+    private static final int MIN_PLAYERS = 1;
 
     private static class GameServerListener extends Listener {
         private final GameServer server;
@@ -60,13 +55,27 @@ public class GameServer extends Server {
             }
             else if (object instanceof Networking.InitialiseGame) {
                 if (connection.getRemoteAddressTCP().toString().split(":")[0].equals("/127.0.0.1")) {
-                    int[] saboteurIDs = server.coordinator.pickSaboteurs(server.getNumPlayers());
-                    for (int i : saboteurIDs) {
-                        server.setSaboteur(i);
+                    if (server.getNumPlayers() >= MIN_PLAYERS) {
+                        server.initialiseGame();
+                        server.sendToAllTCP(Networking.startGame(server.connectedPlayers, server.tasks, server.items, server.getSeed()));
+                        server.coordinator.setStarted(true);
                     }
-                    server.sendToAllTCP(Networking.startGame(server.connectedPlayers, server.getSeed()));
-                    server.coordinator.setStarted(true);
                 }
+            }
+            else if (object instanceof Networking.TaskFinished) {
+                Networking.TaskFinished update = ((Networking.TaskFinished) object);
+                Networking.TaskInfo taskInfo = server.getTask(update.taskID);
+                taskInfo.completed = true;
+                taskInfo.failed = update.failed;
+                server.sendToAllExceptTCP(connection.getID(), object);
+                server.checkWinConditions();
+            }
+            else if (object instanceof Networking.PlayerTakeDamageUpdate) {
+                Networking.PlayerTakeDamageUpdate update = ((Networking.PlayerTakeDamageUpdate) object);
+                Networking.PlayerInfo playerInfo = server.connectedPlayers[update.playerID];
+                playerInfo.isAlive = false;
+                server.sendToAllExceptTCP(connection.getID(), object);
+                server.checkWinConditions();
             }
             else {
                 server.sendToAllExceptTCP(connection.getID(), object);
@@ -78,6 +87,11 @@ public class GameServer extends Server {
             server.removePlayer(connection.getID());
         }
     }
+
+    private final Networking.PlayerInfo[] connectedPlayers = new Networking.PlayerInfo[MAX_PLAYERS];
+    private Networking.TaskInfo[] tasks = new Networking.TaskInfo[0];
+    private Networking.ItemInfo[] items = new Networking.ItemInfo[0];
+    private final GameCoordinator coordinator = new GameCoordinator();
 
     private final String password;
 
@@ -98,12 +112,21 @@ public class GameServer extends Server {
         bind(TCPPort, UDPPort);
     }
 
+
     public int getNumPlayers() {
         int count = 0;
         for (Networking.PlayerInfo connectedPlayer : connectedPlayers) {
             if (connectedPlayer != null) count++;
         }
         return count;
+    }
+
+    public int getNumSaboteurs() {
+        int num = 0;
+        for (Networking.PlayerInfo player: connectedPlayers) {
+            if (player != null && player.isSaboteur) num++;
+        }
+        return num;
     }
 
     /**
@@ -158,12 +181,53 @@ public class GameServer extends Server {
         }
     }
 
+
+    public Networking.TaskInfo getTask(int id) {
+        for (Networking.TaskInfo taskInfo: tasks) {
+            if (taskInfo != null && taskInfo.id == id) {
+                return taskInfo;
+            }
+        }
+        return null;
+    }
+
+    public int getTasksComplete() {
+        int num = 0;
+        for (Networking.TaskInfo task: tasks) {
+            if (task.completed) num++;
+        }
+        return num;
+    }
+
+    public int getTasksTodo() {
+        return getTasksComplete() - tasks.length;
+    }
+
+
     /**
      * Get the seed to communicate to clients to use as the map seed.
      * @return random seed for map generation.
      */
     public long getSeed() {
         return coordinator.getSeed();
+    }
+
+    private void initialiseGame() {
+        int[] saboteurIDs = coordinator.pickSaboteurs(getNumPlayers());
+        for (int i : saboteurIDs) {
+            setSaboteur(i);
+        }
+        tasks = coordinator.generateTasks(getNumPlayers());
+        items = coordinator.generateItems(getNumPlayers());
+    }
+
+
+    private void checkWinConditions() {
+        // Check if saboteurs win
+        if (getNumPlayers() <= getNumSaboteurs()) sendToAllTCP(Networking.endGame("Saboteurs"));
+
+        // Check if players win
+        if (getTasksTodo() <= 0) sendToAllTCP(Networking.endGame("Ducks"));
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.socialgame.game.networking;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.maps.MapObject;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -75,8 +73,10 @@ public class GameClient extends Client {
                             newPlayer.setPositionAboutOrigin(info.x, info.y);
 
                             // Inventory sync
-                            for (int j: info.inventory) {
-                                GameObject item = GameObject.objects.get(j);
+                            for (Networking.ItemInfo itemInfo: info.inventory) {
+                                if (itemInfo == null) continue;
+
+                                GameObject item = GameObject.objects.get(itemInfo.id);
                                 if (item instanceof Item)
                                     ((Item) item).interact(newPlayer);
                             }
@@ -122,7 +122,7 @@ public class GameClient extends Client {
                 game.getRandom().setSeed(update.seed);
 
                 if (game.getScreen() instanceof GameScreen) {
-                    ((GameScreen) game.getScreen()).setStartGameFlag(true);
+                    ((GameScreen) game.getScreen()).setStartGameFlag(true, update.playerInfos, update.taskInfos, update.itemInfos);
                 }
 
             }

@@ -35,6 +35,15 @@ public abstract class GameObject extends Actor implements Disposable {
         return -1;
     }
 
+    protected static int getLastFreeID() {
+        for (int i = lastID; i > 0; i++) {
+            if (objects.get(i) == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public static void deleteAll() {
         for (GameObject object : objects.values()) {
             object.delete(false);
