@@ -38,7 +38,10 @@ public class Networking {
         kryo.register(LeaveNotification.class);
         kryo.register(JoinRequest.class);
         kryo.register(JoinAccepted.class);
+        kryo.register(JoinRefused.class);
         kryo.register(TaskFinished.class);
+        kryo.register(InitialiseGame.class);
+        kryo.register(StartGame.class);
     }
 
     static public void resetPools() {
@@ -54,6 +57,7 @@ public class Networking {
         public int topSelection;
         public int colorSelection;
         public int[] inventory = new int[2];
+        public boolean isSaboteur;
         public float x, y;
 
         public PlayerInfo() {
@@ -69,6 +73,7 @@ public class Networking {
             this.hatSelection = customisation.getHatSelection();
             this.topSelection = customisation.getTopSelection();
             this.colorSelection = customisation.getColorSelection();
+            this.isSaboteur = false;
             this.x = x;
             this.y = y;
         }
@@ -167,6 +172,21 @@ public class Networking {
     public static LeaveNotification leaveNotification(int playerID) {
         LeaveNotification obj = new LeaveNotification();
         obj.playerID = playerID;
+        return obj;
+    }
+
+    // endregion
+
+    // region GameCoordinator updates
+
+    public static InitialiseGame initialiseGame() {
+        return new InitialiseGame();
+    }
+
+    public static StartGame startGame(PlayerInfo[] playerInfos, long mapSeed) {
+        StartGame obj = new StartGame();
+        obj.playerInfos = playerInfos;
+        obj.seed = mapSeed;
         return obj;
     }
 
@@ -332,6 +352,35 @@ public class Networking {
     }
 
     //endregion
+
+    // region GameCoordinator updates
+
+    /**
+     * Class sent by clients to instruct server to start the game.
+     */
+    public static class InitialiseGame {
+        @Override
+        public String toString() {
+            return "InitialiseGame{}";
+        }
+    }
+
+    /**
+     * Class sent by server to synchronise clients on game start.
+     */
+    public static class StartGame {
+        PlayerInfo[] playerInfos = new PlayerInfo[GameServer.MAX_PLAYERS];
+        long seed;
+
+        @Override
+        public String toString() {
+            return "StartGame{" +
+                    "playerInfos=" + Arrays.toString(playerInfos) +
+                    '}';
+        }
+    }
+
+    // endregion
 
     // region Task sync updates
 

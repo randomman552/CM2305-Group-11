@@ -1,5 +1,7 @@
 package com.socialgame.game.networking;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.maps.MapObject;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -7,6 +9,7 @@ import com.socialgame.game.SocialGame;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.player.Player;
+import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.tasks.Task;
 
 import java.io.IOException;
@@ -63,8 +66,7 @@ public class GameClient extends Client {
 
                 // If our mainPlayer has not been set, initial sync is required
                 if (game.mainPlayer == null) {
-                    game.mainPlayer = new Player(game, update.playerID);
-                    game.getMainStage().addActor(game.mainPlayer);
+                    game.setMainPlayer(new Player(game, update.playerID));
 
                     for (int i = 0; i < GameServer.MAX_PLAYERS; i++) {
                         if (i != update.playerID && update.playerInfos[i] != null) {
@@ -109,6 +111,21 @@ public class GameClient extends Client {
                 }
                 catch (NullPointerException | ClassCastException ignored) {}
             }
+            else if (object instanceof Networking.StartGame) {
+                Networking.StartGame update = ((Networking.StartGame) object);
+                for (int i = 0; i < update.playerInfos.length; i++) {
+                    if (GameObject.objects.get(i) instanceof Player) {
+                        Player player = ((Player) GameObject.objects.get(i));
+                        player.setIsSaboteur(update.playerInfos[i].isSaboteur);
+                    }
+                }
+                game.getRandom().setSeed(update.seed);
+
+                if (game.getScreen() instanceof GameScreen) {
+                    ((GameScreen) game.getScreen()).setStartGameFlag(true);
+                }
+
+            }
         }
 
         @Override
@@ -122,7 +139,7 @@ public class GameClient extends Client {
         }
     }
 
-    public SocialGame game;
+    private SocialGame game;
 
     public GameClient(SocialGame game, String password) throws IOException {
         this(game, password, "localhost");

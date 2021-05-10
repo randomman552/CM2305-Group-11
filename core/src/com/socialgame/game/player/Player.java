@@ -19,6 +19,7 @@ import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.clothing.Hat;
 import com.socialgame.game.util.customisation.Customisation;
 
+
 public class Player extends Interactable {
     /**
      * Height of all players in units
@@ -159,7 +160,7 @@ public class Player extends Interactable {
         // Central rectangle
         PolygonShape rectShape = new PolygonShape();
         float rectX = getHeight()/6 - (getWidth()/24);
-        float rectY = getHeight()/6;
+        float rectY = getHeight()/6.25f;
         rectShape.setAsBox(rectX, rectY, new Vector2(0, -getHeight()/3), 0);
         fixtureDef.shape = rectShape;
         body.createFixture(fixtureDef);
@@ -208,6 +209,15 @@ public class Player extends Interactable {
         return health > 0;
     }
 
+
+    public boolean getIsSaboteur(){
+        return isSaboteur;
+    }
+
+    public void setIsSaboteur(boolean bool) {
+        isSaboteur = bool;
+    }
+
     public void setHealth(float val) {
         health = val;
     }
@@ -236,9 +246,12 @@ public class Player extends Interactable {
             drawItem(batch, curCol.a);
             return;
         }
-        super.draw(batch, parentAlpha);
-        drawClothing(batch, curCol.a);
-        drawItem(batch, curCol.a);
+
+        if(!(!isAlive() && game.mainPlayer.isAlive())){
+            super.draw(batch, parentAlpha);
+            drawClothing(batch, curCol.a);
+            drawItem(batch, curCol.a);
+        }
     }
 
     private void drawItem(Batch batch, float parentAlpha) {

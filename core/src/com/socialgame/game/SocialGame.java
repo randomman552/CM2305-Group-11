@@ -30,6 +30,7 @@ import com.socialgame.game.util.SoundAtlas;
 import com.socialgame.game.util.customisation.LinkedCustomisation;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SocialGame extends Game {
 	/**
@@ -73,6 +74,8 @@ public class SocialGame extends Game {
 	public Settings settings;
 
 	public LinkedCustomisation customisation;
+
+	private Random random;
 
 	/*
 	 * TODO: Customisation rewards
@@ -354,6 +357,22 @@ public class SocialGame extends Game {
 		return new ArrayList<>();
 	}
 
+	public void setMainPlayer(Player player) {
+		if (getScreen() instanceof GameScreen) {
+			mainPlayer = player;
+			GameScreen screen = ((GameScreen) getScreen());
+			screen.spawnPlayer(player);
+		}
+	}
+
+	public Player getMainPlayer() {
+		return ((Player) mainPlayer);
+	}
+
+	public Random getRandom() {
+		return random;
+	}
+
 	/**
 	 * Method to get the HUD of the game screen.
 	 * If the current screen is not a game screen, a new HUD instance will be returned.
@@ -401,6 +420,8 @@ public class SocialGame extends Game {
 		soundAtlas = new SoundAtlas();
 		soundAtlas.setMusicVolumes(settings.getAdjustedMusicVol());
 		elapsedTime = 0;
+
+		random = new Random();
 
 		this.setScreen(new MainMenuScreen(this));
 		soundAtlas.getSound("death").play(settings.getAdjustedSfxVol());

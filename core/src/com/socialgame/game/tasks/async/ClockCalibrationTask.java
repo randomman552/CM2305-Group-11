@@ -152,8 +152,11 @@ public class ClockCalibrationTask extends Task {
     public ClockCalibrationTask(final SocialGame game, float x, float y) {
         super(game, x, y);
 
-        // region Font creation
+        //Override task class texture
+        texture = game.spriteSheet.findRegion("clockTask");
 
+        // region Font creation
+        
         // Create font parameters for title and time fonts
         FreeTypeFontParameter titleFontParam = new FreeTypeFontParameter();
         FreeTypeFontParameter timeFontParam = new FreeTypeFontParameter();

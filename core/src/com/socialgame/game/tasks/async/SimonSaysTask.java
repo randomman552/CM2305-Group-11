@@ -64,6 +64,9 @@ public class SimonSaysTask extends Task {
         super(game, x, y);
         lastPlayedTime = game.elapsedTime;
 
+        //Override task class texture
+        texture = game.spriteSheet.findRegion("simonSaysTask");
+
         //region Button colours
         Color c1 = new Color(1, 0, 0, 1);
         Color c2 = new Color(0, 1, 0, 1);

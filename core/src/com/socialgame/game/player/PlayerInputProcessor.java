@@ -34,7 +34,6 @@ public class PlayerInputProcessor implements InputProcessor {
         if (player == null){
             return;
         }
-
         Vector2 vel = player.body.getLinearVelocity();
         float maxVel = (player.isAlive())? Player.MAX_VEL : Player.MAX_VEL * Player.SPEC_VEL_MOD;
         float rawAcceleration = Player.ACCELERATION;

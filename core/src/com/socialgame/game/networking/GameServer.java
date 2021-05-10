@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.socialgame.game.util.customisation.Customisation;
+import com.socialgame.game.GameCoordinator;
 
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ public class GameServer extends Server {
      * Array of information about players.
      */
     private final Networking.PlayerInfo[] connectedPlayers = new Networking.PlayerInfo[MAX_PLAYERS];
+    private final GameCoordinator coordinator = new GameCoordinator();
 
     private static class GameServerListener extends Listener {
         private final GameServer server;
@@ -29,6 +31,13 @@ public class GameServer extends Server {
                 Networking.JoinRequest update = ((Networking.JoinRequest) object);
                 // Check password
                 if (!update.password.equals(server.password)) {
+                    connection.sendTCP(Networking.joinRefused("Incorrect password"));
+                    return;
+                }
+
+                // Check if game has already started
+                if (server.coordinator.isStarted()) {
+                    connection.sendTCP(Networking.joinRefused("Game has already started"));
                     return;
                 }
 
@@ -48,6 +57,16 @@ public class GameServer extends Server {
                 info.x = update.x;
                 info.y = update.y;
                 server.sendToAllExceptTCP(connection.getID(), object);
+            }
+            else if (object instanceof Networking.InitialiseGame) {
+                if (connection.getRemoteAddressTCP().toString().split(":")[0].equals("/127.0.0.1")) {
+                    int[] saboteurIDs = server.coordinator.pickSaboteurs(server.getNumPlayers());
+                    for (int i : saboteurIDs) {
+                        server.setSaboteur(i);
+                    }
+                    server.sendToAllTCP(Networking.startGame(server.connectedPlayers, server.getSeed()));
+                    server.coordinator.setStarted(true);
+                }
             }
             else {
                 server.sendToAllExceptTCP(connection.getID(), object);
@@ -77,6 +96,14 @@ public class GameServer extends Server {
 
         start();
         bind(TCPPort, UDPPort);
+    }
+
+    public int getNumPlayers() {
+        int count = 0;
+        for (Networking.PlayerInfo connectedPlayer : connectedPlayers) {
+            if (connectedPlayer != null) count++;
+        }
+        return count;
     }
 
     /**
@@ -119,6 +146,24 @@ public class GameServer extends Server {
             }
         }
         return -1;
+    }
+
+    /**
+     * Set the player with the given ID as a saboteur, if they are connected.
+     * @param playerID The ID of the player.
+     */
+    public void setSaboteur(int playerID) {
+        if (connectedPlayers[playerID] != null) {
+            connectedPlayers[playerID].isSaboteur = true;
+        }
+    }
+
+    /**
+     * Get the seed to communicate to clients to use as the map seed.
+     * @return random seed for map generation.
+     */
+    public long getSeed() {
+        return coordinator.getSeed();
     }
 
     @Override
