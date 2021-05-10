@@ -20,9 +20,12 @@ import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import java.lang.Thread;
+import java.util.concurrent.TimeoutException;
+
 
 public class HUD extends Group {
     protected final SocialGame game;
@@ -34,6 +37,7 @@ public class HUD extends Group {
     private final Table mapTable;
     private final ImageButton dropButton;
     private final TextChat chat;
+
 
     public HUD(final SocialGame game) {
         this.game = game;
@@ -244,9 +248,37 @@ public class HUD extends Group {
     }
 
     public void incrementHazard() {
+        //TODO make end statement when bar is full
         float step = 1f / game.getTasks().size();
-        float curStep = progressBar.getValue() * game.getTasks().size();
+        float curStep = hazardBar.getValue() * game.getTasks().size();
         hazardBar.setValue(curStep + step);
+    }
+
+
+    public void setHazardBar(){
+        //TODO call this when a game starts
+
+        Thread thread = new Thread(){
+
+
+
+            @Override
+            public void run(){
+
+                while (true){
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    float curValue = hazardBar.getValue();
+                    hazardBar.setValue(curValue + 0.05f);
+                }
+            }
+
+        };
+        thread.start();
     }
 
 
