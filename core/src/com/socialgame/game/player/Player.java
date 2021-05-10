@@ -15,6 +15,7 @@ import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.baseclasses.Interactable;
 import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.baseclasses.Weapon;
+import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.networking.Networking;
 import com.socialgame.game.player.clothing.Hat;
 import com.socialgame.game.util.customisation.Customisation;
@@ -101,7 +102,7 @@ public class Player extends Interactable {
     private final Sound walkSound;
     private long walkSoundID;
 
-    private boolean isSaboteur;
+    private boolean saboteur;
     private final Customisation customisation;
     private int invSlot;
 
@@ -143,6 +144,7 @@ public class Player extends Interactable {
 
         // Give unique player id
         setID(id);
+        setName("Player " + (getID() + 1));
     }
 
     @Override
@@ -206,26 +208,46 @@ public class Player extends Interactable {
         return idleAnim.getKeyFrame(time);
     }
 
+
+    public boolean isSaboteur(){
+        return saboteur;
+    }
+
+    public void setSaboteur(boolean bool) {
+        saboteur = bool;
+    }
+
+
     public boolean isAlive() {
         return health > 0;
     }
 
-
-    public boolean getIsSaboteur(){
-        return isSaboteur;
-    }
-
-    public void setIsSaboteur(boolean bool) {
-        isSaboteur = bool;
-    }
-
-    public void setHealth(float val) {
+    private void setHealth(float val) {
         health = val;
+        if (!isAlive()) setVisible(false);
     }
 
-    public float getHealth() {
+    private float getHealth() {
         return health;
     }
+
+    public void takeDamage(float amount) {
+        setHealth(health - amount);
+        if (!isAlive()) {
+            game.playSound("death", this);
+
+            // If this is the main player, and we have just died, reveal all other players
+            if (game.mainPlayer == this) {
+                for (int i = 0; i < GameServer.MAX_PLAYERS; i++) {
+                    GameObject obj = objects.get(i);
+                    if (obj != null) obj.setVisible(true);
+                }
+            } else {
+                setVisible(false);
+            }
+        }
+    }
+
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -268,6 +290,7 @@ public class Player extends Interactable {
         hat.draw(batch, parentAlpha);
     }
 
+
     /**
      * Add the given item to the players inventory
      * Will drop currently held item if holding one
@@ -306,16 +329,18 @@ public class Player extends Interactable {
     }
 
     public boolean hasWeapon() {
+        // Prevent dead players from attacking live ones
+        if (!isAlive()) return false;
+
+        // If they have a weapon, they can attack
         for (Item item: inventory)
             if (item instanceof Weapon)
                 return true;
-        return false;
+
+        // If they are saboteur, they can attack
+        return isSaboteur();
     }
 
-    public void takeDamage(float amount) {
-        health -= amount;
-        game.playSound("death", this);
-    }
 
     @Override
     public void delete() {
@@ -333,7 +358,7 @@ public class Player extends Interactable {
         if (caller instanceof Player) {
             Player player = ((Player) caller);
             if (player == this) return;
-            if (player.isSaboteur || player.hasWeapon()) {
+            if (player.saboteur || player.hasWeapon()) {
                 game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getID(), getHealth()));
                 this.takeDamage(getHealth());
             }

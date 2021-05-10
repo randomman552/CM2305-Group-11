@@ -127,7 +127,14 @@ public class GameClient extends Client {
                 for (int i = 0; i < update.playerInfos.length; i++) {
                     if (GameObject.objects.get(i) instanceof Player) {
                         Player player = ((Player) GameObject.objects.get(i));
-                        player.setIsSaboteur(update.playerInfos[i].isSaboteur);
+                        player.setSaboteur(update.playerInfos[i].isSaboteur);
+
+                        if (player == game.getMainPlayer()) {
+                            String message = "You are a duck...";
+                            if (player.isSaboteur())
+                                message = "You are a saboteur...";
+                            game.getHud().getChat().receiveMessage("Game", message);
+                        }
                     }
                 }
                 game.getRandom().setSeed(update.seed);
@@ -139,7 +146,7 @@ public class GameClient extends Client {
             }
             else if (object instanceof Networking.EndGame) {
                 Networking.EndGame update = ((Networking.EndGame) object);
-                game.showEndScreen(update.saboteursWin && game.mainPlayer.getIsSaboteur() || !update.saboteursWin && !game.mainPlayer.getIsSaboteur());
+                game.showEndScreen(update.saboteursWin && game.mainPlayer.isSaboteur() || !update.saboteursWin && !game.mainPlayer.isSaboteur());
             }
             else if (object instanceof Networking.TextMessage) {
                 Networking.TextMessage update = ((Networking.TextMessage) object);
