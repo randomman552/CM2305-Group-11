@@ -317,7 +317,9 @@ public class GameScreen implements Screen {
         }
 
         // Advance physics and actors
-        game.getPhysWorld().step(delta, 6, 2);
+        synchronized (game.getPhysWorld()) {
+            game.getPhysWorld().step(delta, 6, 2);
+        }
         stage.act(delta);
         uiStage.act(delta);
 

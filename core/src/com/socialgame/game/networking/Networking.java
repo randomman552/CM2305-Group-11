@@ -228,9 +228,9 @@ public class Networking {
         return obj;
     }
 
-    public static EndGame endGame(String winner) {
+    public static EndGame endGame(boolean saboteursWin) {
         EndGame obj = new EndGame();
-        obj.winner = winner;
+        obj.saboteursWin = saboteursWin;
         return obj;
     }
 
@@ -433,12 +433,12 @@ public class Networking {
      * Class send by server to end a game.
      */
     public static class EndGame {
-        public String winner;
+        public boolean saboteursWin;
 
         @Override
         public String toString() {
             return "EndGame{" +
-                    "winner='" + winner + '\'' +
+                    "saboteursWin=" + saboteursWin +
                     '}';
         }
     }

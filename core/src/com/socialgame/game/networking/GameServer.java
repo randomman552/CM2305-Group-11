@@ -200,7 +200,7 @@ public class GameServer extends Server {
     }
 
     public int getTasksTodo() {
-        return getTasksComplete() - tasks.length;
+        return  tasks.length - getTasksComplete();
     }
 
 
@@ -224,10 +224,10 @@ public class GameServer extends Server {
 
     private void checkWinConditions() {
         // Check if saboteurs win
-        if (getNumPlayers() <= getNumSaboteurs()) sendToAllTCP(Networking.endGame("Saboteurs"));
+        if (getNumPlayers() <= getNumSaboteurs()) sendToAllTCP(Networking.endGame(true));
 
         // Check if players win
-        if (getTasksTodo() <= 0) sendToAllTCP(Networking.endGame("Ducks"));
+        if (getTasksTodo() <= 0) sendToAllTCP(Networking.endGame(false));
     }
 
     @Override

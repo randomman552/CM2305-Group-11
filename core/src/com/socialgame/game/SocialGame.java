@@ -21,6 +21,7 @@ import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.screens.GameScreen;
+import com.socialgame.game.screens.menu.EndScreen;
 import com.socialgame.game.screens.menu.ErrorScreen;
 import com.socialgame.game.screens.menu.MainMenuScreen;
 import com.socialgame.game.screens.menu.MenuScreen;
@@ -214,6 +215,22 @@ public class SocialGame extends Game {
 	 */
 	synchronized public void showErrorMessage() {
 		showErrorMessage("An error has occurred");
+	}
+
+	// endregion
+
+	// region End screen display
+
+	volatile private boolean displayEnd;
+	volatile private boolean endWin;
+
+	synchronized public void showEndScreen(boolean win) {
+		// End all connections before showing end screen
+		closeServer();
+		closeClient();
+
+		displayEnd = true;
+		endWin = win;
 	}
 
 	// endregion
@@ -441,6 +458,12 @@ public class SocialGame extends Game {
 				setScreen(new ErrorScreen(this, errorMessage, new MainMenuScreen(this)));
 			errorMessage = null;
 			errorNextScreen = null;
+		}
+
+		// Check if we need to display an end screen
+		if (displayEnd) {
+			setScreen(new EndScreen(this, endWin));
+			displayEnd = false;
 		}
 
 		super.render();

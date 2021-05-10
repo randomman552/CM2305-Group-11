@@ -1,34 +1,48 @@
 
 menu.png
-size: 2048, 2048
+size: 4096, 2048
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 background
   rotate: false
-  xy: 2, 204
+  xy: 2, 918
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 checkbox_base
   rotate: false
-  xy: 2, 2
+  xy: 1323, 868
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 checkbox_tick
   rotate: false
-  xy: 1924, 1236
+  xy: 2, 2
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-title
+lose
   rotate: false
   xy: 2, 52
+  size: 1319, 864
+  orig: 1319, 864
+  offset: 0, 0
+  index: -1
+title
+  rotate: false
+  xy: 1924, 982
   size: 600, 150
   orig: 600, 150
+  offset: 0, 0
+  index: -1
+win
+  rotate: false
+  xy: 1924, 1134
+  size: 1269, 864
+  orig: 1269, 864
   offset: 0, 0
   index: -1

@@ -23,20 +23,24 @@ public class GameClient extends Client {
         }
 
         @Override
-        synchronized public void received(Connection connection, Object object) {
+        public void received(Connection connection, Object object) {
             System.out.println("Client Receives: " + object);
             if (object instanceof Networking.VelocityUpdate) {
                 Networking.VelocityUpdate update = ((Networking.VelocityUpdate) object);
                 try {
                     GameObject obj = GameObject.objects.get(update.id);
-                    obj.body.setLinearVelocity(update.xVel, update.yVel);
+                    synchronized (game.getPhysWorld()) {
+                        obj.body.setLinearVelocity(update.xVel, update.yVel);
+                    }
                 } catch (NullPointerException ignored) {}
             }
             else if (object instanceof Networking.PositionUpdate) {
                 Networking.PositionUpdate update = ((Networking.PositionUpdate) object);
                 try {
                     GameObject obj = GameObject.objects.get(update.id);
-                    obj.setPositionAboutOrigin(update.x, update.y);
+                    synchronized (game.getPhysWorld()) {
+                        obj.setPositionAboutOrigin(update.x, update.y);
+                    }
                 } catch (NullPointerException ignored) {}
             }
             else if (object instanceof Networking.PickupItemUpdate) {
@@ -125,6 +129,10 @@ public class GameClient extends Client {
                     ((GameScreen) game.getScreen()).setStartGameFlag(true, update.playerInfos, update.taskInfos, update.itemInfos);
                 }
 
+            }
+            else if (object instanceof Networking.EndGame) {
+                Networking.EndGame update = ((Networking.EndGame) object);
+                game.showEndScreen(update.saboteursWin && game.mainPlayer.getIsSaboteur() || !update.saboteursWin && !game.mainPlayer.getIsSaboteur());
             }
         }
 
