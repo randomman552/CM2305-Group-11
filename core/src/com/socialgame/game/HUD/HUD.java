@@ -3,6 +3,7 @@ package com.socialgame.game.HUD;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -32,6 +33,7 @@ public class HUD extends Group {
     private final ImageButton mapButton;
     private final Table mapTable;
     private final ImageButton dropButton;
+    private final TextChat chat;
 
     public HUD(final SocialGame game) {
         this.game = game;
@@ -69,7 +71,7 @@ public class HUD extends Group {
         progressBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, progressBarStyle);
         progressBar.setValue(0);
         progressBar.setAnimateDuration(0.25f);
-        progressBar.setBounds(10, 10, 100, 30);
+        progressBar.setBounds(10, 680, 100, 30);
 
         // Set up hazard bar
         ProgressBar.ProgressBarStyle hazardBarStyle = new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
@@ -80,7 +82,7 @@ public class HUD extends Group {
         hazardBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, hazardBarStyle);
         hazardBar.setValue(0f);
         hazardBar.setAnimateDuration(0.25f);
-        hazardBar.setBounds(10, 10, 100, 10);
+        hazardBar.setBounds(10, 700, 100, 10);
 
         // endregion
 
@@ -215,6 +217,13 @@ public class HUD extends Group {
 
         // endregion
 
+        // region Text chat component
+
+        chat = new TextChat(game);
+        chat.setPosition(10, 10);
+
+        // endregion
+
         // region Add actors to group
 
         addActor(progressBar);
@@ -223,6 +232,7 @@ public class HUD extends Group {
         addActor(mapButton);
         addActor(dropButton);
         addActor(mapTable);
+        addActor(chat);
 
         // endregion
     }
@@ -239,6 +249,7 @@ public class HUD extends Group {
         hazardBar.setValue(curStep + step);
     }
 
+
     public void toggleMap() {
         mapTable.setVisible(!mapTable.isVisible());
     }
@@ -249,5 +260,22 @@ public class HUD extends Group {
 
     public void hideMap() {
         mapTable.setVisible(false);
+    }
+
+
+    public void receiveMessage(String sender, String message) {
+        chat.receiveMessage(sender, message);
+    }
+
+    public TextChat getChat() {
+        return chat;
+    }
+
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        synchronized (this) {
+            super.draw(batch, parentAlpha);
+        }
     }
 }

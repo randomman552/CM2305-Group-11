@@ -134,6 +134,12 @@ public class GameClient extends Client {
                 Networking.EndGame update = ((Networking.EndGame) object);
                 game.showEndScreen(update.saboteursWin && game.mainPlayer.isSaboteur() || !update.saboteursWin && !game.mainPlayer.isSaboteur());
             }
+            else if (object instanceof Networking.TextMessage) {
+                Networking.TextMessage update = ((Networking.TextMessage) object);
+                synchronized (game.getHud()) {
+                    game.getHud().receiveMessage(update.sender, update.message);
+                }
+            }
         }
 
         @Override

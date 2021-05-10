@@ -31,6 +31,8 @@ import com.socialgame.game.baseclasses.Item;
 import com.socialgame.game.map.MapBodyBuilder;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.Networking;
+import com.socialgame.game.networking.voicechat.VoiceChatClient;
+import com.socialgame.game.networking.voicechat.VoiceClient;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerInputProcessor;
 import com.socialgame.game.tasks.Task;
@@ -55,6 +57,8 @@ public class GameScreen implements Screen {
     private final PlayerInputProcessor playerInputProcessor;
 
     public GameClient client;
+    public VoiceChatClient voiceChatClient;
+    public VoiceClient voiceClient;
 
     private final ArrayList<Task> tasks;
     private final ArrayList<Item> items;
@@ -182,6 +186,15 @@ public class GameScreen implements Screen {
         client = new GameClient(game, password, host);
         game.setClient(client);
 
+        // Connect to voice chat server
+        voiceChatClient = new VoiceChatClient(host);
+
+        game.setVoiceChatClient(voiceChatClient);
+        voiceClient = new VoiceClient(voiceChatClient.getKryo());
+
+        voiceClient.addReceiver(voiceChatClient);
+
+
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();
         items = new ArrayList<>();
@@ -304,6 +317,9 @@ public class GameScreen implements Screen {
         if (startGameFlag) {
             startGame();
         }
+
+        // send voice
+        voiceClient.sendVoice(voiceChatClient, delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
