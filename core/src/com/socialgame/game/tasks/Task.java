@@ -77,8 +77,8 @@ public abstract class Task extends Interactable {
         pixmap.dispose();
 
         // Create close button
-        ImageButtonStyle style = new ImageButtonStyle();
-        ImageButton closeBtn = new ImageButton(style);
+        TextureRegionDrawable closeButton = new TextureRegionDrawable(game.spriteSheet.findRegion("close button"));
+        ImageButton closeBtn = new ImageButton(closeButton);
         closeBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

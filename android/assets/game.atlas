@@ -16,6 +16,11 @@ clockTask
   xy: 2687, 1561
   size: 32, 32
   orig: 32, 32
+close button
+  rotate: false
+  xy: 1499, 1187
+  size: 225, 225
+  orig: 225, 225
   offset: 0, 0
   index: -1
 killButton

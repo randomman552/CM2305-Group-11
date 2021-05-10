@@ -151,8 +151,9 @@ public class HUD extends Group {
 
         // Create close button
         // TODO Add icon to close buttons
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        ImageButton mapCloseButton = new ImageButton(style);
+        TextureRegionDrawable closeButton = new TextureRegionDrawable(game.spriteSheet.findRegion("close button"));
+        //ImageButton.ImageButtonStyle style = new ImageButton(closeButton);
+        ImageButton mapCloseButton = new ImageButton(closeButton);
         mapCloseButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
