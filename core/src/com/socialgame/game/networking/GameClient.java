@@ -93,7 +93,6 @@ public class GameClient extends Client {
                     Networking.PlayerInfo info = update.playerInfos[update.playerID];
                     Player newPlayer = new Player(game, update.playerID, update.playerInfos[update.playerID].getCustomisation());
                     newPlayer.setPositionAboutOrigin(info.x, info.y);
-                    game.getHud().getChat().receiveMessage("Game", newPlayer.getName() + " joined.");
                     game.getMainStage().addActor(newPlayer);
                 }
             }
@@ -105,7 +104,6 @@ public class GameClient extends Client {
             else if (object instanceof Networking.LeaveNotification) {
                 Networking.LeaveNotification update = ((Networking.LeaveNotification) object);
                 GameObject player = GameObject.objects.get(update.playerID);
-                game.getHud().getChat().receiveMessage("Game", player.getName() + " left.");
                 player.delete();
             }
             else if (object instanceof Networking.TaskFinished) {
