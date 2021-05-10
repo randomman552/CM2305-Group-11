@@ -86,7 +86,7 @@ public class HUD extends Group {
 
         // region Interact button
 
-        TextureRegionDrawable interactButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
+        TextureRegionDrawable interactButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("use"));
         interactButton = new ImageButton(interactButtonDrawable);
 
         interactButton.setPosition(2f + 1100f, 10f);
@@ -120,8 +120,9 @@ public class HUD extends Group {
                     }
                 }
 
-                assert closest != null;
-                closest.interact(player);
+                if (closest != null && closestDist < 2f){
+                    closest.interact(player);
+                }
 
                 // Update on serverside if required
                 if (closest instanceof Item) {
@@ -135,7 +136,7 @@ public class HUD extends Group {
 
         // region Map button
 
-        TextureRegionDrawable mapButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
+        TextureRegionDrawable mapButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("mapSprite"));
         mapButton = new ImageButton(mapButtonDrawable);
         mapButton.setPosition(2f + 1100f, 600f);
         mapButton.setSize(100f, 100f);
@@ -150,7 +151,7 @@ public class HUD extends Group {
         // region Map Table
 
         // Create close button
-        // TODO Add icon to close buttons
+
         TextureRegionDrawable closeButton = new TextureRegionDrawable(game.spriteSheet.findRegion("close button"));
         //ImageButton.ImageButtonStyle style = new ImageButton(closeButton);
         ImageButton mapCloseButton = new ImageButton(closeButton);
@@ -198,7 +199,7 @@ public class HUD extends Group {
         // endregion
 
         // region Drop button
-        TextureRegionDrawable dropButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("killButton"));
+        TextureRegionDrawable dropButtonDrawable = new TextureRegionDrawable(game.spriteSheet.findRegion("drop"));
 
         dropButton = new ImageButton(dropButtonDrawable);
 

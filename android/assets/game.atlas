@@ -6,23 +6,30 @@ filter: Linear, Linear
 repeat: none
 axe
   rotate: false
-  xy: 2687, 1595
+  xy: 3827, 1595
   size: 248, 393
   orig: 248, 393
   offset: 0, 0
   index: -1
 clockTask
   rotate: false
-  xy: 2687, 1561
+  xy: 2687, 1576
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 close button
   rotate: false
-  xy: 2937, 1763
+  xy: 233, 32
   size: 225, 225
   orig: 225, 225
+  offset: 0, 0
+  index: -1
+drop
+  rotate: false
+  xy: 2687, 1610
+  size: 378, 378
+  orig: 378, 378
   offset: 0, 0
   index: -1
 killButton
@@ -44,6 +51,13 @@ map
   xy: 2, 741
   size: 1775, 1247
   orig: 1775, 1247
+  offset: 0, 0
+  index: -1
+mapSprite
+  rotate: false
+  xy: 3067, 1610
+  size: 378, 378
+  orig: 378, 378
   offset: 0, 0
   index: -1
 placeholder
@@ -121,6 +135,13 @@ triangleUp
   xy: 2, 259
   size: 578, 480
   orig: 578, 480
+  offset: 0, 0
+  index: -1
+use
+  rotate: false
+  xy: 3447, 1610
+  size: 378, 378
+  orig: 378, 378
   offset: 0, 0
   index: -1
 wrench
