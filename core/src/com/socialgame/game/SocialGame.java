@@ -19,6 +19,8 @@ import com.socialgame.game.HUD.HUD;
 import com.socialgame.game.baseclasses.GameObject;
 import com.socialgame.game.networking.GameClient;
 import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.networking.voicechat.VoiceChatClient;
+import com.socialgame.game.networking.voicechat.VoiceChatServer;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.menu.EndScreen;
@@ -147,7 +149,9 @@ public class SocialGame extends Game {
     // region Networking elements
 
     private GameServer server;
+    private VoiceChatServer voiceChatServer;
     private GameClient client;
+    private VoiceChatClient voiceChatClient;
 
 	public GameClient getClient() {
 		return client;
@@ -157,6 +161,14 @@ public class SocialGame extends Game {
 		this.client = client;
 	}
 
+	public VoiceChatClient getVoiceChatClient() {
+		return voiceChatClient;
+	}
+
+	public void setVoiceChatClient(VoiceChatClient voiceChatClient) {
+		this.voiceChatClient = voiceChatClient;
+	}
+
 	public GameServer getServer() {
 		return server;
 	}
@@ -164,6 +176,16 @@ public class SocialGame extends Game {
 	public void setServer(GameServer server) {
 		this.server = server;
 	}
+
+	public VoiceChatServer getVoiceChatServer() {
+		return  voiceChatServer;
+	}
+
+	public void setVoiceChatServer(VoiceChatServer voiceChatServer) {
+		this.voiceChatServer = voiceChatServer;
+	}
+
+
 
 	/**
 	 * Stop server if it is running
