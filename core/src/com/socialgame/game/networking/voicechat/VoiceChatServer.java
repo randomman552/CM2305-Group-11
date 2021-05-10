@@ -28,7 +28,9 @@ public class VoiceChatServer extends Server {
     }
     public VoiceChatServer(int TCP, int UDP) throws IOException {
         super(22050, 22050);
-        Networking.register(this);
+        this.getKryo().register(short[].class);
+        this.getKryo().register(VoiceNetData.class);
+
         addListener(new VoiceChatServerListener(this));
         bind(TCP, UDP);
         start();
