@@ -77,6 +77,9 @@ public class GameServer extends Server {
                 server.sendToAllExceptTCP(connection.getID(), object);
                 server.checkWinConditions();
             }
+            else if (object instanceof Networking.TextMessage) {
+                server.sendToAllTCP(object);
+            }
             else {
                 server.sendToAllExceptTCP(connection.getID(), object);
             }

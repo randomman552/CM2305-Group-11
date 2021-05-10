@@ -47,6 +47,7 @@ public class Networking {
         kryo.register(InitialiseGame.class);
         kryo.register(StartGame.class);
         kryo.register(EndGame.class);
+        kryo.register(TextMessage.class);
     }
 
     static public void resetPools() {
@@ -247,6 +248,17 @@ public class Networking {
 
     public static TaskFinished taskFinished(int taskID) {
         return taskFinished(taskID, false);
+    }
+
+    // endregion
+
+    // region Text Chat
+
+    public static TextMessage textMessage(String sender, String message) {
+        TextMessage obj = new TextMessage();
+        obj.sender = sender;
+        obj.message = message;
+        return obj;
     }
 
     // endregion
@@ -456,6 +468,23 @@ public class Networking {
             return "TaskFinished{" +
                     "taskID=" + taskID +
                     ", failed=" + failed +
+                    '}';
+        }
+    }
+
+    // endregion
+
+    // region Text Chat
+
+    public static class TextMessage {
+        public String sender;
+        public String message;
+
+        @Override
+        public String toString() {
+            return "TextMessage{" +
+                    "sender='" + sender + '\'' +
+                    ", message='" + message + '\'' +
                     '}';
         }
     }
