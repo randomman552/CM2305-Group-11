@@ -109,6 +109,8 @@ public class PlayerInputProcessor implements InputProcessor {
             case Input.Keys.ENTER:
                 game.getUIStage().setKeyboardFocus(game.getHud().getChat().textInput);
                 game.getHud().getChat().textInput.setDisabled(true);
+                // Remove all keys from pressed keys to stop movement during chat opening
+                pressedKeys.clear();
                 return true;
         }
 
