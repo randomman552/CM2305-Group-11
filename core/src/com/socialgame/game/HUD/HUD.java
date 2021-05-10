@@ -41,15 +41,15 @@ public class HUD extends Group {
         // region Progress bars
 
         // Create Pixmap objects to define colours for progress and hazard bar
-        Pixmap progressBackgroundPixmap = new Pixmap(1, 30, Pixmap.Format.RGBA8888);
+        Pixmap progressBackgroundPixmap = new Pixmap(1, 60, Pixmap.Format.RGBA8888);
         progressBackgroundPixmap.setColor(Color.GRAY);
         progressBackgroundPixmap.fill();
 
-        Pixmap progressForegroundPixmap = new Pixmap(1, 30, Pixmap.Format.RGBA8888);
+        Pixmap progressForegroundPixmap = new Pixmap(1, 60, Pixmap.Format.RGBA8888);
         progressForegroundPixmap.setColor(Color.GREEN);
         progressForegroundPixmap.fill();
 
-        Pixmap hazardForegroundPixmap = new Pixmap(1, 10, Pixmap.Format.RGBA8888);
+        Pixmap hazardForegroundPixmap = new Pixmap(1, 20, Pixmap.Format.RGBA8888);
         hazardForegroundPixmap.setColor(Color.RED);
         hazardForegroundPixmap.fill();
 
@@ -62,7 +62,7 @@ public class HUD extends Group {
                 new Texture(hazardForegroundPixmap)));
 
         // Set up progress bar
-        ProgressBar.ProgressBarStyle progressBarStyle =new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
+        ProgressBar.ProgressBarStyle progressBarStyle =new ProgressBar.ProgressBarStyle();
         progressBarStyle.background = background;
         progressBarStyle.knob = progressForeground;
         progressBarStyle.knobBefore = progressForeground;
@@ -71,10 +71,10 @@ public class HUD extends Group {
         progressBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, progressBarStyle);
         progressBar.setValue(0);
         progressBar.setAnimateDuration(0.25f);
-        progressBar.setBounds(10, 680, 100, 30);
+        progressBar.setBounds(10, 650, 200, 60);
 
         // Set up hazard bar
-        ProgressBar.ProgressBarStyle hazardBarStyle = new com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle();
+        ProgressBar.ProgressBarStyle hazardBarStyle = new ProgressBar.ProgressBarStyle();
         hazardBarStyle.knob = hazardForeground;
         hazardBarStyle.knobBefore = hazardForeground;
 
@@ -82,7 +82,7 @@ public class HUD extends Group {
         hazardBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, hazardBarStyle);
         hazardBar.setValue(0f);
         hazardBar.setAnimateDuration(0.25f);
-        hazardBar.setBounds(10, 700, 100, 10);
+        hazardBar.setBounds(10, 650, 200, 20);
 
         // endregion
 
