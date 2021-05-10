@@ -239,7 +239,7 @@ public class GameScreen implements Screen {
     public void spawnWeapons(Networking.ItemInfo[] itemInfos) {
         Collections.shuffle(weaponObjects, game.getRandom());
         // Picks a random MapObject from the array to use for a task location
-        for (int i = 0; i < itemInfos.length && i < taskObjects.size(); i++) {
+        for (int i = 0; i < itemInfos.length && i < weaponObjects.size(); i++) {
             MapObject mapObject = weaponObjects.get(i);
             if (mapObject instanceof RectangleMapObject) {
                 float x = ((RectangleMapObject) mapObject).getRectangle().x * unitScale;
