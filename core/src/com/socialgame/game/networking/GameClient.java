@@ -68,7 +68,7 @@ public class GameClient extends Client {
                 // FIXME: 11/05/2021 This is terrible, dont ever do this
                 // Need to do this to prevent race between networking and openGL threads.
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
