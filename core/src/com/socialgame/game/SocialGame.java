@@ -193,8 +193,11 @@ public class SocialGame extends Game {
 	synchronized public void closeServer() {
 		if (getServer() != null) {
 			getServer().stop();
+			getVoiceChatServer().stop();
 			setServer(null);
+			setVoiceChatServer(null);
 		}
+
 	}
 
 	/**
@@ -203,7 +206,9 @@ public class SocialGame extends Game {
 	synchronized public void closeClient() {
 		if (getClient() != null) {
 			getClient().stop();
+			getVoiceChatClient().stop();
 			setClient(null);
+			setVoiceChatClient(null);
 		}
 	}
 
