@@ -65,6 +65,13 @@ public class GameClient extends Client {
             }
             else if (object instanceof Networking.JoinAccepted) {
                 Networking.JoinAccepted update = ((Networking.JoinAccepted) object);
+                // FIXME: 11/05/2021 This is terrible, dont ever do this
+                // Need to do this to prevent race between networking and openGL threads.
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 // If our mainPlayer has not been set, initial sync is required
                 if (game.mainPlayer == null) {
