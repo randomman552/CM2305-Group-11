@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.networking.GameServer;
+import com.socialgame.game.networking.voicechat.VoiceChatServer;
 import com.socialgame.game.screens.GameScreen;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class CreateGameScreen extends MenuScreen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) { /* touchDown = hovering over button */
                 try {
                     game.setServer(new GameServer(passwordText.getText()));
+                    game.setVoiceChatServer(new VoiceChatServer());
                     game.setScreen(new GameScreen(game, passwordText.getText(), "localhost"));
                 } catch (IOException e) {
                     String message = "Server failed to start.\nIs another server already running?";

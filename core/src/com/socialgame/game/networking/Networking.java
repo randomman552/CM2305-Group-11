@@ -2,6 +2,7 @@ package com.socialgame.game.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.socialgame.game.networking.voicechat.VoiceNetData;
 import com.socialgame.game.util.customisation.Customisation;
 import com.socialgame.game.util.customisation.UnlinkedCustomisation;
 
@@ -10,6 +11,8 @@ import java.util.Arrays;
 public class Networking {
     public static final int TCP_PORT = 54555;
     public static final int UDP_PORT = 54556;
+    public static final int TCPVC_PORT = 54557;
+    public static final int UDPVC_PORT = 54558;
 
     // Setup initial pools on class init
     static {
@@ -31,6 +34,7 @@ public class Networking {
         kryo.register(TaskInfo[].class);
         kryo.register(TaskInfo.class);
         kryo.register(int[].class);
+        kryo.register(short[].class);
 
         // Register update classes
         kryo.register(PositionUpdate.class);
@@ -47,6 +51,7 @@ public class Networking {
         kryo.register(InitialiseGame.class);
         kryo.register(StartGame.class);
         kryo.register(EndGame.class);
+        kryo.register(VoiceNetData.class);
     }
 
     static public void resetPools() {
