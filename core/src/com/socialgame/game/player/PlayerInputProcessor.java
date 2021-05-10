@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.socialgame.game.SocialGame;
 import com.socialgame.game.networking.Networking;
+import com.socialgame.game.screens.GameScreen;
 import com.socialgame.game.screens.menu.MainMenuScreen;
 
 import java.util.ArrayList;
@@ -65,6 +66,11 @@ public class PlayerInputProcessor implements InputProcessor {
         else if (pressedKeys.contains(Input.Keys.S)) {
             float scalar = (-maxVel - vel.y) / -maxVel;
             yForce = -baseAcceleration * scalar - counteractForce;
+        }
+
+        else if (pressedKeys.contains(Input.Keys.SPACE)) {
+            GameScreen.voiceClient.sendVoice(GameScreen.voiceChatClient, delta);
+
         }
 
         // endregion
