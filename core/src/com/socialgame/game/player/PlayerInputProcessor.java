@@ -106,6 +106,10 @@ public class PlayerInputProcessor implements InputProcessor {
             case Input.Keys.TAB:
                 game.getHud().showMap();
                 return true;
+            case Input.Keys.ENTER:
+                game.getUIStage().setKeyboardFocus(game.getHud().getChat().textInput);
+                game.getHud().getChat().textInput.setDisabled(true);
+                return true;
         }
 
         pressedKeys.add(keycode);
@@ -117,6 +121,9 @@ public class PlayerInputProcessor implements InputProcessor {
         switch(keycode) {
             case Input.Keys.TAB:
                 game.getHud().hideMap();
+                return true;
+            case Input.Keys.ENTER:
+                game.getHud().getChat().textInput.setDisabled(false);
                 return true;
         }
 
