@@ -32,7 +32,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:raw/game,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:../../../../../Desktop/close button.png,type:Input,regionName:null}]
+inputFiles=[{path:raw/game,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false}]
 
 
 ---
