@@ -18,6 +18,13 @@ clockTask
   orig: 32, 32
   offset: 0, 0
   index: -1
+close button
+  rotate: false
+  xy: 2937, 1763
+  size: 225, 225
+  orig: 225, 225
+  offset: 0, 0
+  index: -1
 killButton
   rotate: false
   xy: 2, 36
@@ -118,7 +125,7 @@ triangleUp
   index: -1
 wrench
   rotate: false
-  xy: 2937, 1668
+  xy: 2346, 1186
   size: 80, 320
   orig: 80, 320
   offset: 0, 0
