@@ -88,7 +88,7 @@ public class SocialGame extends Game {
 	/**
 	 * Reference to this clients primary player.
 	 */
-    public GameObject mainPlayer;
+    public Player mainPlayer;
 
     // region Stage methods
 

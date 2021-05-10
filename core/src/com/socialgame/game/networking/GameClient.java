@@ -120,7 +120,7 @@ public class GameClient extends Client {
                 for (int i = 0; i < update.playerInfos.length; i++) {
                     if (GameObject.objects.get(i) instanceof Player) {
                         Player player = ((Player) GameObject.objects.get(i));
-                        player.setIsSaboteur(update.playerInfos[i].isSaboteur);
+                        player.setSaboteur(update.playerInfos[i].isSaboteur);
                     }
                 }
                 game.getRandom().setSeed(update.seed);
@@ -132,7 +132,7 @@ public class GameClient extends Client {
             }
             else if (object instanceof Networking.EndGame) {
                 Networking.EndGame update = ((Networking.EndGame) object);
-                game.showEndScreen(update.saboteursWin && game.mainPlayer.getIsSaboteur() || !update.saboteursWin && !game.mainPlayer.getIsSaboteur());
+                game.showEndScreen(update.saboteursWin && game.mainPlayer.isSaboteur() || !update.saboteursWin && !game.mainPlayer.isSaboteur());
             }
         }
 
