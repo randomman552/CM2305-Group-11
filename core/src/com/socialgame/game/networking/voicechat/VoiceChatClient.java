@@ -31,7 +31,7 @@ public class VoiceChatClient extends Client {
     }
 
     public VoiceChatClient(String host, int TCPVC_PORT, int UDPVC_PORT) throws IOException {
-        super(22050, 22050);
+        super(44100, 44100);
         Networking.register(this);
 
         addListener(new VoiceChatListener(game));
