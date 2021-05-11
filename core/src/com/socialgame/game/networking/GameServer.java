@@ -155,6 +155,7 @@ public class GameServer extends Server {
         if (i != -1) {
             connectedPlayers[i] = null;
             sendToAllTCP(Networking.leaveNotification(i));
+            sendToAllTCP(Networking.textMessage("Server", "Player " + i + " left."));
         }
     }
 
@@ -168,6 +169,7 @@ public class GameServer extends Server {
         for (int i = 0; i < connectedPlayers.length; i++) {
             if (connectedPlayers[i] == null) {
                 connectedPlayers[i] = new Networking.PlayerInfo(connectionID, customisation);
+                sendToAllTCP(Networking.textMessage("Server", "Player " + i + " joined."));
                 return i;
             }
         }
@@ -222,6 +224,7 @@ public class GameServer extends Server {
         }
         tasks = coordinator.generateTasks(getNumPlayers());
         items = coordinator.generateItems(getNumPlayers());
+        sendToAllTCP(Networking.textMessage("Server", "game begins."));
     }
 
 

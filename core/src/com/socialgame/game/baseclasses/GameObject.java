@@ -251,13 +251,6 @@ public abstract class GameObject extends Actor implements Disposable {
 
         batch.setColor(oldCol);
     }
-
-    public boolean isAlive() {
-        return isAlive();
-    }
-    public boolean getIsSaboteur(){
-        return getIsSaboteur();
-    }
     
     @Override
     public void dispose() {
