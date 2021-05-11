@@ -276,8 +276,6 @@ public class GameScreen implements Screen {
         spawnTasks(taskInfos);
         spawnWeapons(itemInfos);
         releasePlayers();
-        hud.setHazardBar();
-
 
         setStartGameFlag(false);
     }

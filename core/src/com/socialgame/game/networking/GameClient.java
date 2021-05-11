@@ -24,7 +24,7 @@ public class GameClient extends Client {
 
         @Override
         public void received(Connection connection, Object object) {
-            //System.out.println("Client Receives: " + object);
+            System.out.println("Client Receives: " + object);
             if (object instanceof Networking.VelocityUpdate) {
                 Networking.VelocityUpdate update = ((Networking.VelocityUpdate) object);
                 try {
@@ -154,6 +154,9 @@ public class GameClient extends Client {
                 synchronized (game.getHud()) {
                     game.getHud().receiveMessage(update.sender, update.message);
                 }
+            }
+            else if (object instanceof Networking.HazardAdvance) {
+                game.getHud().setHazard(((Networking.HazardAdvance) object).value);
             }
         }
 

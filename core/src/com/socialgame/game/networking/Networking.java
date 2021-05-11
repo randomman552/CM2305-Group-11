@@ -53,6 +53,7 @@ public class Networking {
         kryo.register(EndGame.class);
         kryo.register(VoiceNetData.class);
         kryo.register(TextMessage.class);
+        kryo.register(HazardAdvance.class);
     }
 
     static public void resetPools() {
@@ -237,6 +238,12 @@ public class Networking {
     public static EndGame endGame(boolean saboteursWin) {
         EndGame obj = new EndGame();
         obj.saboteursWin = saboteursWin;
+        return obj;
+    }
+
+    public static HazardAdvance hazardAdvance(float value) {
+        HazardAdvance obj = new HazardAdvance();
+        obj.value = value;
         return obj;
     }
 
@@ -456,6 +463,20 @@ public class Networking {
         public String toString() {
             return "EndGame{" +
                     "saboteursWin=" + saboteursWin +
+                    '}';
+        }
+    }
+
+    /**
+     * Class used to synchronise advance of the hazard to clients
+     */
+    public static class HazardAdvance {
+        float value;
+
+        @Override
+        public String toString() {
+            return "HazardAdvance{" +
+                    "value=" + value +
                     '}';
         }
     }

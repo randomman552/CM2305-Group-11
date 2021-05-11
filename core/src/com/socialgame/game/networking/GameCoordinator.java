@@ -1,11 +1,28 @@
-package com.socialgame.game;
-
-import com.socialgame.game.networking.GameServer;
-import com.socialgame.game.networking.Networking;
+package com.socialgame.game.networking;
 
 import java.util.Random;
 
 public class GameCoordinator {
+    public static class HazardTimerThread extends Thread {
+        private GameServer server;
+
+        public HazardTimerThread(GameServer server) {
+            this.server = server;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while(true) {
+                        sleep((long) HAZARD_TIME_STEP * 1000);
+                        server.hazardAdvance(HAZARD_TIME_STEP);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private static final float SABOTEUR_RATIO = 0.25f;
 
     private static final int NUM_TASKS_PER_PLAYER = 2;
@@ -14,9 +31,13 @@ public class GameCoordinator {
     private static final int NUM_ITEMS_PER_PLAYER = 2;
     private static final int NUM_ITEM_TYPES = 5;
 
+    protected static final float HAZARD_SECONDS = 300;
+    protected static final float HAZARD_TIME_STEP = 1;
+
     private final Random random = new Random();
     private boolean started = false;
     private int nextID = GameServer.MAX_PLAYERS;
+    private float hazardTime = 0;
 
 
     public int[] pickSaboteurs(int numPlayers) {
@@ -61,5 +82,18 @@ public class GameCoordinator {
         long seed = random.nextLong();
         random.setSeed(seed);
         return seed;
+    }
+
+
+    protected void incrementHazard(float timeStep) {
+        hazardTime += timeStep;
+    }
+
+    protected float getHazardValue() {
+        return hazardTime / HAZARD_SECONDS;
+    }
+
+    protected boolean checkHazardWinCondition() {
+        return hazardTime >= HAZARD_SECONDS;
     }
 }

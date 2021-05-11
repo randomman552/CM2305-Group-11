@@ -3,7 +3,6 @@ package com.socialgame.game.networking;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.socialgame.game.GameCoordinator;
 import com.socialgame.game.util.customisation.Customisation;
 
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class GameServer extends Server {
 
         @Override
         public void received(Connection connection, Object object) {
-            //System.out.println("Server Receives: " + object);
+            System.out.println("Server Receives: " + object);
             if (object instanceof Networking.JoinRequest) {
                 Networking.JoinRequest update = ((Networking.JoinRequest) object);
                 // Check password
@@ -59,6 +58,8 @@ public class GameServer extends Server {
                         server.initialiseGame();
                         server.sendToAllTCP(Networking.startGame(server.connectedPlayers, server.tasks, server.items, server.getSeed()));
                         server.coordinator.setStarted(true);
+                        // Start hazard timer
+                        new GameCoordinator.HazardTimerThread(server).start();
                     }
                 }
             }
@@ -230,10 +231,16 @@ public class GameServer extends Server {
 
     private void checkWinConditions() {
         // Check if saboteurs win
-        if (getNumPlayers() <= getNumSaboteurs()) sendToAllTCP(Networking.endGame(true));
+        if (getNumPlayers() <= getNumSaboteurs() || coordinator.checkHazardWinCondition()) sendToAllTCP(Networking.endGame(true));
 
         // Check if players win
         if (getTasksTodo() <= 0) sendToAllTCP(Networking.endGame(false));
+    }
+
+    protected void hazardAdvance (float timeStep) {
+        coordinator.incrementHazard(timeStep);
+        sendToAllTCP(Networking.hazardAdvance(coordinator.getHazardValue()));
+        checkWinConditions();
     }
 
     @Override
