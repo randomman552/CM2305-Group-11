@@ -234,7 +234,7 @@ public class GameServer extends Server {
         if (getNumPlayers() <= getNumSaboteurs() || coordinator.checkHazardWinCondition()) sendToAllTCP(Networking.endGame(true));
 
         // Check if players win
-        if (getTasksTodo() <= 0) sendToAllTCP(Networking.endGame(false));
+        if (getTasksTodo() <= 0 || getNumSaboteurs() == 0) sendToAllTCP(Networking.endGame(false));
     }
 
     protected void hazardAdvance (float timeStep) {
