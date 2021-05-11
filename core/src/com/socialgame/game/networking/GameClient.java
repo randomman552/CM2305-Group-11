@@ -150,6 +150,7 @@ public class GameClient extends Client {
             }
             else if (object instanceof Networking.TextMessage) {
                 Networking.TextMessage update = ((Networking.TextMessage) object);
+                if (game.getHud() == null) return;
                 synchronized (game.getHud()) {
                     game.getHud().receiveMessage(update.sender, update.message);
                 }
