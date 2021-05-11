@@ -26,13 +26,15 @@ public class VoiceChatClient extends Client {
             System.out.println("Client Receives: " + object);
         }
     }
+
     public VoiceChatClient(String host) throws IOException {
         this(host, Networking.TCPVC_PORT, Networking.UDPVC_PORT);
     }
 
     public VoiceChatClient(String host, int TCPVC_PORT, int UDPVC_PORT) throws IOException {
-        super(22050, 22050);
-        Networking.register(this);
+        super(44100, 44100);
+        this.getKryo().register(short[].class);
+        this.getKryo().register(VoiceNetData.class);
 
         addListener(new VoiceChatListener(game));
         start();

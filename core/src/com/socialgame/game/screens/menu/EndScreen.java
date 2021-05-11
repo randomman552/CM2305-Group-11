@@ -54,7 +54,6 @@ public class EndScreen extends MenuScreen {
 
         Table table = new Table();
         table.setSize(Gdx.graphics.getHeight(),Gdx.graphics.getHeight()/10);
-        table.setDebug(true); // turn on all debug lines (table, cell, and widget)
         table.setFillParent(true);
         table.center();
         table.add(returnButton).width(Gdx.graphics.getWidth()/5).height(Gdx.graphics.getHeight()/10);

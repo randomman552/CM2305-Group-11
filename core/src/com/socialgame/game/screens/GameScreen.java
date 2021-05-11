@@ -57,8 +57,8 @@ public class GameScreen implements Screen {
     private final PlayerInputProcessor playerInputProcessor;
 
     public GameClient client;
-    public VoiceChatClient voiceChatClient;
-    public VoiceClient voiceClient;
+    public static VoiceChatClient voiceChatClient;
+    public static VoiceClient voiceClient;
 
     private final ArrayList<Task> tasks;
     private final ArrayList<Item> items;
@@ -76,7 +76,6 @@ public class GameScreen implements Screen {
     private final ArrayList<MapObject> taskObjects;
     private final ArrayList<MapObject> weaponObjects;
     private final ImageButton startButton;
-
 
     private static final String floorLayer = "Floor";
     private static final String wallLayer = "Walls";
@@ -311,6 +310,15 @@ public class GameScreen implements Screen {
         // endregion
 
         Gdx.input.setInputProcessor(inputProcessor);
+
+        // Start voice chat thread for sending voice
+        Thread voiceChatSenderThread = new Thread(() -> {
+            while (true) {
+                if (playerInputProcessor.sendVoice)
+                    voiceClient.sendVoice(voiceChatClient, Gdx.graphics.getDeltaTime());
+            }
+        });
+        voiceChatSenderThread.start();
     }
 
     @Override
@@ -321,7 +329,7 @@ public class GameScreen implements Screen {
         }
 
         // send voice
-        voiceClient.sendVoice(voiceChatClient, delta);
+
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

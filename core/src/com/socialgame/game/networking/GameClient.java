@@ -24,7 +24,7 @@ public class GameClient extends Client {
 
         @Override
         public void received(Connection connection, Object object) {
-            System.out.println("Client Receives: " + object);
+            //System.out.println("Client Receives: " + object);
             if (object instanceof Networking.VelocityUpdate) {
                 Networking.VelocityUpdate update = ((Networking.VelocityUpdate) object);
                 try {
@@ -65,6 +65,13 @@ public class GameClient extends Client {
             }
             else if (object instanceof Networking.JoinAccepted) {
                 Networking.JoinAccepted update = ((Networking.JoinAccepted) object);
+                // FIXME: 11/05/2021 This is terrible, dont ever do this
+                // Need to do this to prevent race between networking and openGL threads.
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 // If our mainPlayer has not been set, initial sync is required
                 if (game.mainPlayer == null) {
@@ -143,6 +150,7 @@ public class GameClient extends Client {
             }
             else if (object instanceof Networking.TextMessage) {
                 Networking.TextMessage update = ((Networking.TextMessage) object);
+                if (game.getHud() == null) return;
                 synchronized (game.getHud()) {
                     game.getHud().receiveMessage(update.sender, update.message);
                 }
