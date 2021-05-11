@@ -243,14 +243,14 @@ public class HUD extends Group {
 
     public void incrementProgress() {
         float step = 1f / game.getTasks().size();
-        float curStep = progressBar.getValue() * game.getTasks().size();
+        float curStep = progressBar.getValue();// * game.getTasks().size();
         progressBar.setValue(curStep + step);
     }
 
     public void incrementHazard() {
         //TODO make end statement when bar is full
         float step = 1f / game.getTasks().size();
-        float curStep = hazardBar.getValue() * game.getTasks().size();
+        float curStep = hazardBar.getValue();// * game.getTasks().size();
         hazardBar.setValue(curStep + step);
     }
 
@@ -273,7 +273,7 @@ public class HUD extends Group {
                     }
 
                     float curValue = hazardBar.getValue();
-                    hazardBar.setValue(curValue + 0.05f);
+                    hazardBar.setValue(curValue + 0.0333333f);
                 }
             }
 
