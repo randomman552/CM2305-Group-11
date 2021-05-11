@@ -313,7 +313,7 @@ public class GameScreen implements Screen {
         // Start voice chat thread for sending voice
         Thread voiceChatSenderThread = new Thread(() -> {
             while (true) {
-                if (playerInputProcessor.sendVoice && !game.mainPlayer.isAlive())
+                if (playerInputProcessor.sendVoice && game.mainPlayer.isAlive())
                     voiceClient.sendVoice(voiceChatClient, Gdx.graphics.getDeltaTime());
             }
         });
@@ -326,9 +326,6 @@ public class GameScreen implements Screen {
         if (startGameFlag) {
             startGame();
         }
-
-        // send voice
-
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
