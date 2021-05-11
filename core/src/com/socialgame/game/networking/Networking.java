@@ -69,7 +69,8 @@ public class Networking {
         public int topSelection = 0;
         public int colorSelection = 0;
         public ItemInfo[] inventory = new ItemInfo[2];
-        public boolean isSaboteur, isAlive = false;
+        public boolean isSaboteur = false;
+        public boolean isAlive = true;
         public float x, y = 0;
 
         public PlayerInfo() {

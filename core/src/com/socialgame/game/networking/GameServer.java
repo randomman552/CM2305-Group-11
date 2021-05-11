@@ -97,7 +97,7 @@ public class GameServer extends Server {
     private final Networking.PlayerInfo[] connectedPlayers = new Networking.PlayerInfo[MAX_PLAYERS];
     private Networking.TaskInfo[] tasks = new Networking.TaskInfo[0];
     private Networking.ItemInfo[] items = new Networking.ItemInfo[0];
-    private final GameCoordinator coordinator = new GameCoordinator();
+    protected final GameCoordinator coordinator = new GameCoordinator();
 
     private final String password;
 
@@ -123,6 +123,14 @@ public class GameServer extends Server {
         int count = 0;
         for (Networking.PlayerInfo connectedPlayer : connectedPlayers) {
             if (connectedPlayer != null) count++;
+        }
+        return count;
+    }
+
+    public int getNumLivingPlayers() {
+        int count = 0;
+        for (Networking.PlayerInfo connectedPlayer : connectedPlayers) {
+            if (connectedPlayer != null && connectedPlayer.isAlive) count++;
         }
         return count;
     }
@@ -233,7 +241,9 @@ public class GameServer extends Server {
 
     private void checkWinConditions() {
         // Check if saboteurs win
-        if (getNumPlayers() <= getNumSaboteurs() || coordinator.checkHazardWinCondition()) sendToAllTCP(Networking.endGame(true));
+        if (getNumLivingPlayers() <= getNumSaboteurs() || coordinator.checkHazardWinCondition()) sendToAllTCP(Networking.endGame(true));
+
+        System.out.println(getNumLivingPlayers());
 
         // Check if players win
         if (getTasksTodo() <= 0 || getNumSaboteurs() == 0) sendToAllTCP(Networking.endGame(false));
