@@ -241,9 +241,7 @@ public class GameServer extends Server {
 
     private void checkWinConditions() {
         // Check if saboteurs win
-        if (getNumLivingPlayers() <= getNumSaboteurs() || coordinator.checkHazardWinCondition()) sendToAllTCP(Networking.endGame(true));
-
-        System.out.println(getNumLivingPlayers());
+        if (getNumLivingPlayers() - getNumSaboteurs() <= 0 || coordinator.checkHazardWinCondition()) sendToAllTCP(Networking.endGame(true));
 
         // Check if players win
         if (getTasksTodo() <= 0 || getNumSaboteurs() == 0) sendToAllTCP(Networking.endGame(false));

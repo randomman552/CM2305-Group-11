@@ -86,6 +86,11 @@ public class Player extends Interactable {
     // endregion
 
     /**
+     * Cooldown between kills.
+     */
+    private static final float KILL_COOL_DOWN = 10;
+
+    /**
      * Box2D category mask for all players to prevent them from colliding.
      */
     private static final int CATEGORY_MASK = -1;
@@ -105,6 +110,8 @@ public class Player extends Interactable {
     private boolean saboteur;
     private final Customisation customisation;
     private int invSlot;
+
+    private float lastKillTime = 0;
 
     private final Hat hat;
 
@@ -329,6 +336,12 @@ public class Player extends Interactable {
     }
 
     public boolean hasWeapon() {
+        System.out.println(lastKillTime + KILL_COOL_DOWN);
+        System.out.println(game.elapsedTime);
+
+        // Prevent attacking when on cool down
+        if (game.elapsedTime < lastKillTime + KILL_COOL_DOWN) return false;
+
         // Prevent dead players from attacking live ones
         if (!isAlive()) return false;
 
@@ -358,9 +371,12 @@ public class Player extends Interactable {
         if (caller instanceof Player) {
             Player player = ((Player) caller);
             if (player == this) return;
-            if (player.saboteur || player.hasWeapon()) {
+            if (player.hasWeapon()) {
                 game.getClient().sendTCP(Networking.playerDeathUpdate(getID(), getHealth()));
+                player.lastKillTime = game.elapsedTime;
                 this.takeDamage(getHealth());
+            } else {
+                game.getHud().receiveMessage("Game", "No weapon/on cooldown");
             }
         }
     }
