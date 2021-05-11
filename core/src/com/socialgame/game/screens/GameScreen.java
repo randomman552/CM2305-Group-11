@@ -313,7 +313,7 @@ public class GameScreen implements Screen {
         // Start voice chat thread for sending voice
         Thread voiceChatSenderThread = new Thread(() -> {
             while (true) {
-                if (playerInputProcessor.sendVoice)
+                if (playerInputProcessor.sendVoice && !game.mainPlayer.isAlive())
                     voiceClient.sendVoice(voiceChatClient, Gdx.graphics.getDeltaTime());
             }
         });
