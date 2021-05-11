@@ -186,10 +186,7 @@ public class VoiceClient implements Disposable{
                 }
                 timer -= interval;
 
-                // Make new thread
                 ready = false;
-                System.out.println("New thread created");
-                // Need to check if data needs sending. TODO
                 int packetSize = (int) (this.getSampleRate() / this.getSendRate());
                 if(data == null){
                     data = new short[packetSize];

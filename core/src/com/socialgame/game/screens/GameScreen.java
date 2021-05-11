@@ -36,7 +36,6 @@ import com.socialgame.game.networking.voicechat.VoiceClient;
 import com.socialgame.game.player.Player;
 import com.socialgame.game.player.PlayerInputProcessor;
 import com.socialgame.game.tasks.Task;
-import com.socialgame.game.util.Settings;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,7 +76,6 @@ public class GameScreen implements Screen {
     private final ArrayList<MapObject> taskObjects;
     private final ArrayList<MapObject> weaponObjects;
     private final ImageButton startButton;
-
 
     private static final String floorLayer = "Floor";
     private static final String wallLayer = "Walls";
@@ -280,16 +278,6 @@ public class GameScreen implements Screen {
         releasePlayers();
 
         setStartGameFlag(false);
-
-        // Add voice chat thread
-        Thread voiceChatSenderThread = new Thread() {
-            @Override
-            public void run() {
-                if (playerInputProcessor.sendVoice)
-                    voiceClient.sendVoice(voiceChatClient, Gdx.graphics.getDeltaTime());
-            }
-        };
-        voiceChatSenderThread.start();
     }
 
     @Override
@@ -320,6 +308,15 @@ public class GameScreen implements Screen {
         // endregion
 
         Gdx.input.setInputProcessor(inputProcessor);
+
+        // Start voice chat thread for sending voice
+        Thread voiceChatSenderThread = new Thread(() -> {
+            while (true) {
+                if (playerInputProcessor.sendVoice)
+                    voiceClient.sendVoice(voiceChatClient, Gdx.graphics.getDeltaTime());
+            }
+        });
+        voiceChatSenderThread.start();
     }
 
     @Override
