@@ -21,7 +21,7 @@ public class GameServer extends Server {
 
         @Override
         public void received(Connection connection, Object object) {
-            System.out.println("Server Receives: " + object);
+            //System.out.println("Server Receives: " + object);
             if (object instanceof Networking.JoinRequest) {
                 Networking.JoinRequest update = ((Networking.JoinRequest) object);
                 // Check password

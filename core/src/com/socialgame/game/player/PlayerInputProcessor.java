@@ -17,6 +17,8 @@ import java.util.ArrayList;
 public class PlayerInputProcessor implements InputProcessor {
     protected SocialGame game;
 
+    public volatile boolean sendVoice = false;
+
     /**
      * Array list to store the key codes of the keys which are currently pressed down.
      * This list of keys is then used to control the player associated with this controller.
@@ -118,6 +120,9 @@ public class PlayerInputProcessor implements InputProcessor {
                 // Remove all keys from pressed keys to stop movement during chat opening
                 pressedKeys.clear();
                 return true;
+            case Input.Keys.SPACE:
+                sendVoice = true;
+                return true;
         }
 
         pressedKeys.add(keycode);
@@ -132,6 +137,9 @@ public class PlayerInputProcessor implements InputProcessor {
                 return true;
             case Input.Keys.ENTER:
                 game.getHud().getChat().textInput.setDisabled(false);
+                return true;
+            case Input.Keys.SPACE:
+                sendVoice = false;
                 return true;
         }
 

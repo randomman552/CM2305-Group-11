@@ -280,6 +280,16 @@ public class GameScreen implements Screen {
         releasePlayers();
 
         setStartGameFlag(false);
+
+        // Add voice chat thread
+        Thread voiceChatSenderThread = new Thread() {
+            @Override
+            public void run() {
+                if (playerInputProcessor.sendVoice)
+                    voiceClient.sendVoice(voiceChatClient, Gdx.graphics.getDeltaTime());
+            }
+        };
+        voiceChatSenderThread.start();
     }
 
     @Override

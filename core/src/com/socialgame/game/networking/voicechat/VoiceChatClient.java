@@ -26,6 +26,7 @@ public class VoiceChatClient extends Client {
             System.out.println("Client Receives: " + object);
         }
     }
+
     public VoiceChatClient(String host) throws IOException {
         this(host, Networking.TCPVC_PORT, Networking.UDPVC_PORT);
     }

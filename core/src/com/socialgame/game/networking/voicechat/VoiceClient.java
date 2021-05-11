@@ -139,11 +139,8 @@ public class VoiceClient implements Disposable{
          * @param message The message received.
          */
         public void processAudio(short[] samples, Connection connection, VoiceNetData message){
-            Thread thread = new Thread(() -> {
-                short[] received = message.getData();
-                player.writeSamples(received, 0, received.length);
-            });
-            thread.start();
+            short[] received = message.getData();
+            player.writeSamples(received, 0, received.length);
         }
 
         @Deprecated
@@ -162,10 +159,7 @@ public class VoiceClient implements Disposable{
                         short[] data = message.getData();
 
                         // Play audio
-                        Thread thread = new Thread(() -> {
-                            player.writeSamples(data, 0, data.length);
-                        });
-                        thread.start();
+                        player.writeSamples(data, 0, data.length);
                     }
                 }
             });
@@ -201,16 +195,14 @@ public class VoiceClient implements Disposable{
                     data = new short[packetSize];
                 }
 
-                    // This will block! We need to do this in a separate thread!
-                    if(this.recorder == null) this.createRecorder();
-                    this.recorder.read(data, 0, packetSize);
+                // This will block! We need to do this in a separate thread!
+                if(this.recorder == null) this.createRecorder();
+                this.recorder.read(data, 0, packetSize);
 
-                    // Send to server, this will not block but may affect networking...
-                    client.sendUDP(new VoiceNetData(data));
+                // Send to server, this will not block but may affect networking...
+                client.sendUDP(new VoiceNetData(data));
 
-                    ready = true;
-                });
-                thread.start();
+                ready = true;
             }
         }
 

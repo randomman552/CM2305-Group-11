@@ -24,7 +24,7 @@ public class GameClient extends Client {
 
         @Override
         public void received(Connection connection, Object object) {
-            System.out.println("Client Receives: " + object);
+            //System.out.println("Client Receives: " + object);
             if (object instanceof Networking.VelocityUpdate) {
                 Networking.VelocityUpdate update = ((Networking.VelocityUpdate) object);
                 try {
