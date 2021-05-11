@@ -13,7 +13,7 @@ public class GameCoordinator {
         @Override
         public void run() {
             try {
-                while(true) {
+                while(server.coordinator.getHazardValue() <= 1) {
                         sleep((long) HAZARD_TIME_STEP * 1000);
                         server.hazardAdvance(HAZARD_TIME_STEP);
                 }
