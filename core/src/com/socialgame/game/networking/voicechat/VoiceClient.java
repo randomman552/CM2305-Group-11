@@ -194,12 +194,12 @@ public class VoiceClient implements Disposable{
 
                 // Make new thread
                 ready = false;
-                Thread thread = new Thread(() -> {
-                    // Need to check if data needs sending. TODO
-                    int packetSize = (int) (this.getSampleRate() / this.getSendRate());
-                    if(data == null){
-                        data = new short[packetSize];
-                    }
+                System.out.println("New thread created");
+                // Need to check if data needs sending. TODO
+                int packetSize = (int) (this.getSampleRate() / this.getSendRate());
+                if(data == null){
+                    data = new short[packetSize];
+                }
 
                     // This will block! We need to do this in a separate thread!
                     if(this.recorder == null) this.createRecorder();
