@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class GameServer extends Server {
     public static final int MAX_PLAYERS = 16;
-    private static final int MIN_PLAYERS = 1;
+    private static final int MIN_PLAYERS = 4;
 
     private static class GameServerListener extends Listener {
         private final GameServer server;
