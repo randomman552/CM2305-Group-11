@@ -45,8 +45,8 @@ public class GameServer extends Server {
                 }
                 server.sendToAllTCP(Networking.joinAccepted(server.connectedPlayers, playerID));
             }
-            else if (object instanceof Networking.PositionUpdate) {
-                Networking.PositionUpdate update = ((Networking.PositionUpdate) object);
+            else if (object instanceof Networking.PlayerPositionUpdate) {
+                Networking.PlayerPositionUpdate update = ((Networking.PlayerPositionUpdate) object);
                 Networking.PlayerInfo info = server.connectedPlayers[server.getPlayerID(connection.getID())];
                 info.x = update.x;
                 info.y = update.y;
@@ -71,8 +71,8 @@ public class GameServer extends Server {
                 server.sendToAllExceptTCP(connection.getID(), object);
                 server.checkWinConditions();
             }
-            else if (object instanceof Networking.PlayerTakeDamageUpdate) {
-                Networking.PlayerTakeDamageUpdate update = ((Networking.PlayerTakeDamageUpdate) object);
+            else if (object instanceof Networking.PlayerDeathUpdate) {
+                Networking.PlayerDeathUpdate update = ((Networking.PlayerDeathUpdate) object);
                 Networking.PlayerInfo playerInfo = server.connectedPlayers[update.playerID];
                 playerInfo.isAlive = false;
                 server.sendToAllExceptTCP(connection.getID(), object);

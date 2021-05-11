@@ -84,8 +84,8 @@ public class PlayerInputProcessor implements InputProcessor {
 
         vel = player.body.getLinearVelocity();
         if (game.getClient() != null && player.body.isAwake()) {
-            game.getClient().sendTCP(Networking.velocityUpdate(player.getID(), vel.x, vel.y));
-            game.getClient().sendTCP(Networking.positionUpdate(player.getID(), player.getX(), player.getY()));
+            game.getClient().sendTCP(Networking.playerVelocityUpdate(player.getID(), vel.x, vel.y));
+            game.getClient().sendTCP(Networking.playerPositionUpdate(player.getID(), player.getX(), player.getY()));
         }
     }
 

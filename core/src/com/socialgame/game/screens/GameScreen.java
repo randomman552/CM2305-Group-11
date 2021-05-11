@@ -94,18 +94,6 @@ public class GameScreen implements Screen {
     private Networking.TaskInfo[] taskInfos = new Networking.TaskInfo[0];
     private Networking.ItemInfo[] itemInfos = new Networking.ItemInfo[0];
 
-    public int getLayerIndex(String layer) {
-        return tiledMap.getLayers().getIndex(layer);
-    }
-
-    public MapObjects getLayerObjects(String index) {
-        return getLayer(index).getObjects();
-    }
-
-    public MapLayer getLayer(String index) {
-        return tiledMap.getLayers().get(index);
-    }
-
     public GameScreen(SocialGame game) throws IOException {
         this(game, "");
     }
@@ -197,6 +185,19 @@ public class GameScreen implements Screen {
         // Create tasks (stored for later initialisation)
         tasks = new ArrayList<>();
         items = new ArrayList<>();
+    }
+
+
+    public int getLayerIndex(String layer) {
+        return tiledMap.getLayers().getIndex(layer);
+    }
+
+    public MapObjects getLayerObjects(String index) {
+        return getLayer(index).getObjects();
+    }
+
+    public MapLayer getLayer(String index) {
+        return tiledMap.getLayers().get(index);
     }
 
     public ArrayList<Task> getTasks() {

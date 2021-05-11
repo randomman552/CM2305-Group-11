@@ -31,7 +31,13 @@ public class GameCoordinator {
     private static final int NUM_ITEMS_PER_PLAYER = 2;
     private static final int NUM_ITEM_TYPES = 5;
 
+    /**
+     * Number of seconds the hazard takes to finish the game.
+     */
     protected static final float HAZARD_SECONDS = 300;
+    /**
+     * Number of seconds between client side hazard updates.
+     */
     protected static final float HAZARD_TIME_STEP = 1;
 
     private final Random random = new Random();

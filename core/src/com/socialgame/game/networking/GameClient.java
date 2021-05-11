@@ -25,8 +25,8 @@ public class GameClient extends Client {
         @Override
         public void received(Connection connection, Object object) {
             System.out.println("Client Receives: " + object);
-            if (object instanceof Networking.VelocityUpdate) {
-                Networking.VelocityUpdate update = ((Networking.VelocityUpdate) object);
+            if (object instanceof Networking.PlayerVelocityUpdate) {
+                Networking.PlayerVelocityUpdate update = ((Networking.PlayerVelocityUpdate) object);
                 try {
                     GameObject obj = GameObject.objects.get(update.id);
                     synchronized (game.getPhysWorld()) {
@@ -34,8 +34,8 @@ public class GameClient extends Client {
                     }
                 } catch (NullPointerException ignored) {}
             }
-            else if (object instanceof Networking.PositionUpdate) {
-                Networking.PositionUpdate update = ((Networking.PositionUpdate) object);
+            else if (object instanceof Networking.PlayerPositionUpdate) {
+                Networking.PlayerPositionUpdate update = ((Networking.PlayerPositionUpdate) object);
                 try {
                     GameObject obj = GameObject.objects.get(update.id);
                     synchronized (game.getPhysWorld()) {
@@ -103,8 +103,8 @@ public class GameClient extends Client {
                     game.getMainStage().addActor(newPlayer);
                 }
             }
-            else if (object instanceof Networking.PlayerTakeDamageUpdate) {
-                Networking.PlayerTakeDamageUpdate update = (Networking.PlayerTakeDamageUpdate) object;
+            else if (object instanceof Networking.PlayerDeathUpdate) {
+                Networking.PlayerDeathUpdate update = (Networking.PlayerDeathUpdate) object;
                 Player player = (Player) GameObject.objects.get(update.playerID);
                 player.takeDamage(update.damage);
             }

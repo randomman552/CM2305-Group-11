@@ -37,12 +37,12 @@ public class Networking {
         kryo.register(short[].class);
 
         // Register update classes
-        kryo.register(PositionUpdate.class);
-        kryo.register(VelocityUpdate.class);
+        kryo.register(PlayerPositionUpdate.class);
+        kryo.register(PlayerVelocityUpdate.class);
         kryo.register(PickupItemUpdate.class);
         kryo.register(DropItemUpdate.class);
         kryo.register(SwitchItemUpdate.class);
-        kryo.register(PlayerTakeDamageUpdate.class);
+        kryo.register(PlayerDeathUpdate.class);
         kryo.register(LeaveNotification.class);
         kryo.register(JoinRequest.class);
         kryo.register(JoinAccepted.class);
@@ -143,16 +143,16 @@ public class Networking {
 
     // region Player updates
 
-    public static PositionUpdate positionUpdate(int id, float x, float y) {
-        PositionUpdate obj = new PositionUpdate();
+    public static PlayerPositionUpdate playerPositionUpdate(int id, float x, float y) {
+        PlayerPositionUpdate obj = new PlayerPositionUpdate();
         obj.id = id;
         obj.x = x;
         obj.y = y;
         return obj;
     }
 
-    public static VelocityUpdate velocityUpdate(int id, float xVel, float yVel) {
-        VelocityUpdate obj = new VelocityUpdate();
+    public static PlayerVelocityUpdate playerVelocityUpdate(int id, float xVel, float yVel) {
+        PlayerVelocityUpdate obj = new PlayerVelocityUpdate();
         obj.id = id;
         obj.xVel = xVel;
         obj.yVel = yVel;
@@ -179,8 +179,8 @@ public class Networking {
         return obj;
     }
 
-    public static PlayerTakeDamageUpdate playerTakeDamageUpdate(int playerID, float damage) {
-        PlayerTakeDamageUpdate obj = new PlayerTakeDamageUpdate();
+    public static PlayerDeathUpdate playerDeathUpdate(int playerID, float damage) {
+        PlayerDeathUpdate obj = new PlayerDeathUpdate();
         obj.playerID = playerID;
         obj.damage = damage;
         return obj;
@@ -281,7 +281,7 @@ public class Networking {
 
     // region Player updates
 
-    public static class PositionUpdate {
+    public static class PlayerPositionUpdate {
         public int id;
         public float x, y;
 
@@ -295,7 +295,7 @@ public class Networking {
         }
     }
 
-    public static class VelocityUpdate {
+    public static class PlayerVelocityUpdate {
         public int id;
         public float xVel, yVel;
 
@@ -346,7 +346,7 @@ public class Networking {
         }
     }
 
-    public static class PlayerTakeDamageUpdate {
+    public static class PlayerDeathUpdate {
         public int playerID;
         public float damage;
 

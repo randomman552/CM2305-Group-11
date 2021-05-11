@@ -359,7 +359,7 @@ public class Player extends Interactable {
             Player player = ((Player) caller);
             if (player == this) return;
             if (player.saboteur || player.hasWeapon()) {
-                game.getClient().sendTCP(Networking.playerTakeDamageUpdate(getID(), getHealth()));
+                game.getClient().sendTCP(Networking.playerDeathUpdate(getID(), getHealth()));
                 this.takeDamage(getHealth());
             }
         }
