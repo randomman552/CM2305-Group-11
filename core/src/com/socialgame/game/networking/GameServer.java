@@ -60,6 +60,8 @@ public class GameServer extends Server {
                         server.coordinator.setStarted(true);
                         // Start hazard timer
                         new GameCoordinator.HazardTimerThread(server).start();
+                    } else {
+                        server.sendToAllTCP(Networking.textMessage("Server", "Not enough players."));
                     }
                 }
             }
