@@ -1,5 +1,5 @@
 {
-  "platform": "mac64",
+  "platform": "mac",
   "jdk": "Java_Mac.zip",
   "executable": "UglyDuckling",
   "classpath": [
