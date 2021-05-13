@@ -1,6 +1,6 @@
 {
   "platform": "linux64",
-  "jdk": "Java_Linux.zip",
+  "jdk": "Java_Linux.tar.gz",
   "executable": "UglyDuckling",
   "classpath": [
     "../desktop/build/libs/desktop-1.0.jar"

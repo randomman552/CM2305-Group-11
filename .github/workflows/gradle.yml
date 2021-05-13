@@ -31,35 +31,13 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew desktop:dist
 
-    # Download JRE for packr
-    - name: Grant execute permission for download_JRE.sh
-      working-directory: ./packr
-      run: chmod +x download_JRE.sh
-    - name: Download JRE for Packr
-      working-directory: ./packr
-      run: ./download_JRE.sh
-
     # Packr builds
-    - name: Windows packr build
+    - name: Grant execute permission for packr
       working-directory: ./packr
-      run: java -jar packr-all.jar windows.json
-    - name: Mac packr build
+      run: chmod +x ./build.sh
+    - name: Packr builds
       working-directory: ./packr
-      run: java -jar packr-all.jar mac.json
-    - name: Linux packr build
-      working-directory: ./packr
-      run: java -jar packr-all.jar linux.json
-
-    # Zip packr builds
-    - name: Zip windows build
-      working-directory: ./packr/out/windows
-      run: zip -r windows.zip ./windows
-    - name: Zip mac build
-      working-directory: ./packr/out/mac
-      run: zip -r mac.zip ./mac
-    - name: Zip linux build
-      working-directory: ./packr/out/linux
-      run: zip -r linux.zip ./linux
+      run: ./build.sh
 
     - name: Automatic Releases
       uses: marvinpinto/action-automatic-releases@v1.1.2

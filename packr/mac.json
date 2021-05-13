@@ -1,6 +1,6 @@
 {
   "platform": "mac",
-  "jdk": "Java_Mac.zip",
+  "jdk": "Java_Mac.tar.gz",
   "executable": "UglyDuckling",
   "classpath": [
     "../desktop/build/libs/desktop-1.0.jar"
