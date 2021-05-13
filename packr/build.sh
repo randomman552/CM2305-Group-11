@@ -10,6 +10,6 @@ java -jar packr-all.jar mac.json
 
 # Zip results
 cd out
-zip -r windows.zip ./windows
-zip -r linux.zip ./linux
-zip -r mac.zip ./mac
+zip -q -r windows.zip ./windows
+zip -q -r linux.zip ./linux
+zip -q -r mac.zip ./mac
