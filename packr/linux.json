@@ -1,6 +1,6 @@
 {
-  "platform": "windows64",
-  "jdk": "Java_Windows.zip",
+  "platform": "linux64",
+  "jdk": "Java_Linux.zip",
   "executable": "UglyDuckling",
   "classpath": [
     "../desktop/build/libs/desktop-1.0.jar"
@@ -12,5 +12,5 @@
   "resources": [
 
   ],
-  "output": "out/windows"
+  "output": "out/linux"
 }
