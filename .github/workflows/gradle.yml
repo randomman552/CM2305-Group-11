@@ -37,7 +37,7 @@ jobs:
       run: chmod +x download_JRE.sh
     - name: Download JRE for Packr
       working-directory: ./packr
-      run: download_JRE.sh
+      run: ./download_JRE.sh
 
     # Packr builds
     - name: Windows packr build
